@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Καταγραφή Φορτίου ανά Ιστό — Sports ReHub</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#18110B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Load Log">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #18110B; }
+  * { box-sizing: border-box; }
+  ::selection { background: #C1652F; color: #18110B; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid #C79A56; outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useCallback, useMemo } = React;
+
+const T = {
+  bg: "#18110B", bgSoft: "#211811", panel: "#2A2019", panelLine: "#3C2F24",
+  paper: "#F2E9DA", paperDim: "#B8A997",
+  terracotta: "#C1652F", terracottaDim: "#8A4A24",
+  gold: "#C79A56", sage: "#87977A", rust: "#A6412C",
+};
+
+const TISSUES = [
+  { id: "tendon", label: "Τένοντας", grain: "fiber",
+    loadTypes: ["Ισομετρική", "Ισοτονική – Ομόκεντρη (concentric)", "Ισοτονική – Έκκεντρη (eccentric)", "Πλειομετρική (SSC)"],
+    note: "Αποθήκευση / απελευθέρωση ενέργειας — ευαίσθητος σε ρυθμό φόρτισης" },
+  { id: "muscle", label: "Μυς", grain: "stripe",
+    loadTypes: ["Ομόκεντρη", "Έκκεντρη", "Ισομετρική", "Μεικτή"],
+    note: "Παραγωγή δύναμης — ανοχή σε όγκο & ένταση" },
+  { id: "bone", label: "Οστό", grain: "lattice",
+    loadTypes: ["Αξονική φόρτιση", "Χαμηλή κρούση", "Υψηλή κρούση", "Αντίδραση εδάφους"],
+    note: "Προσαρμογή σε μηχανικό stress — Wolff's law" },
+  { id: "ligament", label: "Σύνδεσμος", grain: "cross",
+    loadTypes: ["Πολυεπίπεδο στρες", "Ιδιοδεκτικό / διαταραχή ισορροπίας", "Φόρτιση ακραίου εύρους", "Λειτουργική σταθεροποίηση"],
+    note: "Μηχανοϋποδοχείς & αρθρική σταθερότητα" },
+  { id: "cardio", label: "Καρδιαγγειακό", grain: "pulse",
+    loadTypes: ["Αερόβια – χαμηλής έντασης (Ζώνη 1-2)", "Αερόβια – μέτριας έντασης (Ζώνη 3)", "Αναερόβια – Διαλειμματική υψηλής έντασης (HIIT)", "Αναερόβια – Αναερόβιο κατώφλι"],
+    note: "Καρδιαγγειακό / μεταβολικό σύστημα — αερόβιος vs αναερόβιος μηχανισμός",
+    cardio: true },
+];
+
+const RESISTANCE_UNITS = ["kg", "% 1RM", "λάστιχο (επίπεδο)", "βάρος σώματος"];
+const EXERCISE_CATEGORIES = ["Κάτω άκρο", "Άνω άκρο", "Κορμός", "Ολικό σώμα", "Άλλο"];
+const SEED_EXERCISES = [
+  { id: "seed1", name: "Καθίσματα (Squat)", category: "Κάτω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed2", name: "Προβολές (Lunge)", category: "Κάτω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed3", name: "Πλάγιες προβολές (Side Lunge)", category: "Κάτω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed4", name: "Βουλγαρικό split squat", category: "Κάτω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed5", name: "Άρση θανάτου (Deadlift)", category: "Κάτω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed6", name: "Step-up", category: "Κάτω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed7", name: "Ανύψωση γαστροκνημίου (Calf raise)", category: "Κάτω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed8", name: "Πιέσεις στήθους (Bench press)", category: "Άνω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed9", name: "Κάμψεις (Push-up)", category: "Άνω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed10", name: "Κωπηλατική (Row)", category: "Άνω άκρο", defaultLoadType: "", notes: "" },
+];
+const CARDIO_MODES = [
+  { id: "treadmill", label: "Διάδρομος" },
+  { id: "bike", label: "Ποδήλατο" },
+  { id: "other", label: "Άλλο / υπαίθριο" },
+];
+const SIDE_OPTIONS = ["Δεξί", "Αριστερό", "Αμφοτερόπλευρα"];
+const JUMP_TYPES = ["CMJ (Countermovement Jump)", "SJ (Squat Jump)", "Drop / Stop Jump", "Μονοποδικό CMJ", "Επαναλαμβανόμενα άλματα", "Άλλο"];
+const ISO_TYPES = ["iMTP (Isometric Mid-Thigh Pull)", "ForceFrame – Ισχίο (Απαγωγοί/Προσαγωγοί)", "ForceFrame – Οπίσθιοι Μηριαίοι", "ForceFrame – Τετρακέφαλος", "Άλλο"];
+
+function Icon(props) {
+  const { name, ...rest } = props;
+  const paths = {
+    plus: <path d="M12 5v14M5 12h14"/>,
+    trash: <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/>,
+    chevron: <path d="M6 9l6 6 6-6"/>,
+    user: <React.Fragment><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></React.Fragment>,
+    stethoscope: <React.Fragment><path d="M4 3v6a5 5 0 0 0 10 0V3M9 15a5 5 0 0 0 10 0v-2"/><circle cx="19" cy="10" r="2"/></React.Fragment>,
+    activity: <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>,
+    x: <path d="M18 6 6 18M6 6l12 12"/>,
+    heart: <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>,
+    pencil: <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>,
+    book: <React.Fragment><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></React.Fragment>,
+    folder: <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>,
+    gauge: <React.Fragment><path d="M12 20a8 8 0 1 0-8-8"/><path d="M12 12l4-4M4 12H2M12 2v2M22 12h-2"/></React.Fragment>,
+  };
+  const strokeW = name === "plus" || name === "x" ? 2.5 : 2;
+  return <svg width={rest.size || 14} height={rest.size || 14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeW} strokeLinecap="round" strokeLinejoin="round" style={rest.style}>{paths[name]}</svg>;
+}
+
+function Grain({ type, active }) {
+  const stroke = active ? T.bg : T.paperDim;
+  const common = { stroke, strokeWidth: 1.1, fill: "none", opacity: active ? 0.55 : 0.35 };
+  return (
+    <svg width="30" height="18" viewBox="0 0 34 18" aria-hidden="true">
+      {type === "fiber" && [0, 6, 12, 18].map((y) => <path key={y} d={`M0 ${y + 2} C 8 ${y - 2}, 26 ${y + 6}, 34 ${y + 2}`} {...common} />)}
+      {type === "stripe" && [3, 7, 11, 15].map((y) => <line key={y} x1="0" y1={y} x2="34" y2={y} {...common} />)}
+      {type === "lattice" && (
+        <g {...common}>
+          <line x1="0" y1="0" x2="34" y2="18" /><line x1="0" y1="18" x2="34" y2="0" />
+          <line x1="17" y1="0" x2="17" y2="18" /><line x1="0" y1="9" x2="34" y2="9" />
+        </g>
+      )}
+      {type === "cross" && (
+        <g {...common}>
+          {[2, 12, 22, 32].map((x) => <line key={"a" + x} x1={x} y1="0" x2={x - 10} y2="18" />)}
+          {[2, 12, 22, 32].map((x) => <line key={"b" + x} x1={x - 10} y1="0" x2={x} y2="18" />)}
+        </g>
+      )}
+      {type === "pulse" && <path d="M0 9 L8 9 L11 2 L15 16 L18 9 L34 9" {...common} />}
+    </svg>
+  );
+}
+
+function borgLabel(v) {
+  if (v === 0) return "καμία";
+  if (v <= 2) return "πολύ ελαφριά";
+  if (v <= 4) return "ελαφριά";
+  if (v <= 6) return "μέτρια";
+  if (v <= 8) return "έντονη";
+  return "μέγιστη";
+}
+
+function ScaleInput({ label, value, onChange, low, high, danger }) {
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'IBM Plex Mono', monospace", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>
+        <span>{label}</span>
+        <span style={{ color: danger && value >= 6 ? T.rust : T.gold }}>{value} · {borgLabel(value)}</span>
+      </div>
+      <input type="range" min={0} max={10} value={value} onChange={(e) => onChange(Number(e.target.value))}
+        style={{ width: "100%", accentColor: danger && value >= 6 ? T.rust : T.terracotta }} />
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: T.paperDim, opacity: 0.6, marginTop: 2 }}>
+        <span>{low}</span><span>{high}</span>
+      </div>
+    </div>
+  );
+}
+
+function Field({ label, unit, children }) {
+  return (
+    <div>
+      <label style={{ display: "block", fontSize: 11, color: T.paperDim, marginBottom: 6 }}>{label}{unit ? ` (${unit})` : ""}</label>
+      {children}
+    </div>
+  );
+}
+const inputStyle = { width: "100%", background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 8, padding: "9px 10px", color: T.paper, fontSize: 13 };
+
+function NumberField({ label, value, onChange, placeholder, unit }) {
+  return (
+    <Field label={label} unit={unit}>
+      <input type="number" inputMode="decimal" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} style={inputStyle} />
+    </Field>
+  );
+}
+function TextField({ label, value, onChange, placeholder }) {
+  return (
+    <Field label={label}>
+      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} style={inputStyle} />
+    </Field>
+  );
+}
+function SelectField({ label, value, onChange, options }) {
+  return (
+    <Field label={label}>
+      <div style={{ position: "relative" }}>
+        <select value={value} onChange={(e) => onChange(e.target.value)} style={{ ...inputStyle, padding: "9px 30px 9px 10px", appearance: "none" }}>
+          {options.map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
+        <Icon name="chevron" size={14} style={{ position: "absolute", right: 9, top: 10, color: T.paperDim, pointerEvents: "none" }} />
+      </div>
+    </Field>
+  );
+}
+
+function TrendChart({ data, series, domain, xKey }) {
+  const w = 600, h = 200, padL = 38, padR = 12, padT = 10, padB = 24;
+  const innerW = w - padL - padR, innerH = h - padT - padB;
+  const n = data.length;
+  const [dMin, dMax] = domain;
+  const x = (i) => padL + (n === 1 ? innerW / 2 : (innerW * i) / (n - 1));
+  const y = (v) => padT + innerH - (innerH * (v - dMin)) / (dMax - dMin || 1);
+  const ticks = 5;
+  const tickVals = Array.from({ length: ticks }, (_, i) => dMin + ((dMax - dMin) * i) / (ticks - 1));
+  const path = (key) => data.map((d, i) => `${i === 0 ? "M" : "L"} ${x(i)} ${y(d[key])}`).join(" ");
+  return (
+    <div>
+      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 200, display: "block" }}>
+        {tickVals.map((v) => <line key={v} x1={padL} x2={w - padR} y1={y(v)} y2={y(v)} stroke={T.panelLine} strokeDasharray="3 3" />)}
+        {tickVals.map((v) => <text key={v} x={padL - 6} y={y(v) + 3} fontSize="9" fill={T.paperDim} textAnchor="end">{Math.round(v)}</text>)}
+        {data.map((d, i) => <text key={i} x={x(i)} y={h - 6} fontSize="9" fill={T.paperDim} textAnchor="middle">{(d[xKey] || "").slice(5)}</text>)}
+        {series.map((s) => (
+          <g key={s.key}>
+            <path d={path(s.key)} fill="none" stroke={s.color} strokeWidth="2" />
+            {data.map((d, i) => <circle key={i} cx={x(i)} cy={y(d[s.key])} r="3" fill={s.color} />)}
+          </g>
+        ))}
+      </svg>
+      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", paddingLeft: 8, marginTop: 4 }}>
+        {series.map((s) => (
+          <div key={s.key} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: T.paperDim }}>
+            <span style={{ width: 9, height: 9, borderRadius: 2, background: s.color, display: "inline-block" }} />{s.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+function autoDomain(values) {
+  const nums = values.filter((v) => typeof v === "number" && !isNaN(v));
+  if (!nums.length) return [0, 10];
+  const max = Math.max(...nums);
+  const niceMax = Math.ceil((max * 1.2) / 5) * 5 || 10;
+  return [0, niceMax];
+}
+
+const store = {
+  get(key, fallback) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } },
+  set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } },
+  remove(key) { try { localStorage.removeItem(key); } catch {} },
+};
+
+function daysBetween(a, b) { return Math.floor((b - a) / 86400000); }
+function weekNumber(startDate, entryDate) {
+  if (!startDate) return null;
+  const s = new Date(startDate + "T00:00:00");
+  const e = new Date(entryDate + "T00:00:00");
+  const d = daysBetween(s, e);
+  if (d < 0) return null;
+  return Math.floor(d / 7) + 1;
+}
+
+const emptyPatientDraft = () => ({
+  name: "", startDate: new Date().toISOString().slice(0, 10),
+  age: "", phone: "", email: "", occupation: "", sport: "", dominantLimb: SIDE_OPTIONS[0],
+  pathology: "", affectedSide: SIDE_OPTIONS[0], injuryDate: "", medicalHistory: "",
+  medications: "", comorbidities: "", referringDoctor: "", imaging: "", allergies: "",
+});
+
+function TissueLoadLog() {
+  const [patients, setPatients] = useState(() => store.get("trl_patients", []));
+  const [activePatient, setActivePatient] = useState(() => {
+    const list = store.get("trl_patients", []);
+    return list.length ? list[0].id : null;
+  });
+  const [entries, setEntries] = useState([]);
+  const [measurements, setMeasurements] = useState([]);
+  const [view, setView] = useState("load"); // load | measurements
+  const [tissueId, setTissueId] = useState("tendon");
+  const [measureTab, setMeasureTab] = useState("jump"); // jump | isometric
+  const [mode, setMode] = useState("clinician");
+  const [showNewPatient, setShowNewPatient] = useState(false);
+  const [editingPatient, setEditingPatient] = useState(false);
+  const [patientDraft, setPatientDraft] = useState(emptyPatientDraft());
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [customTypes, setCustomTypes] = useState(() => store.get("trl_customtypes", {}));
+  const [addingType, setAddingType] = useState(false);
+  const [newTypeName, setNewTypeName] = useState("");
+  const [cardioMode, setCardioMode] = useState("other");
+  const [exercises, setExercises] = useState(() => {
+    const saved = store.get("trl_exercises", null);
+    if (saved) return saved;
+    store.set("trl_exercises", SEED_EXERCISES);
+    return SEED_EXERCISES;
+  });
+  const [showLibrary, setShowLibrary] = useState(false);
+  const [exDraft, setExDraft] = useState({ name: "", category: EXERCISE_CATEGORIES[0], defaultLoadType: "", notes: "" });
+
+  const tissue = TISSUES.find((t) => t.id === tissueId);
+  const isCardio = !!tissue.cardio;
+  const allLoadTypes = [...tissue.loadTypes, ...(customTypes[tissueId] || [])];
+
+  const emptyForm = {
+    activity: "", loadType: allLoadTypes[0], intensity: 5,
+    resistance: "", resistanceUnit: "kg",
+    sets: "", reps: "", tempo: "",
+    duration: "", heartRateAvg: "", heartRatePercent: "",
+    speed: "", pace: "", incline: "", resistanceLevel: "",
+    frequency: "", session: "",
+    painDuring: 0, pain24h: 0, sessionRPE: 3, notes: "",
+  };
+  const [form, setForm] = useState(emptyForm);
+
+  const emptyJumpForm = { testType: JUMP_TYPES[0], jumpHeight: "", contactTime: "", flightTime: "", rsi: "", asymmetry: "", notes: "" };
+  const emptyIsoForm = { testType: ISO_TYPES[0], rightForce: "", leftForce: "", totalForce: "", rfd: "", notes: "" };
+  const [jumpForm, setJumpForm] = useState(emptyJumpForm);
+  const [isoForm, setIsoForm] = useState(emptyIsoForm);
+
+  useEffect(() => { setForm((f) => ({ ...f, loadType: allLoadTypes[0] })); setAddingType(false); }, [tissueId]);
+
+  useEffect(() => {
+    if (!activePatient) { setEntries([]); setMeasurements([]); return; }
+    setEntries(store.get(`trl_entries_${activePatient}`, []));
+    setMeasurements(store.get(`trl_measurements_${activePatient}`, []));
+  }, [activePatient]);
+
+  const flashToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2200); };
+  const patient = patients.find((p) => p.id === activePatient);
+
+  const nextSession = useMemo(() => {
+    const nums = entries.map((e) => Number(e.session)).filter((n) => !isNaN(n) && n > 0);
+    return nums.length ? Math.max(...nums) + 1 : 1;
+  }, [entries]);
+
+  useEffect(() => { setForm((f) => ({ ...f, session: nextSession })); }, [nextSession, activePatient]);
+
+  const todayWeek = patient ? weekNumber(patient.startDate, new Date().toISOString().slice(0, 10)) : null;
+
+  const openNewPatient = () => {
+    setPatientDraft({ ...emptyPatientDraft() });
+    setShowNewPatient(true);
+  };
+  const saveNewPatient = () => {
+    const name = patientDraft.name.trim();
+    if (!name) return;
+    const id = `${Date.now()}`;
+    const next = [...patients, { id, ...patientDraft, name }];
+    setPatients(next);
+    setActivePatient(id);
+    setShowNewPatient(false);
+    store.set("trl_patients", next);
+  };
+  const openEditPatient = () => {
+    if (!patient) return;
+    setPatientDraft({ ...emptyPatientDraft(), ...patient });
+    setEditingPatient(true);
+  };
+  const saveEditPatient = () => {
+    const next = patients.map((p) => p.id === activePatient ? { ...p, ...patientDraft, name: patientDraft.name.trim() || p.name } : p);
+    setPatients(next);
+    store.set("trl_patients", next);
+    setEditingPatient(false);
+    flashToast("Ενημερώθηκε ο φάκελος ασθενή");
+  };
+  const removePatient = (id) => {
+    const next = patients.filter((p) => p.id !== id);
+    setPatients(next);
+    if (activePatient === id) setActivePatient(next[0]?.id ?? null);
+    store.set("trl_patients", next);
+    store.remove(`trl_entries_${id}`);
+    store.remove(`trl_measurements_${id}`);
+  };
+
+  const addCustomType = () => {
+    const name = newTypeName.trim();
+    if (!name) return;
+    const existing = customTypes[tissueId] || [];
+    if ([...tissue.loadTypes, ...existing].includes(name)) { setForm({ ...form, loadType: name }); setNewTypeName(""); setAddingType(false); return; }
+    const next = { ...customTypes, [tissueId]: [...existing, name] };
+    setCustomTypes(next);
+    store.set("trl_customtypes", next);
+    setForm({ ...form, loadType: name });
+    setNewTypeName(""); setAddingType(false);
+    flashToast("Προστέθηκε νέος τύπος φόρτισης");
+  };
+
+  const addExercise = () => {
+    const name = exDraft.name.trim();
+    if (!name) return;
+    if (exercises.some((ex) => ex.name.toLowerCase() === name.toLowerCase())) { flashToast("Υπάρχει ήδη στη βάση"); return; }
+    const ex = { id: `${Date.now()}`, name, category: exDraft.category, defaultLoadType: exDraft.defaultLoadType, notes: exDraft.notes.trim() };
+    const next = [...exercises, ex];
+    setExercises(next);
+    store.set("trl_exercises", next);
+    setExDraft({ name: "", category: EXERCISE_CATEGORIES[0], defaultLoadType: "", notes: "" });
+    flashToast("Προστέθηκε στη βάση ασκήσεων");
+  };
+  const removeExercise = (id) => {
+    const next = exercises.filter((e) => e.id !== id);
+    setExercises(next);
+    store.set("trl_exercises", next);
+  };
+  const pickExercise = (name) => {
+    setForm((f) => {
+      const match = exercises.find((e) => e.name === name);
+      return { ...f, activity: name, loadType: match && match.defaultLoadType ? match.defaultLoadType : f.loadType };
+    });
+  };
+
+  const saveEntry = useCallback(() => {
+    if (!activePatient) return;
+    if (!form.activity.trim()) { flashToast("Πρόσθεσε όνομα άσκησης/δραστηριότητας"); return; }
+    setSaving(true);
+    const entry = {
+      id: `${Date.now()}`, date: new Date().toISOString().slice(0, 10), tissue: tissueId,
+      cardioMode: isCardio ? cardioMode : undefined,
+      recordedBy: mode === "clinician" ? "Θεραπευτής" : "Ασθενής",
+      week: patient ? weekNumber(patient.startDate, new Date().toISOString().slice(0, 10)) : null,
+      ...form,
+    };
+    const next = [entry, ...entries];
+    setEntries(next);
+    const ok = store.set(`trl_entries_${activePatient}`, next);
+    flashToast(ok ? "Καταχωρήθηκε" : "Η αποθήκευση απέτυχε");
+    setSaving(false);
+    setForm({ ...emptyForm, loadType: allLoadTypes[0], session: nextSession + 1 });
+  }, [activePatient, entries, form, tissueId, mode, tissue, customTypes, cardioMode, patient, nextSession]);
+
+  const deleteEntry = (id) => {
+    const next = entries.filter((e) => e.id !== id);
+    setEntries(next);
+    store.set(`trl_entries_${activePatient}`, next);
+  };
+
+  const saveMeasurement = (category) => {
+    if (!activePatient) return;
+    setSaving(true);
+    const base = category === "jump" ? jumpForm : isoForm;
+    let computed = {};
+    if (category === "isometric") {
+      const r = parseFloat(isoForm.rightForce), l = parseFloat(isoForm.leftForce);
+      if (!isNaN(r) && !isNaN(l) && Math.max(r, l) > 0) {
+        computed.asymmetryCalc = Math.round((Math.abs(r - l) / Math.max(r, l)) * 1000) / 10;
+      }
+    }
+    const entry = {
+      id: `${Date.now()}`, date: new Date().toISOString().slice(0, 10), category,
+      week: patient ? weekNumber(patient.startDate, new Date().toISOString().slice(0, 10)) : null,
+      ...base, ...computed,
+    };
+    const next = [entry, ...measurements];
+    setMeasurements(next);
+    const ok = store.set(`trl_measurements_${activePatient}`, next);
+    flashToast(ok ? "Καταχωρήθηκε μέτρηση" : "Η αποθήκευση απέτυχε");
+    setSaving(false);
+    if (category === "jump") setJumpForm(emptyJumpForm); else setIsoForm(emptyIsoForm);
+  };
+  const deleteMeasurement = (id) => {
+    const next = measurements.filter((m) => m.id !== id);
+    setMeasurements(next);
+    store.set(`trl_measurements_${activePatient}`, next);
+  };
+
+  const patientName = patient?.name;
+  const tissueEntries = entries.filter((e) => e.tissue === tissueId).slice().reverse();
+  const chartData = tissueEntries.map((e) => ({ date: e.date, sessionRPE: e.sessionRPE, painDuring: e.painDuring, pain24h: e.pain24h }));
+  const hrData = tissueEntries.filter((e) => e.heartRateAvg !== "" && e.heartRateAvg != null).map((e) => ({ date: e.date, heartRateAvg: Number(e.heartRateAvg) }));
+  const isPatientMode = mode === "patient";
+
+  const jumpEntries = measurements.filter((m) => m.category === "jump").slice().reverse();
+  const isoEntries = measurements.filter((m) => m.category === "isometric").slice().reverse();
+  const jumpChartData = jumpEntries.filter((j) => j.jumpHeight !== "").map((j) => ({ date: j.date, jumpHeight: Number(j.jumpHeight) }));
+  const isoChartData = isoEntries.map((i) => {
+    const r = parseFloat(i.rightForce), l = parseFloat(i.leftForce), tot = parseFloat(i.totalForce);
+    const val = !isNaN(tot) ? tot : (!isNaN(r) && !isNaN(l) ? (r + l) / 2 : (!isNaN(r) ? r : (!isNaN(l) ? l : null)));
+    return val != null ? { date: i.date, force: val } : null;
+  }).filter(Boolean);
+
+  const patientHasPersonal = patient && (patient.age || patient.phone || patient.email || patient.occupation || patient.sport || patient.dominantLimb);
+  const patientHasMedical = patient && (patient.pathology || patient.affectedSide || patient.injuryDate || patient.medicalHistory || patient.medications || patient.comorbidities || patient.referringDoctor || patient.imaging || patient.allergies);
+
+  return (
+    <div style={{ minHeight: "100vh", background: `radial-gradient(1200px 600px at 15% -10%, ${T.bgSoft}, ${T.bg} 60%)`, color: T.paper, fontFamily: "'IBM Plex Sans', sans-serif", padding: "28px 16px 60px" }}>
+      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+        <h1 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 26, letterSpacing: "-0.01em", margin: 0 }}>
+          Καταγραφή <span style={{ color: T.terracotta }}>Φορτίου</span> ανά Ιστό
+        </h1>
+        <p style={{ color: T.paperDim, fontSize: 13, marginTop: 4, marginBottom: 22 }}>Sports ReHub · φόρτιση, φάκελος ασθενή & μετρήσεις προόδου</p>
+
+        <div style={{ display: "flex", background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: 4, marginBottom: 18, gap: 4 }}>
+          {[{ id: "clinician", label: "Θεραπευτής", icon: "stethoscope" }, { id: "patient", label: "Ασθενής", icon: "user" }].map(({ id, label, icon }) => (
+            <button key={id} onClick={() => setMode(id)} style={{
+              flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              padding: "10px 8px", borderRadius: 7, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600,
+              background: mode === id ? T.terracotta : "transparent", color: mode === id ? T.bg : T.paperDim,
+            }}><Icon name={icon} size={15} /> {label}</button>
+          ))}
+        </div>
+
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 8 }}>Ασθενής</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {patients.map((p) => (
+              <div key={p.id} style={{ position: "relative" }}>
+                <button onClick={() => setActivePatient(p.id)} style={{
+                  padding: "8px 14px", borderRadius: 999, cursor: "pointer",
+                  border: `1px solid ${activePatient === p.id ? T.gold : T.panelLine}`,
+                  background: activePatient === p.id ? "rgba(199,154,86,0.14)" : T.panel,
+                  color: activePatient === p.id ? T.gold : T.paper, fontSize: 13.5, fontWeight: 500,
+                }}>{p.name}</button>
+                {!isPatientMode && (
+                  <button onClick={() => removePatient(p.id)} aria-label={`Διαγραφή ${p.name}`} style={{
+                    position: "absolute", top: -6, right: -6, width: 16, height: 16, borderRadius: "50%",
+                    background: T.rust, border: `1px solid ${T.bg}`, color: T.paper,
+                    display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0,
+                  }}><Icon name="x" size={10} /></button>
+                )}
+              </div>
+            ))}
+            {!isPatientMode && !showNewPatient && (
+              <button onClick={openNewPatient} style={{
+                padding: "8px 14px", borderRadius: 999, border: `1px dashed ${T.panelLine}`,
+                background: "transparent", color: T.paperDim, fontSize: 13.5, cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 6,
+              }}><Icon name="plus" size={14} /> Νέος ασθενής</button>
+            )}
+          </div>
+
+          {!isPatientMode && showNewPatient && (
+            <div style={{ background: T.panel, border: `1px solid ${T.gold}`, borderRadius: 10, padding: 14, marginTop: 10 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+                <TextField label="Όνομα ασθενή" value={patientDraft.name} onChange={(v) => setPatientDraft({ ...patientDraft, name: v })} />
+                <Field label="Ημερομηνία έναρξης"><input type="date" value={patientDraft.startDate} onChange={(e) => setPatientDraft({ ...patientDraft, startDate: e.target.value })} style={inputStyle} /></Field>
+              </div>
+              <TextField label="Παθολογία / διάγνωση" value={patientDraft.pathology} onChange={(v) => setPatientDraft({ ...patientDraft, pathology: v })} placeholder="π.χ. τενοντοπάθεια Αχίλλειου" />
+              <p style={{ fontSize: 11, color: T.paperDim, marginTop: 8, marginBottom: 10 }}>Τα υπόλοιπα στοιχεία (προσωπικά/ιατρικά) συμπληρώνονται στον πλήρη φάκελο μετά την προσθήκη.</p>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button onClick={saveNewPatient} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 13.5, fontWeight: 600, cursor: "pointer" }}>Προσθήκη ασθενή</button>
+                <button onClick={() => setShowNewPatient(false)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 8, padding: "9px 16px", fontSize: 13.5, cursor: "pointer" }}>Άκυρο</button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {activePatient && patient && !editingPatient && (
+          <div style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "12px 14px", marginBottom: 22, fontSize: 12.5, color: T.paperDim }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.gold, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13 }}>
+                <Icon name="folder" size={13} /> Φάκελος Ασθενή
+              </div>
+              {!isPatientMode && <button onClick={openEditPatient} style={{ background: "none", border: "none", color: T.gold, cursor: "pointer", padding: 4 }} aria-label="Επεξεργασία φακέλου"><Icon name="pencil" size={14} /></button>}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div>
+                <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 4 }}>Προσωπικά</div>
+                {patientHasPersonal ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    {patient.age && <div><strong style={{ color: T.paper }}>Ηλικία:</strong> {patient.age}</div>}
+                    {patient.occupation && <div><strong style={{ color: T.paper }}>Επάγγελμα:</strong> {patient.occupation}</div>}
+                    {patient.sport && <div><strong style={{ color: T.paper }}>Άθλημα:</strong> {patient.sport}</div>}
+                    {patient.dominantLimb && <div><strong style={{ color: T.paper }}>Κυρίαρχο άκρο:</strong> {patient.dominantLimb}</div>}
+                    {patient.phone && <div><strong style={{ color: T.paper }}>Τηλ:</strong> {patient.phone}</div>}
+                    {patient.email && <div><strong style={{ color: T.paper }}>Email:</strong> {patient.email}</div>}
+                  </div>
+                ) : <div style={{ opacity: 0.5 }}>—</div>}
+              </div>
+              <div>
+                <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 4 }}>Ιατρικά</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  {patient.pathology ? <div><strong style={{ color: T.paper }}>Παθολογία:</strong> {patient.pathology}</div> : <div style={{ opacity: 0.5 }}>Καμία παθολογία</div>}
+                  {patient.affectedSide && <div><strong style={{ color: T.paper }}>Πάσχον:</strong> {patient.affectedSide}</div>}
+                  {patient.injuryDate && <div><strong style={{ color: T.paper }}>Τραυματισμός:</strong> {patient.injuryDate}</div>}
+                  <div><strong style={{ color: T.paper }}>Έναρξη:</strong> {patient.startDate || "—"} {todayWeek ? `· Εβδ.${todayWeek}` : ""}</div>
+                  {patient.referringDoctor && <div><strong style={{ color: T.paper }}>Παραπομπή:</strong> {patient.referringDoctor}</div>}
+                  {patient.imaging && <div><strong style={{ color: T.paper }}>Απεικόνιση:</strong> {patient.imaging}</div>}
+                  {patient.allergies && <div><strong style={{ color: T.paper }}>Αλλεργίες:</strong> {patient.allergies}</div>}
+                  {patient.medications && <div><strong style={{ color: T.paper }}>Φάρμακα:</strong> {patient.medications}</div>}
+                  {patient.comorbidities && <div><strong style={{ color: T.paper }}>Συνοδά:</strong> {patient.comorbidities}</div>}
+                  {patient.medicalHistory && <div><strong style={{ color: T.paper }}>Ιστορικό:</strong> {patient.medicalHistory}</div>}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activePatient && editingPatient && (
+          <div style={{ background: T.panel, border: `1px solid ${T.gold}`, borderRadius: 10, padding: 16, marginBottom: 22 }}>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, marginBottom: 12, color: T.gold }}>Προσωπικά στοιχεία</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+              <TextField label="Όνομα" value={patientDraft.name} onChange={(v) => setPatientDraft({ ...patientDraft, name: v })} />
+              <NumberField label="Ηλικία" value={patientDraft.age} onChange={(v) => setPatientDraft({ ...patientDraft, age: v })} />
+              <TextField label="Τηλέφωνο" value={patientDraft.phone} onChange={(v) => setPatientDraft({ ...patientDraft, phone: v })} />
+              <TextField label="Email" value={patientDraft.email} onChange={(v) => setPatientDraft({ ...patientDraft, email: v })} />
+              <TextField label="Επάγγελμα" value={patientDraft.occupation} onChange={(v) => setPatientDraft({ ...patientDraft, occupation: v })} />
+              <TextField label="Άθλημα / δραστηριότητα" value={patientDraft.sport} onChange={(v) => setPatientDraft({ ...patientDraft, sport: v })} />
+              <SelectField label="Κυρίαρχο άκρο" value={patientDraft.dominantLimb} onChange={(v) => setPatientDraft({ ...patientDraft, dominantLimb: v })} options={SIDE_OPTIONS} />
+            </div>
+
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, margin: "16px 0 12px", color: T.gold }}>Ιατρικά στοιχεία</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+              <TextField label="Παθολογία / διάγνωση" value={patientDraft.pathology} onChange={(v) => setPatientDraft({ ...patientDraft, pathology: v })} />
+              <SelectField label="Πάσχον άκρο/πλευρά" value={patientDraft.affectedSide} onChange={(v) => setPatientDraft({ ...patientDraft, affectedSide: v })} options={SIDE_OPTIONS} />
+              <Field label="Ημερομηνία τραυματισμού"><input type="date" value={patientDraft.injuryDate} onChange={(e) => setPatientDraft({ ...patientDraft, injuryDate: e.target.value })} style={inputStyle} /></Field>
+              <Field label="Ημερομηνία έναρξης θεραπείας"><input type="date" value={patientDraft.startDate} onChange={(e) => setPatientDraft({ ...patientDraft, startDate: e.target.value })} style={inputStyle} /></Field>
+              <TextField label="Παραπέμπων ιατρός" value={patientDraft.referringDoctor} onChange={(v) => setPatientDraft({ ...patientDraft, referringDoctor: v })} />
+              <TextField label="Ευρήματα απεικόνισης" value={patientDraft.imaging} onChange={(v) => setPatientDraft({ ...patientDraft, imaging: v })} placeholder="π.χ. MRI: μερική ρήξη..." />
+              <TextField label="Φάρμακα" value={patientDraft.medications} onChange={(v) => setPatientDraft({ ...patientDraft, medications: v })} />
+              <TextField label="Συνοδά νοσήματα" value={patientDraft.comorbidities} onChange={(v) => setPatientDraft({ ...patientDraft, comorbidities: v })} />
+              <TextField label="Αλλεργίες" value={patientDraft.allergies} onChange={(v) => setPatientDraft({ ...patientDraft, allergies: v })} />
+            </div>
+            <Field label="Ιστορικό / προηγούμενοι τραυματισμοί">
+              <textarea value={patientDraft.medicalHistory} onChange={(e) => setPatientDraft({ ...patientDraft, medicalHistory: e.target.value })} rows={2} style={{ ...inputStyle, marginBottom: 14, resize: "vertical" }} />
+            </Field>
+
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={saveEditPatient} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 13.5, fontWeight: 600, cursor: "pointer" }}>Αποθήκευση φακέλου</button>
+              <button onClick={() => setEditingPatient(false)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 8, padding: "9px 16px", fontSize: 13.5, cursor: "pointer" }}>Άκυρο</button>
+            </div>
+          </div>
+        )}
+
+        {!activePatient ? (
+          <div style={{ border: `1px dashed ${T.panelLine}`, borderRadius: 14, padding: "40px 20px", textAlign: "center", color: T.paperDim, fontSize: 14 }}>
+            Πρόσθεσε έναν ασθενή για να ξεκινήσεις.
+          </div>
+        ) : (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 20 }}>
+              {[{ id: "load", label: "Καταγραφή Φορτίου", icon: "activity" }, { id: "measurements", label: "Μετρήσεις (VALD)", icon: "gauge" }].map((v) => (
+                <button key={v.id} onClick={() => setView(v.id)} style={{
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  padding: "12px 10px", borderRadius: 10, cursor: "pointer", fontSize: 13.5, fontWeight: 700,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  border: `1px solid ${view === v.id ? T.gold : T.panelLine}`,
+                  background: view === v.id ? "rgba(199,154,86,0.14)" : T.panel,
+                  color: view === v.id ? T.gold : T.paperDim,
+                }}><Icon name={v.icon} size={15} /> {v.label}</button>
+              ))}
+            </div>
+
+            {view === "load" && (
+              <>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6, marginBottom: 18 }}>
+                  {TISSUES.map((t) => {
+                    const active = t.id === tissueId;
+                    return (
+                      <button key={t.id} onClick={() => setTissueId(t.id)} style={{
+                        display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
+                        padding: "10px 3px", borderRadius: 10, cursor: "pointer",
+                        border: `1px solid ${active ? T.terracotta : T.panelLine}`,
+                        background: active ? T.terracotta : T.panel, color: active ? T.bg : T.paper,
+                      }}>
+                        <Grain type={t.grain} active={active} />
+                        <span style={{ fontSize: 10.5, fontWeight: 600, textAlign: "center", lineHeight: 1.15 }}>{t.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p style={{ color: T.paperDim, fontSize: 12, marginTop: -10, marginBottom: 18, fontStyle: "italic" }}>{tissue.note}</p>
+
+                <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 18, marginBottom: 22 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 15 }}>Νέα καταχώρηση — {patientName}</div>
+                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: T.gold, background: "rgba(199,154,86,0.12)", padding: "4px 8px", borderRadius: 6 }}>
+                      {todayWeek ? `Εβδ. ${todayWeek}` : ""}{todayWeek && " · "}Θεραπεία #{form.session}
+                    </div>
+                  </div>
+
+                  {!isCardio && (
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                        <label style={{ fontSize: 12, color: T.paperDim }}>Άσκηση / δραστηριότητα</label>
+                        <button onClick={() => setShowLibrary((s) => !s)} style={{ background: "none", border: "none", color: T.gold, fontSize: 11.5, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
+                          <Icon name="book" size={12} /> βάση ασκήσεων
+                        </button>
+                      </div>
+                      <input list="exercise-options" value={form.activity} onChange={(e) => pickExercise(e.target.value)}
+                        placeholder="π.χ. Καθίσματα (Squat) — ή γράψε δική σου"
+                        style={{ ...inputStyle, marginBottom: showLibrary ? 10 : 14 }} />
+                      <datalist id="exercise-options">{exercises.map((ex) => <option key={ex.id} value={ex.name} />)}</datalist>
+
+                      {showLibrary && (
+                        <div style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: 12, marginBottom: 14 }}>
+                          <div style={{ fontSize: 11, color: T.paperDim, marginBottom: 8 }}>Βάση ασκήσεων ({exercises.length})</div>
+                          <div style={{ maxHeight: 140, overflowY: "auto", marginBottom: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+                            {exercises.map((ex) => (
+                              <div key={ex.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12.5, padding: "4px 2px" }}>
+                                <span>{ex.name} <span style={{ color: T.paperDim, fontSize: 11 }}>· {ex.category}</span></span>
+                                <button onClick={() => removeExercise(ex.id)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={12} /></button>
+                              </div>
+                            ))}
+                          </div>
+                          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, marginBottom: 8 }}>
+                            <input value={exDraft.name} onChange={(e) => setExDraft({ ...exDraft, name: e.target.value })} placeholder="Νέα άσκηση" style={{ ...inputStyle, fontSize: 12.5, padding: "7px 9px" }} />
+                            <select value={exDraft.category} onChange={(e) => setExDraft({ ...exDraft, category: e.target.value })} style={{ ...inputStyle, fontSize: 12.5, padding: "7px 9px" }}>
+                              {EXERCISE_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                          </div>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 8 }}>
+                            <select value={exDraft.defaultLoadType} onChange={(e) => setExDraft({ ...exDraft, defaultLoadType: e.target.value })} style={{ ...inputStyle, fontSize: 12.5, padding: "7px 9px" }}>
+                              <option value="">— προεπιλεγμένος τύπος φόρτισης (προαιρετικό) —</option>
+                              {tissue.loadTypes.map((lt) => <option key={lt} value={lt}>{lt}</option>)}
+                            </select>
+                            <button onClick={addExercise} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>Προσθήκη</button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {isCardio && (
+                    <>
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Δραστηριότητα</label>
+                      <input value={form.activity} onChange={(e) => setForm({ ...form, activity: e.target.value })} placeholder="π.χ. τρέξιμο, ποδήλατο, κολύμβηση" style={{ ...inputStyle, marginBottom: 12 }} />
+                      <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+                        {CARDIO_MODES.map((m) => (
+                          <button key={m.id} onClick={() => setCardioMode(m.id)} style={{
+                            flex: 1, padding: "8px 6px", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer",
+                            border: `1px solid ${cardioMode === m.id ? T.terracotta : T.panelLine}`,
+                            background: cardioMode === m.id ? T.terracotta : T.bgSoft, color: cardioMode === m.id ? T.bg : T.paperDim,
+                          }}>{m.label}</button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {!isCardio && (
+                    <>
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Φορτίο αντίστασης (προαιρετικό)</label>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 10, marginBottom: 14 }}>
+                        <input type="number" inputMode="decimal" value={form.resistance} onChange={(e) => setForm({ ...form, resistance: e.target.value })} placeholder="π.χ. 20" style={inputStyle} />
+                        <div style={{ position: "relative" }}>
+                          <select value={form.resistanceUnit} onChange={(e) => setForm({ ...form, resistanceUnit: e.target.value })} style={{ ...inputStyle, padding: "10px 30px 10px 12px", appearance: "none" }}>
+                            {RESISTANCE_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                          </select>
+                          <Icon name="chevron" size={15} style={{ position: "absolute", right: 10, top: 12, color: T.paperDim, pointerEvents: "none" }} />
+                        </div>
+                      </div>
+
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Τύπος φόρτισης</label>
+                      <div style={{ position: "relative", marginBottom: 8 }}>
+                        <select value={form.loadType} onChange={(e) => setForm({ ...form, loadType: e.target.value })} style={{ ...inputStyle, padding: "10px 36px 10px 12px", appearance: "none" }}>
+                          {allLoadTypes.map((lt) => <option key={lt} value={lt}>{lt}</option>)}
+                        </select>
+                        <Icon name="chevron" size={15} style={{ position: "absolute", right: 12, top: 12, color: T.paperDim, pointerEvents: "none" }} />
+                      </div>
+                      {!addingType ? (
+                        <button onClick={() => setAddingType(true)} style={{ background: "none", border: "none", color: T.gold, fontSize: 12, cursor: "pointer", padding: 0, marginBottom: 14, display: "flex", alignItems: "center", gap: 4 }}>
+                          <Icon name="plus" size={12} /> δικός σου τύπος φόρτισης
+                        </button>
+                      ) : (
+                        <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+                          <input autoFocus value={newTypeName} onChange={(e) => setNewTypeName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addCustomType()}
+                            placeholder="π.χ. Ισομετρική με band" style={{ flex: 1, ...inputStyle, padding: "8px 12px" }} />
+                          <button onClick={addCustomType} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Προσθήκη</button>
+                        </div>
+                      )}
+
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+                        <NumberField label="Sets" value={form.sets} onChange={(v) => setForm({ ...form, sets: v })} placeholder="3" />
+                        <NumberField label="Reps" value={form.reps} onChange={(v) => setForm({ ...form, reps: v })} placeholder="10" />
+                        <TextField label="Ρυθμός/tempo" value={form.tempo} onChange={(v) => setForm({ ...form, tempo: v })} placeholder="3-1-3" />
+                      </div>
+
+                      {!isPatientMode && (
+                        <ScaleInput label="Ένταση (RPE φόρτισης)" value={form.intensity} onChange={(v) => setForm({ ...form, intensity: v })} low="πολύ ελαφριά" high="μέγιστη" />
+                      )}
+                    </>
+                  )}
+
+                  {isCardio && cardioMode === "treadmill" && (
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 8, marginBottom: 14 }}>
+                      <NumberField label="Ταχύτητα" unit="km/h" value={form.speed} onChange={(v) => setForm({ ...form, speed: v })} placeholder="8" />
+                      <NumberField label="Pace" unit="min/km" value={form.pace} onChange={(v) => setForm({ ...form, pace: v })} placeholder="6:00" />
+                      <NumberField label="Κλίση" unit="%" value={form.incline} onChange={(v) => setForm({ ...form, incline: v })} placeholder="2" />
+                      <NumberField label="Διάρκεια" unit="λεπτά" value={form.duration} onChange={(v) => setForm({ ...form, duration: v })} placeholder="30" />
+                    </div>
+                  )}
+                  {isCardio && cardioMode === "bike" && (
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 14 }}>
+                      <NumberField label="Ταχύτητα" unit="km/h" value={form.speed} onChange={(v) => setForm({ ...form, speed: v })} placeholder="25" />
+                      <NumberField label="Ένταση/αντίσταση" unit="επίπεδο ή W" value={form.resistanceLevel} onChange={(v) => setForm({ ...form, resistanceLevel: v })} placeholder="8" />
+                      <NumberField label="Διάρκεια" unit="λεπτά" value={form.duration} onChange={(v) => setForm({ ...form, duration: v })} placeholder="30" />
+                    </div>
+                  )}
+                  {isCardio && cardioMode === "other" && (
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 8, marginBottom: 14 }}>
+                      <NumberField label="Διάρκεια" unit="λεπτά" value={form.duration} onChange={(v) => setForm({ ...form, duration: v })} placeholder="30" />
+                    </div>
+                  )}
+                  {isCardio && (
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 14 }}>
+                      <NumberField label="Μέση ΚΣ" unit="bpm" value={form.heartRateAvg} onChange={(v) => setForm({ ...form, heartRateAvg: v })} placeholder="140" />
+                      <NumberField label="% HRmax" value={form.heartRatePercent} onChange={(v) => setForm({ ...form, heartRatePercent: v })} placeholder="75" />
+                    </div>
+                  )}
+                  {isCardio && (
+                    <>
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Τύπος φόρτισης</label>
+                      <div style={{ position: "relative", marginBottom: 14 }}>
+                        <select value={form.loadType} onChange={(e) => setForm({ ...form, loadType: e.target.value })} style={{ ...inputStyle, padding: "10px 36px 10px 12px", appearance: "none" }}>
+                          {allLoadTypes.map((lt) => <option key={lt} value={lt}>{lt}</option>)}
+                        </select>
+                        <Icon name="chevron" size={15} style={{ position: "absolute", right: 12, top: 12, color: T.paperDim, pointerEvents: "none" }} />
+                      </div>
+                    </>
+                  )}
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
+                    <NumberField label="Συχνότητα" unit="φορές/εβδ." value={form.frequency} onChange={(v) => setForm({ ...form, frequency: v })} placeholder="3" />
+                    <NumberField label="Θεραπεία #" value={form.session} onChange={(v) => setForm({ ...form, session: v })} placeholder={String(nextSession)} />
+                  </div>
+
+                  <ScaleInput label="RPE συνεδρίας (Borg CR10)" value={form.sessionRPE} onChange={(v) => setForm({ ...form, sessionRPE: v })} low="χαλαρά" high="εξάντληση" />
+                  <ScaleInput label="Πόνος κατά τη δραστηριότητα" value={form.painDuring} onChange={(v) => setForm({ ...form, painDuring: v })} low="καθόλου" high="αφόρητος" danger />
+                  <ScaleInput label="Πόνος 24 ώρες μετά" value={form.pain24h} onChange={(v) => setForm({ ...form, pain24h: v })} low="καθόλου" high="αφόρητος" danger />
+
+                  <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Σημειώσεις</label>
+                  <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={2} style={{ ...inputStyle, marginBottom: 16, resize: "vertical" }} />
+
+                  <button onClick={saveEntry} disabled={saving} style={{
+                    width: "100%", background: T.terracotta, color: T.bg, border: "none", borderRadius: 9,
+                    padding: "12px", fontSize: 14.5, fontWeight: 700, cursor: saving ? "default" : "pointer",
+                    opacity: saving ? 0.7 : 1, fontFamily: "'Space Grotesk', sans-serif",
+                  }}>{saving ? "Αποθήκευση…" : "Καταχώρηση φορτίου"}</button>
+                </div>
+
+                {chartData.length > 1 && (
+                  <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "18px 10px 8px", marginBottom: 22 }}>
+                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, marginBottom: 10, paddingLeft: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                      <Icon name="activity" size={15} style={{ color: T.gold }} /> Τάση RPE / πόνου — {tissue.label}
+                    </div>
+                    <TrendChart data={chartData} xKey="date" domain={[0, 10]} series={[
+                      { key: "sessionRPE", color: T.gold, label: "RPE συνεδρίας" },
+                      { key: "painDuring", color: T.terracotta, label: "Πόνος (κατά)" },
+                      { key: "pain24h", color: T.rust, label: "Πόνος (24ω)" },
+                    ]} />
+                  </div>
+                )}
+                {isCardio && hrData.length > 1 && (
+                  <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "18px 10px 8px", marginBottom: 22 }}>
+                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, marginBottom: 10, paddingLeft: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                      <Icon name="heart" size={15} style={{ color: T.rust }} /> Τάση μέσης καρδιακής συχνότητας
+                    </div>
+                    <TrendChart data={hrData} xKey="date" domain={[60, 200]} series={[{ key: "heartRateAvg", color: T.rust, label: "Μέση ΚΣ (bpm)" }]} />
+                  </div>
+                )}
+
+                <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 10 }}>
+                  Ιστορικό — {tissue.label} ({tissueEntries.length})
+                </div>
+                {tissueEntries.length === 0 ? (
+                  <div style={{ color: T.paperDim, fontSize: 13, opacity: 0.7 }}>Καμία καταχώρηση ακόμη για αυτόν τον ιστό.</div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {tissueEntries.map((e) => (
+                      <div key={e.id} style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "12px 14px", fontSize: 13 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                          <span style={{ fontWeight: 600 }}>{e.activity}</span>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: T.paperDim }}>
+                              {e.date}{e.week ? ` · Εβδ.${e.week}` : ""}{e.session ? ` · Θ#${e.session}` : ""}
+                            </span>
+                            <button onClick={() => deleteEntry(e.id)} aria-label="Διαγραφή" style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={13} /></button>
+                          </div>
+                        </div>
+                        <div style={{ color: T.paperDim, fontSize: 12 }}>
+                          {e.loadType && <React.Fragment>{e.loadType} · </React.Fragment>}
+                          {e.resistance && <React.Fragment><strong style={{ color: T.gold }}>{e.resistance} {e.resistanceUnit}</strong> · </React.Fragment>}
+                          {(e.sets || e.reps) && <React.Fragment>{e.sets || "–"}×{e.reps || "–"} · </React.Fragment>}
+                          {e.speed && <React.Fragment>{e.speed} km/h · </React.Fragment>}
+                          {e.pace && <React.Fragment>{e.pace} min/km · </React.Fragment>}
+                          {e.incline && <React.Fragment>κλίση {e.incline}% · </React.Fragment>}
+                          {e.resistanceLevel && <React.Fragment>αντίσταση {e.resistanceLevel} · </React.Fragment>}
+                          {e.duration && <React.Fragment>{e.duration}′ · </React.Fragment>}
+                          {e.heartRateAvg && <React.Fragment><strong style={{ color: T.rust }}>{e.heartRateAvg} bpm</strong>{e.heartRatePercent ? ` (${e.heartRatePercent}% HRmax)` : ""} · </React.Fragment>}
+                          {e.frequency && <React.Fragment>{e.frequency}×/εβδ · </React.Fragment>}
+                          RPE {e.sessionRPE} · πόνος {e.painDuring}/{e.pain24h} (κατά/24ω) · {e.recordedBy}
+                        </div>
+                        {e.notes && <div style={{ marginTop: 6, color: T.paper, opacity: 0.85 }}>{e.notes}</div>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+
+            {view === "measurements" && (
+              <>
+                <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+                  {[{ id: "jump", label: "Άλματα" }, { id: "isometric", label: "Ισομετρικά" }].map((t) => (
+                    <button key={t.id} onClick={() => setMeasureTab(t.id)} style={{
+                      flex: 1, padding: "10px 8px", borderRadius: 9, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      border: `1px solid ${measureTab === t.id ? T.terracotta : T.panelLine}`,
+                      background: measureTab === t.id ? T.terracotta : T.panel,
+                      color: measureTab === t.id ? T.bg : T.paper,
+                    }}>{t.label}</button>
+                  ))}
+                </div>
+
+                {measureTab === "jump" && (
+                  <>
+                    <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 18, marginBottom: 22 }}>
+                      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 15, marginBottom: 14 }}>Νέα μέτρηση άλματος — {patientName}</div>
+                      <div style={{ marginBottom: 14 }}>
+                        <SelectField label="Τύπος άλματος" value={jumpForm.testType} onChange={(v) => setJumpForm({ ...jumpForm, testType: v })} options={JUMP_TYPES} />
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
+                        <NumberField label="Ύψος άλματος" unit="cm" value={jumpForm.jumpHeight} onChange={(v) => setJumpForm({ ...jumpForm, jumpHeight: v })} placeholder="32" />
+                        <NumberField label="RSI" value={jumpForm.rsi} onChange={(v) => setJumpForm({ ...jumpForm, rsi: v })} placeholder="1.8" />
+                        <NumberField label="Χρόνος επαφής" unit="ms" value={jumpForm.contactTime} onChange={(v) => setJumpForm({ ...jumpForm, contactTime: v })} placeholder="220" />
+                        <NumberField label="Χρόνος πτήσης" unit="ms" value={jumpForm.flightTime} onChange={(v) => setJumpForm({ ...jumpForm, flightTime: v })} placeholder="480" />
+                      </div>
+                      <NumberField label="Ασυμμετρία" unit="%" value={jumpForm.asymmetry} onChange={(v) => setJumpForm({ ...jumpForm, asymmetry: v })} placeholder="8" />
+                      <div style={{ height: 14 }} />
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Σημειώσεις</label>
+                      <textarea value={jumpForm.notes} onChange={(e) => setJumpForm({ ...jumpForm, notes: e.target.value })} rows={2} style={{ ...inputStyle, marginBottom: 16, resize: "vertical" }} />
+                      <button onClick={() => saveMeasurement("jump")} disabled={saving} style={{
+                        width: "100%", background: T.terracotta, color: T.bg, border: "none", borderRadius: 9,
+                        padding: "12px", fontSize: 14.5, fontWeight: 700, cursor: saving ? "default" : "pointer",
+                        opacity: saving ? 0.7 : 1, fontFamily: "'Space Grotesk', sans-serif",
+                      }}>{saving ? "Αποθήκευση…" : "Καταχώρηση μέτρησης"}</button>
+                    </div>
+
+                    {jumpChartData.length > 1 && (
+                      <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "18px 10px 8px", marginBottom: 22 }}>
+                        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, marginBottom: 10, paddingLeft: 8 }}>Τάση ύψους άλματος</div>
+                        <TrendChart data={jumpChartData} xKey="date" domain={autoDomain(jumpChartData.map((d) => d.jumpHeight))} series={[{ key: "jumpHeight", color: T.gold, label: "Ύψος άλματος (cm)" }]} />
+                      </div>
+                    )}
+
+                    <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 10 }}>Ιστορικό άλματα ({jumpEntries.length})</div>
+                    {jumpEntries.length === 0 ? (
+                      <div style={{ color: T.paperDim, fontSize: 13, opacity: 0.7 }}>Καμία μέτρηση ακόμη.</div>
+                    ) : (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {jumpEntries.map((m) => (
+                          <div key={m.id} style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "12px 14px", fontSize: 13 }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                              <span style={{ fontWeight: 600 }}>{m.testType}</span>
+                              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: T.paperDim }}>{m.date}{m.week ? ` · Εβδ.${m.week}` : ""}</span>
+                                <button onClick={() => deleteMeasurement(m.id)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={13} /></button>
+                              </div>
+                            </div>
+                            <div style={{ color: T.paperDim, fontSize: 12 }}>
+                              {m.jumpHeight && <React.Fragment><strong style={{ color: T.gold }}>{m.jumpHeight} cm</strong> · </React.Fragment>}
+                              {m.rsi && <React.Fragment>RSI {m.rsi} · </React.Fragment>}
+                              {m.contactTime && <React.Fragment>επαφή {m.contactTime}ms · </React.Fragment>}
+                              {m.flightTime && <React.Fragment>πτήση {m.flightTime}ms · </React.Fragment>}
+                              {m.asymmetry && <React.Fragment>ασυμμετρία {m.asymmetry}%</React.Fragment>}
+                            </div>
+                            {m.notes && <div style={{ marginTop: 6, color: T.paper, opacity: 0.85 }}>{m.notes}</div>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {measureTab === "isometric" && (
+                  <>
+                    <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 18, marginBottom: 22 }}>
+                      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 15, marginBottom: 14 }}>Νέα ισομετρική μέτρηση — {patientName}</div>
+                      <div style={{ marginBottom: 14 }}>
+                        <SelectField label="Τύπος τεστ" value={isoForm.testType} onChange={(v) => setIsoForm({ ...isoForm, testType: v })} options={ISO_TYPES} />
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
+                        <NumberField label="Δεξιά" unit="N" value={isoForm.rightForce} onChange={(v) => setIsoForm({ ...isoForm, rightForce: v })} placeholder="420" />
+                        <NumberField label="Αριστερή" unit="N" value={isoForm.leftForce} onChange={(v) => setIsoForm({ ...isoForm, leftForce: v })} placeholder="395" />
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
+                        <NumberField label="Συνολική Peak Force" unit="N" value={isoForm.totalForce} onChange={(v) => setIsoForm({ ...isoForm, totalForce: v })} placeholder="π.χ. iMTP: 1850" />
+                        <NumberField label="RFD" unit="N/s" value={isoForm.rfd} onChange={(v) => setIsoForm({ ...isoForm, rfd: v })} placeholder="προαιρετικό" />
+                      </div>
+                      <p style={{ fontSize: 11, color: T.paperDim, marginTop: -6, marginBottom: 14 }}>Για iMTP συνήθως μόνο "Συνολική Peak Force". Για ForceFrame (διμερή τεστ) συμπλήρωσε Δεξιά/Αριστερή — η ασυμμετρία υπολογίζεται αυτόματα.</p>
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Σημειώσεις</label>
+                      <textarea value={isoForm.notes} onChange={(e) => setIsoForm({ ...isoForm, notes: e.target.value })} rows={2} style={{ ...inputStyle, marginBottom: 16, resize: "vertical" }} />
+                      <button onClick={() => saveMeasurement("isometric")} disabled={saving} style={{
+                        width: "100%", background: T.terracotta, color: T.bg, border: "none", borderRadius: 9,
+                        padding: "12px", fontSize: 14.5, fontWeight: 700, cursor: saving ? "default" : "pointer",
+                        opacity: saving ? 0.7 : 1, fontFamily: "'Space Grotesk', sans-serif",
+                      }}>{saving ? "Αποθήκευση…" : "Καταχώρηση μέτρησης"}</button>
+                    </div>
+
+                    {isoChartData.length > 1 && (
+                      <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "18px 10px 8px", marginBottom: 22 }}>
+                        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, marginBottom: 10, paddingLeft: 8 }}>Τάση δύναμης (Peak Force)</div>
+                        <TrendChart data={isoChartData} xKey="date" domain={autoDomain(isoChartData.map((d) => d.force))} series={[{ key: "force", color: T.rust, label: "Peak Force (N)" }]} />
+                      </div>
+                    )}
+
+                    <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 10 }}>Ιστορικό ισομετρικά ({isoEntries.length})</div>
+                    {isoEntries.length === 0 ? (
+                      <div style={{ color: T.paperDim, fontSize: 13, opacity: 0.7 }}>Καμία μέτρηση ακόμη.</div>
+                    ) : (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {isoEntries.map((m) => (
+                          <div key={m.id} style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "12px 14px", fontSize: 13 }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                              <span style={{ fontWeight: 600 }}>{m.testType}</span>
+                              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: T.paperDim }}>{m.date}{m.week ? ` · Εβδ.${m.week}` : ""}</span>
+                                <button onClick={() => deleteMeasurement(m.id)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={13} /></button>
+                              </div>
+                            </div>
+                            <div style={{ color: T.paperDim, fontSize: 12 }}>
+                              {m.totalForce && <React.Fragment><strong style={{ color: T.gold }}>{m.totalForce} N</strong> · </React.Fragment>}
+                              {(m.rightForce || m.leftForce) && <React.Fragment>Δ {m.rightForce || "–"}N / Α {m.leftForce || "–"}N · </React.Fragment>}
+                              {m.asymmetryCalc != null && <React.Fragment>ασυμμετρία {m.asymmetryCalc}% · </React.Fragment>}
+                              {m.rfd && <React.Fragment>RFD {m.rfd} N/s</React.Fragment>}
+                            </div>
+                            {m.notes && <div style={{ marginTop: 6, color: T.paper, opacity: 0.85 }}>{m.notes}</div>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
+
+      {toast && (
+        <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: T.gold, color: T.bg, padding: "10px 20px", borderRadius: 999, fontSize: 13, fontWeight: 600, boxShadow: "0 8px 24px rgba(0,0,0,0.4)" }}>{toast}</div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<TissueLoadLog />);
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js").catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
