@@ -1,54 +1,27 @@
-const CACHE_NAME = "sports-rehub-loadlog-v2";
-const CORE_ASSETS = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./icon-180.png",
-];
+// Network-first: the app always loads the newest version when online, and falls back to the cache offline.
+const CACHE_NAME = "sports-rehub-loadlog-v4";
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).catch(() => {})
-  );
-  self.skipWaiting();
-});
+self.addEventListener("install", () => { self.skipWaiting(); });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
+    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
   );
   self.clients.claim();
 });
 
-// Cache-first for same-origin core assets; network-first (with cache fallback) for everything else
-// (this lets the CDN-hosted React/Babel/fonts keep working online, and still resolve from
-// cache if the tablet briefly loses connection after the first successful load)
 self.addEventListener("fetch", (event) => {
   const req = event.request;
-  const url = new URL(req.url);
-  const isSameOrigin = url.origin === self.location.origin;
-
-  if (isSameOrigin) {
-    event.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req).then((res) => {
-        const resClone = res.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+  if (req.method !== "GET") return;
+  event.respondWith(
+    fetch(req)
+      .then((res) => {
+        if (res && res.status === 200) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(req, copy)).catch(() => {});
+        }
         return res;
-      }))
-    );
-  } else {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
-          return res;
-        })
-        .catch(() => caches.match(req))
-    );
-  }
+      })
+      .catch(() => caches.match(req).then((hit) => hit || caches.match("./index.html")))
+  );
 });
