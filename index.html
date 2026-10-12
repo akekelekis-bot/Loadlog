@@ -255,6 +255,10 @@ const emptyPatientDraft = () => ({
   medications: "", comorbidities: "", referringDoctor: "", imaging: "", allergies: "",
 });
 
+const localYmd = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const shiftYmd = (ymd, n) => { const [y,m,d] = ymd.split("-").map(Number); return localYmd(new Date(y, m-1, d+n)); };
+const fmtDay = (ymd) => { const [y,m,d] = ymd.split("-").map(Number); const dt = new Date(y, m-1, d); return `${["Κυρ","Δευ","Τρί","Τετ","Πέμ","Παρ","Σάβ"][dt.getDay()]} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`; };
+
 function TissueLoadLog() {
   const [patients, setPatients] = useState(() => store.get("trl_patients", []));
   const [activePatient, setActivePatient] = useState(() => {
@@ -264,6 +268,8 @@ function TissueLoadLog() {
   const [entries, setEntries] = useState([]);
   const [measurements, setMeasurements] = useState([]);
   const [view, setView] = useState("load"); // load | measurements
+  const [sessionDate, setSessionDate] = useState(() => localYmd());
+  const [dayOnly, setDayOnly] = useState(false);
   const [tissueId, setTissueId] = useState("tendon");
   const [measureTab, setMeasureTab] = useState("jump"); // jump | isometric
   const [mode, setMode] = useState("clinician");
@@ -401,10 +407,10 @@ function TissueLoadLog() {
     if (!form.activity.trim()) { flashToast("Πρόσθεσε όνομα άσκησης/δραστηριότητας"); return; }
     setSaving(true);
     const entry = {
-      id: `${Date.now()}`, date: new Date().toISOString().slice(0, 10), tissue: tissueId,
+      id: `${Date.now()}`, date: sessionDate, tissue: tissueId,
       cardioMode: isCardio ? cardioMode : undefined,
       recordedBy: mode === "clinician" ? "Θεραπευτής" : "Ασθενής",
-      week: patient ? weekNumber(patient.startDate, new Date().toISOString().slice(0, 10)) : null,
+      week: patient ? weekNumber(patient.startDate, sessionDate) : null,
       ...form,
     };
     const next = [entry, ...entries];
@@ -413,7 +419,7 @@ function TissueLoadLog() {
     flashToast(ok ? "Καταχωρήθηκε" : "Η αποθήκευση απέτυχε");
     setSaving(false);
     setForm({ ...emptyForm, loadType: allLoadTypes[0], session: nextSession + 1 });
-  }, [activePatient, entries, form, tissueId, mode, tissue, customTypes, cardioMode, patient, nextSession]);
+  }, [activePatient, entries, form, tissueId, mode, tissue, customTypes, cardioMode, patient, nextSession, sessionDate]);
 
   const deleteEntry = (id) => {
     const next = entries.filter((e) => e.id !== id);
@@ -433,8 +439,8 @@ function TissueLoadLog() {
       }
     }
     const entry = {
-      id: `${Date.now()}`, date: new Date().toISOString().slice(0, 10), category,
-      week: patient ? weekNumber(patient.startDate, new Date().toISOString().slice(0, 10)) : null,
+      id: `${Date.now()}`, date: sessionDate, category,
+      week: patient ? weekNumber(patient.startDate, sessionDate) : null,
       ...base, ...computed,
     };
     const next = [entry, ...measurements];
@@ -451,15 +457,25 @@ function TissueLoadLog() {
   };
 
   const patientName = patient?.name;
-  const tissueEntries = entries.filter((e) => e.tissue === tissueId).slice().reverse();
-  const chartData = tissueEntries.map((e) => ({ date: e.date, sessionRPE: e.sessionRPE, painDuring: e.painDuring, pain24h: e.pain24h }));
-  const hrData = tissueEntries.filter((e) => e.heartRateAvg !== "" && e.heartRateAvg != null).map((e) => ({ date: e.date, heartRateAvg: Number(e.heartRateAvg) }));
+  const onDay = (x) => !dayOnly || x.date === sessionDate;
+  const tissueAll = entries.filter((e) => e.tissue === tissueId).slice().reverse();
+  const tissueEntries = tissueAll.filter(onDay);
+  const chartData = tissueAll.map((e) => ({ date: e.date, sessionRPE: e.sessionRPE, painDuring: e.painDuring, pain24h: e.pain24h }));
+  const hrData = tissueAll.filter((e) => e.heartRateAvg !== "" && e.heartRateAvg != null).map((e) => ({ date: e.date, heartRateAvg: Number(e.heartRateAvg) }));
   const isPatientMode = mode === "patient";
 
-  const jumpEntries = measurements.filter((m) => m.category === "jump").slice().reverse();
-  const isoEntries = measurements.filter((m) => m.category === "isometric").slice().reverse();
-  const jumpChartData = jumpEntries.filter((j) => j.jumpHeight !== "").map((j) => ({ date: j.date, jumpHeight: Number(j.jumpHeight) }));
-  const isoChartData = isoEntries.map((i) => {
+  const jumpAll = measurements.filter((m) => m.category === "jump").slice().reverse();
+  const isoAll = measurements.filter((m) => m.category === "isometric").slice().reverse();
+  const jumpEntries = jumpAll.filter(onDay);
+  const isoEntries = isoAll.filter(onDay);
+  const datesWithRecords = (() => {
+    const map = {};
+    entries.forEach((e) => { map[e.date] = (map[e.date] || 0) + 1; });
+    measurements.forEach((m) => { map[m.date] = (map[m.date] || 0) + 1; });
+    return Object.entries(map).sort((a, b) => b[0].localeCompare(a[0]));
+  })();
+  const jumpChartData = jumpAll.filter((j) => j.jumpHeight !== "").map((j) => ({ date: j.date, jumpHeight: Number(j.jumpHeight) }));
+  const isoChartData = isoAll.map((i) => {
     const r = parseFloat(i.rightForce), l = parseFloat(i.leftForce), tot = parseFloat(i.totalForce);
     const val = !isNaN(tot) ? tot : (!isNaN(r) && !isNaN(l) ? (r + l) / 2 : (!isNaN(r) ? r : (!isNaN(l) ? l : null)));
     return val != null ? { date: i.date, force: val } : null;
@@ -625,6 +641,38 @@ function TissueLoadLog() {
                   color: view === v.id ? T.gold : T.paperDim,
                 }}><Icon name={v.icon} size={15} /> {v.label}</button>
               ))}
+            </div>
+
+            <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 12, padding: 12, marginBottom: 18 }}>
+              <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 8 }}>Ημερομηνία συνεδρίας</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                <button onClick={() => setSessionDate(shiftYmd(sessionDate, -1))} style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, color: T.paper, borderRadius: 8, padding: "8px 12px", cursor: "pointer", fontSize: 15 }}>‹</button>
+                <input type="date" value={sessionDate} onChange={(e) => e.target.value && setSessionDate(e.target.value)} style={{ ...inputStyle, width: "auto", flex: "1 1 150px" }} />
+                <button onClick={() => setSessionDate(shiftYmd(sessionDate, 1))} style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, color: T.paper, borderRadius: 8, padding: "8px 12px", cursor: "pointer", fontSize: 15 }}>›</button>
+                <button onClick={() => setSessionDate(localYmd())} style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "9px 12px", cursor: "pointer", fontSize: 12.5, fontWeight: 600 }}>Σήμερα</button>
+              </div>
+              <div style={{ fontSize: 12, color: T.paperDim, marginTop: 8 }}>
+                Οι νέες καταχωρήσεις αποθηκεύονται στις <strong style={{ color: T.paper }}>{fmtDay(sessionDate)}</strong>
+                {patient && patient.startDate ? ` · Εβδ.${weekNumber(patient.startDate, sessionDate)}` : ""}
+              </div>
+              <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, fontSize: 12.5, color: T.paper, cursor: "pointer" }}>
+                <input type="checkbox" checked={dayOnly} onChange={(e) => setDayOnly(e.target.checked)} />
+                Εμφάνιση μόνο της ημέρας που διάλεξα (στο ιστορικό)
+              </label>
+              {datesWithRecords.length > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 6 }}>Ημερομηνίες με καταχωρήσεις ({datesWithRecords.length})</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, maxHeight: 128, overflowY: "auto" }}>
+                    {datesWithRecords.map(([d, n]) => (
+                      <button key={d} onClick={() => { setSessionDate(d); setDayOnly(true); }} style={{
+                        background: d === sessionDate ? "rgba(199,154,86,0.18)" : T.bgSoft,
+                        border: `1px solid ${d === sessionDate ? T.gold : T.panelLine}`,
+                        color: d === sessionDate ? T.gold : T.paper, borderRadius: 999, padding: "6px 11px", cursor: "pointer", fontSize: 12,
+                      }}>{fmtDay(d)} · {n}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {view === "load" && (
