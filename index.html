@@ -328,12 +328,143 @@ const SEED_EXERCISES = [
   { id: "seed8", name: "Πιέσεις στήθους (Bench press)", category: "Άνω άκρο", defaultLoadType: "", notes: "" },
   { id: "seed9", name: "Κάμψεις (Push-up)", category: "Άνω άκρο", defaultLoadType: "", notes: "" },
   { id: "seed10", name: "Κωπηλατική (Row)", category: "Άνω άκρο", defaultLoadType: "", notes: "" },
+  { id: "seed-heel-m", name: "Ανύψωση πτέρνας", category: "Κάτω άκρο", tissue: "muscle", defaultLoadType: "Μεικτή", notes: "Στόχος: υπερτροφία γαστροκνημίου" },
+  { id: "seed-heel-t", name: "Ανύψωση πτέρνας", category: "Κάτω άκρο", tissue: "tendon", defaultLoadType: "", notes: "Στόχος: Αχίλλειος τένοντας" },
 ];
 const CARDIO_MODES = [
   { id: "treadmill", label: "Διάδρομος" },
   { id: "bike", label: "Ποδήλατο" },
   { id: "other", label: "Άλλο / υπαίθριο" },
 ];
+const isoLT = (lt) => /Ισομετρ/.test(lt || "");
+const plyoLT = (lt) => /Πλειομετρ/.test(lt || "");
+const eccLT = (lt) => /Έκκεντρ/.test(lt || "") || /Μεικτ/.test(lt || "");
+const impactLT = (lt) => /κρούση|Αντίδραση εδάφους/.test(lt || "");
+const TISSUE_FIELDS = {
+  tendon: [
+    { k: "mvic", l: "Ένταση", u: "% MVIC", t: "number", ph: "70", when: isoLT },
+    { k: "holdSec", l: "Διάρκεια κράτησης", u: "sec", t: "number", ph: "30–45", when: isoLT },
+    { k: "tut", l: "Χρόνος υπό τάση ανά σετ (TUT)", u: "sec", t: "number", ph: "40", when: (lt) => !plyoLT(lt) },
+    { k: "rate", l: "Ρυθμός φόρτισης", t: "select", o: ["Αργός (≥3 s/φάση)", "Μέτριος", "Γρήγορος", "Εκρηκτικός"], when: (lt) => !isoLT(lt) },
+    { k: "restSet", l: "Ανάπαυση μεταξύ σετ", u: "sec", t: "number", ph: "120" },
+    { k: "plyoInt", l: "Ένταση πλειομετρικού", t: "select", o: ["Χαμηλή (skipping, pogo)", "Μέτρια (bounds, box jumps)", "Υψηλή (drop jumps)", "Μέγιστη (depth jumps)"], when: plyoLT },
+    { k: "legs", l: "Αμφοτερόπλευρο / μονόπλευρο", t: "select", o: ["Αμφοτερόπλευρο", "Μονόπλευρο"], when: plyoLT },
+    { k: "dir", l: "Κατεύθυνση", t: "select", o: ["Κάθετη", "Οριζόντια", "Πλάγια", "Πολυκατευθυντική"], when: plyoLT },
+    { k: "pattern", l: "Μορφή επαφών", t: "select", o: ["Συνεχόμενες", "Με παύση ανάμεσα (cluster)"], when: plyoLT },
+    { k: "dropH", l: "Ύψος πτώσης / κουτιού", u: "cm", t: "number", ph: "30", when: plyoLT },
+    { k: "gct", l: "Χρόνος επαφής εδάφους", u: "ms", t: "number", ph: "200", when: plyoLT },
+    { k: "jumpH", l: "Ύψος άλματος", u: "cm", t: "number", ph: "35", when: plyoLT },
+    { k: "surface", l: "Επιφάνεια", t: "select", o: ["Σκληρή", "Ημι-σκληρή", "Ελαστική", "Γρασίδι / φυσική"], when: plyoLT },
+    { k: "morning", l: "Πόνος/δυσκαμψία επόμενης μέρας", t: "select", o: ["Καθόλου", "Ελαφρύ", "Μέτριο", "Έντονο"] },
+  ],
+  muscle: [
+    { k: "intent", l: "Πρόθεση κίνησης", t: "select", o: ["Μέγιστη ταχύτητα (εκρηκτική)", "Ελεγχόμενη", "Αργή"] },
+    { k: "barVel", l: "Μέση ταχύτητα εκτέλεσης", u: "m/s", t: "number", ph: "0.55" },
+    { k: "rir", l: "Αποθεματικό επαναλήψεων (RIR)", t: "select", o: ["0 (αστοχία)", "1", "2", "3", "4", "5+"] },
+    { k: "length", l: "Μήκος μυός", t: "select", o: ["Επιμηκυμένο", "Μέσο", "Βραχυμένο", "Πλήρες εύρος"] },
+    { k: "eccSec", l: "Διάρκεια έκκεντρης φάσης", u: "sec", t: "number", ph: "3", when: eccLT },
+    { k: "restSet", l: "Ανάπαυση μεταξύ σετ", u: "sec", t: "number", ph: "90" },
+    { k: "side", l: "Πλευρά εκτέλεσης", t: "select", o: ["Αμφοτερόπλευρα", "Μονόπλευρα – πάσχον", "Μονόπλευρα – υγιές"] },
+    { k: "group", l: "Μυϊκή ομάδα", t: "text", ph: "π.χ. οπίσθιοι μηρού" },
+    { k: "fatigue", l: "Μυϊκή κόπωση (0–10)", t: "number", ph: "6" },
+  ],
+  bone: [
+    { k: "contacts", l: "Αριθμός επαφών / κρούσεων", t: "number", ph: "50" },
+    { k: "dropH", l: "Ύψος πτώσης", u: "cm", t: "number", ph: "30", when: impactLT },
+    { k: "grf", l: "Εκτίμηση αντίδρασης εδάφους", t: "select", o: ["< 2 × ΒΣ", "2–4 × ΒΣ", "4–6 × ΒΣ", "> 6 × ΒΣ"], when: impactLT },
+    { k: "dir", l: "Κατεύθυνση φόρτισης", t: "select", o: ["Κάθετη (αξονική)", "Πλάγια", "Στροφική", "Πολυκατευθυντική"] },
+    { k: "surface", l: "Επιφάνεια", t: "select", o: ["Σκληρή", "Ημι-σκληρή", "Ελαστική", "Γρασίδι / φυσική"] },
+    { k: "bouts", l: "Σετ φόρτισης (bouts) σήμερα", t: "number", ph: "2" },
+    { k: "gap", l: "Διάλειμμα μεταξύ bouts", u: "ώρες", t: "number", ph: "8" },
+    { k: "site", l: "Στοχευόμενη περιοχή οστού", t: "text", ph: "π.χ. κνήμη, μηριαίο" },
+  ],
+  ligament: [
+    { k: "plane", l: "Επίπεδο κίνησης", t: "select", o: ["Οβελιαίο", "Μετωπιαίο", "Εγκάρσιο", "Πολυεπίπεδο"] },
+    { k: "angle", l: "Γωνία / εύρος άρθρωσης", u: "°", t: "text", ph: "π.χ. 20–40" },
+    { k: "stance", l: "Βάση στήριξης", t: "select", o: ["Αμφοτερόπλευρη", "Μονοπλευρική", "Tandem"] },
+    { k: "surface", l: "Επιφάνεια", t: "select", o: ["Σταθερή", "Αφρώδες", "Balance board", "BOSU / αστάθεια"] },
+    { k: "vision", l: "Όραση", t: "select", o: ["Ανοιχτά μάτια", "Κλειστά μάτια"] },
+    { k: "perturb", l: "Διαταραχή", t: "select", o: ["Καμία", "Χειροκίνητη", "Εξωτερικό φορτίο", "Δεύτερο έργο (dual-task)"] },
+    { k: "holdSec", l: "Διάρκεια ανά επανάληψη", u: "sec", t: "number", ph: "30" },
+    { k: "errors", l: "Απώλειες ισορροπίας", t: "number", ph: "0" },
+    { k: "control", l: "Ποιότητα ελέγχου (0–10)", t: "number", ph: "7" },
+  ],
+};
+const TISSUE_REFS = {
+  tendon: {
+    refs: [
+      { c: "Rio E, Kidgell D, Purdam C, Gaida J, Moseley GL, Pearce AJ, Cook J. Isometric exercise induces analgesia and reduces inhibition in patellar tendinopathy. Br J Sports Med 2015;49(19):1277–83.", u: "https://bjsm.bmj.com/content/49/19/1277.abstract", s: "Ισομετρικές συσπάσεις μείωσαν τον πόνο έναντι ισοτονικών (μικρή cross-over μελέτη, n = 6) → πεδία Ένταση και Διάρκεια κράτησης." },
+      { c: "Kongsgaard M, et al. Corticosteroid injections, eccentric decline squat training and heavy slow resistance training in patellar tendinopathy. Scand J Med Sci Sports 2009;19(6):790–802.", u: "https://pubmed.ncbi.nlm.nih.gov/19793213/", s: "Heavy slow resistance → Ρυθμός φόρτισης, Χρόνος υπό τάση." },
+      { c: "Bohm S, Mersmann F, Arampatzis A. Human tendon adaptation in response to mechanical loading: a systematic review and meta-analysis of exercise intervention studies on healthy adults. Sports Med Open 2015;1:7.", u: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4532714", s: "Παράμετροι μηχανικής φόρτισης και προσαρμογή τένοντα → Ένταση, Χρόνος υπό τάση." },
+      { c: "Silbernagel KG, Thomeé R, Eriksson BI, Karlsson J. Continued sports activity, using a pain-monitoring model, during rehabilitation in patients with Achilles tendinopathy. Am J Sports Med 2007;35(6):897–906.", u: "https://myorthoevidence.com/AceReport/Report/850", s: "Μοντέλο παρακολούθησης πόνου → Πόνος/δυσκαμψία επόμενης μέρας." },
+      { c: "Flanagan EP, Ebben WP, Jensen RL. Reliability of the reactive strength index and time to stabilization during depth jumps. J Strength Cond Res 2008;22(5):1677–82.", u: "https://pubmed.ncbi.nlm.nih.gov/18714215/", s: "RSI στα depth jumps (ύψος / χρόνος επαφής) → αυτόματος υπολογισμός RSI." },
+      { c: "Methodological considerations for determining the volume and intensity of drop jump training. A systematic, critical and prepositive review. Sports Med Open 2023 (συγγραφείς δεν επαληθεύτηκαν).", u: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10160442/", s: "Όγκος (επαφές) και ένταση (ύψος πτώσης) στην πλειομετρική προπόνηση → Επαφές/σετ, Ύψος πτώσης." },
+      { c: "Cook JL, Purdam CR. Is tendon pathology a continuum? A pathology model to explain the clinical presentation of load-induced tendinopathy. Br J Sports Med 2009;43(6):409–16.", u: "https://bjsm.bmj.com/content/43/6/409.abstract", s: "Πλαίσιο συνέχειας παθολογίας τένοντα (γενικό υπόβαθρο)." },
+      { c: "Malliaras P, Rodriguez Palomino J, Barton CJ. Achilles and patellar tendinopathy rehabilitation: strive to implement loading principles not recipes (infographic). Br J Sports Med 2018;52(19).", u: "https://bjsm.bmj.com/content/52/19/1232", s: "Αρχές φόρτισης αντί για σταθερές «συνταγές»." },
+    ],
+    nosrc: "Η κατάταξη έντασης του πλειομετρικού, η μορφή επαφών (cluster), η κατεύθυνση, η επιφάνεια και η ανάπαυση μεταξύ σετ είναι πρακτικές μεταβλητές καταγραφής — χωρίς συγκεκριμένη πηγή εδώ.",
+  },
+  muscle: {
+    refs: [
+      { c: "Zourdos MC, et al. Novel resistance training-specific rating of perceived exertion scale measuring repetitions in reserve. J Strength Cond Res 2016;30(1):267–75.", u: "https://openrepository.aut.ac.nz/items/efef3b25-6701-4fb5-bb82-55fcd2a26027/full", s: "Κλίμακα RPE με βάση τις επαναλήψεις σε εφεδρεία → πεδίο RIR." },
+      { c: "González-Badillo JJ, Sánchez-Medina L. Movement velocity as a measure of loading intensity in resistance training. Int J Sports Med 2010;31(5):347–52 (στοιχεία από DOI 10.1055/s-0030-1248333).", u: "https://www.thieme-connect.com/products/ejournals/pdf/10.1055/s-0030-1248333.pdf", s: "Ταχύτητα εκτέλεσης ως δείκτης έντασης φόρτισης → Μέση ταχύτητα, Πρόθεση κίνησης." },
+      { c: "Schoenfeld BJ, Ogborn D, Krieger JW. Dose-response relationship between weekly resistance training volume and increases in muscle mass: a systematic review and meta-analysis. J Sports Sci 2017;35(11):1073–82.", u: "https://pubmed.ncbi.nlm.nih.gov/28834797/", s: "Εβδομαδιαίος όγκος και μυϊκή μάζα → αυτόματος υπολογισμός Όγκου φορτίου." },
+      { c: "Refalo MC, Helms ER, Trexler ET, Hamilton DL, Fyfe JJ. Influence of resistance training proximity-to-failure on skeletal muscle hypertrophy: a systematic review with meta-analysis. Sports Med 2023;53(3):649–65.", u: "https://openrepository.aut.ac.nz/items/78679612-6ff4-4d00-95d1-7920d072a760/full", s: "Εγγύτητα στην αστοχία και υπερτροφία → πεδίο RIR." },
+    ],
+    nosrc: "Μήκος μυός, διάρκεια έκκεντρης φάσης, ανάπαυση, πλευρά εκτέλεσης, μυϊκή ομάδα και μυϊκή κόπωση είναι πρακτικά πεδία καταγραφής — χωρίς συγκεκριμένη πηγή εδώ. Ο «Όγκος φορτίου» υπολογίζεται ως σετ × επαναλήψεις × kg (μόνο όταν το φορτίο είναι σε kg).",
+  },
+  bone: {
+    refs: [
+      { c: "Turner CH, Robling AG. Designing exercise regimens to increase bone strength. Exerc Sport Sci Rev 2003;31(1):45–50.", u: "https://sponet.de/sponet/Record/4012253", s: "Αρχές σχεδιασμού άσκησης για το οστό (οστεογονικός δείκτης) → πλαίσιο των παραμέτρων." },
+      { c: "Robling AG, Hinant FM, Burr DB, Turner CH. Recovery periods restore mechanosensitivity to dynamically loaded bone. J Exp Biol 2001;204(19):3389–99.", u: "https://pubmed.ncbi.nlm.nih.gov/11606612/", s: "Διαλείμματα επαναφέρουν τη μηχανοευαισθησία του οστού → Σετ φόρτισης (bouts) και Διάλειμμα μεταξύ τους." },
+      { c: "Do bilateral vertical jumps with reactive jump landings achieve osteogenic thresholds? (Penn State Research Database — τίτλος όπως εμφανίζεται, συγγραφείς δεν επαληθεύτηκαν)", u: "https://pure.psu.edu/en/publications/do-bilateral-vertical-jumps-with-reactive-jump-landings-achieve-o/", s: "Αντίδραση εδάφους στα άλματα σε σχέση με οστεογονικά όρια → πεδία Αριθμός επαφών και Εκτίμηση αντίδρασης εδάφους." },
+    ],
+    nosrc: "Κατεύθυνση φόρτισης, επιφάνεια, ύψος πτώσης και στοχευόμενη περιοχή είναι πρακτικά πεδία καταγραφής — χωρίς συγκεκριμένη πηγή εδώ. Οι κατηγορίες «× ΒΣ» είναι ενδεικτικές.",
+  },
+  ligament: {
+    refs: [
+      { c: "Sugimoto D, Myer GD, et al. Critical components of neuromuscular training to reduce ACL injury risk in female athletes: meta-regression analysis. Br J Sports Med 2016;50(20):1259–66.", u: "https://bjsm.bmj.com/content/bjsports/50/20/1259.full.pdf", s: "Συστατικά της νευρομυϊκής εκπαίδευσης για πρόληψη τραυματισμών ΧΕΣ → γενικό πλαίσιο των πεδίων." },
+    ],
+    nosrc: "Επιφάνεια, βάση στήριξης, όραση, διαταραχή, επίπεδο κίνησης, γωνία, απώλειες ισορροπίας και ποιότητα ελέγχου είναι πρακτικά πεδία καταγραφής — δεν βρέθηκε εδώ συγκεκριμένη πηγή ανά πεδίο.",
+  },
+};
+const GMAP = {
+  tendon: { mvic: "int", plyoInt: "int", rate: "int", holdSec: "dur", tut: "dur", restSet: "rest", legs: "type", dir: "type", pattern: "type", surface: "type" },
+  muscle: { intent: "int", barVel: "int", rir: "int", eccSec: "dur", restSet: "rest", length: "type", side: "type", group: "type" },
+  bone: { dropH: "int", grf: "int", contacts: "dur", bouts: "dur", gap: "rest", dir: "type", surface: "type" },
+  ligament: { perturb: "int", angle: "int", holdSec: "dur", plane: "type", stance: "type", surface: "type", vision: "type" },
+};
+const TP_GROUPS = [["freq", "Συχνότητα"], ["int", "Ένταση"], ["dur", "Διάρκεια"], ["type", "Τύπος σύσπασης / άσκησης"], ["rest", "Διάρκεια ξεκούρασης"], ["oth", "Εκτέλεση / παρακολούθηση"]];
+Object.keys(TISSUE_FIELDS).forEach((t) => {
+  TISSUE_FIELDS[t].forEach((f) => { f.g = (GMAP[t] && GMAP[t][f.k]) || "oth"; });
+  const extra = t === "ligament" ? [{ k: "restSet", l: "Ανάπαυση μεταξύ σετ", u: "sec", t: "number", ph: "60", g: "rest" }] : [];
+  TISSUE_FIELDS[t] = [
+    { k: "freq", l: "Συχνότητα", u: "φορές / εβδομάδα", t: "number", ph: "3", g: "freq" },
+    ...TISSUE_FIELDS[t], ...extra,
+    { k: "restSess", l: "Ξεκούραση ιστού έως την επόμενη φόρτιση", u: "ώρες", t: "number", ph: "48", g: "rest" },
+  ];
+});
+const sscOf = (tissueId, lt) => tissueId === "tendon" && plyoLT(lt);
+const calcOf = (tissueId, form) => {
+  const sets = parseFloat(form.sets), reps = parseFloat(form.reps), kg = form.resistanceUnit === "kg" ? parseFloat(form.resistance) : NaN;
+  const tp = form.tp || {}; const c = {};
+  if (tissueId === "muscle" && sets > 0 && reps > 0 && kg > 0) c.volume = Math.round(sets * reps * kg);
+  if (sscOf(tissueId, form.loadType)) {
+    if (sets > 0 && reps > 0) c.totalContacts = Math.round(sets * reps);
+    const h = parseFloat(tp.jumpH), g = parseFloat(tp.gct);
+    if (h > 0 && g > 0) c.rsi = Math.round((h / 100) / (g / 1000) * 100) / 100;
+  }
+  return c;
+};
+const calcText = (e) => {
+  const c = e.calc || {}; const out = [];
+  if (c.volume) out.push(`Όγκος φορτίου: ${c.volume} kg`);
+  if (c.totalContacts) out.push(`Σύνολο επαφών: ${c.totalContacts}`);
+  if (c.rsi) out.push(`RSI: ${c.rsi}`);
+  return out.join(" · ");
+};
+const tpFieldsFor = (tissueId, lt) => (TISSUE_FIELDS[tissueId] || []).filter((f) => !f.when || f.when(lt));
+const tpText = (e) => (TISSUE_FIELDS[e.tissue] || []).filter((f) => e.tp && e.tp[f.k] !== undefined && e.tp[f.k] !== "").map((f) => `${f.l}: ${e.tp[f.k]}${f.u ? " " + f.u : ""}`).join(" · ");
 const SIDE_OPTIONS = ["Δεξί", "Αριστερό", "Αμφοτερόπλευρα"];
 const MMT_GRADES = ["", "0", "1", "2-", "2", "2+", "3-", "3", "3+", "4-", "4", "4+", "5"];
 const ROM_TYPES = ["Ενεργητικό", "Παθητικό"];
@@ -512,6 +643,73 @@ const PARAM_PRESETS = [
   { name: "Χρόνος επαφής εδάφους", unit: "ms" }, { name: "Ύψος κουτιού / εμποδίου", unit: "cm" }, { name: "Ταχύτητα", unit: "m/s" },
   { name: "Ανάπαυση", unit: "sec" }, { name: "Διάρκεια", unit: "sec" }, { name: "Επιπλέον φορτίο (γιλέκο)", unit: "kg" }, { name: "Θερμίδες", unit: "kcal" },
 ];
+function TissuePanel({ tissue, loadType, tp, onChange, form }) {
+  const fields = tpFieldsFor(tissue.id, loadType);
+  if (!fields.length) return null;
+  const set = (k, v) => onChange({ ...tp, [k]: v });
+  return (
+    <div className="ll-tissue" style={{ background: "rgba(255,122,26,0.06)", border: `1px solid ${T.terracottaDim}`, borderRadius: 10, padding: 14, marginBottom: 14 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.gold, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
+        <Icon name="activity" size={13} /> {sscOf(tissue.id, loadType) ? "Αποθήκευση / απελευθέρωση ενέργειας (SSC)" : tissue.id === "muscle" ? "Παραγωγή δύναμης" : "Παράμετροι ιστού"} — {tissue.label}
+      </div>
+      <div style={{ fontSize: 11.5, color: T.paperDim, marginBottom: 12 }}>Δομή φόρτισης: συχνότητα, ένταση, διάρκεια, τύπος σύσπασης / άσκησης, διάρκεια ξεκούρασης — τα πεδία αλλάζουν ανά ιστό και ανά τύπο φόρτισης. Άφησε κενό ό,τι δεν χρειάζεται.</div>
+      {TP_GROUPS.map(([gk, gl]) => {
+        const gf = fields.filter((f) => f.g === gk);
+        if (!gf.length && gk !== "type") return null;
+        return (
+          <div key={gk} style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, marginBottom: 7 }}>{gl}</div>
+            {gk === "type" && (
+              <div style={{ fontSize: 12.5, color: T.paper, marginBottom: gf.length ? 8 : 0 }}>
+                <span style={{ color: T.paperDim }}>Τύπος φόρτισης (από επάνω): </span><strong>{loadType}</strong>
+              </div>
+            )}
+            {gf.length > 0 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 10 }}>
+                {gf.map((f) => {
+                  const v = tp[f.k] === undefined ? "" : tp[f.k];
+                  if (f.t === "select") return <SelectField key={f.k} label={f.l} value={v || "—"} onChange={(x) => set(f.k, x === "—" ? "" : x)} options={["—", ...f.o]} />;
+                  if (f.t === "number") return <NumberField key={f.k} label={f.l} unit={f.u} value={v} onChange={(x) => set(f.k, x)} placeholder={f.ph} />;
+                  return <TextField key={f.k} label={f.l} value={v} onChange={(x) => set(f.k, x)} placeholder={f.ph} />;
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+      {(() => {
+        const c = calcOf(tissue.id, form || {});
+        const items = [];
+        if (c.volume) items.push(["Όγκος φορτίου", `${c.volume} kg`]);
+        if (c.totalContacts) items.push(["Σύνολο επαφών", c.totalContacts]);
+        if (c.rsi) items.push(["RSI", c.rsi]);
+        return items.length ? (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
+            {items.map(([l, v]) => (
+              <div key={l} style={{ background: "rgba(255,122,26,0.14)", border: `1px solid ${T.terracottaDim}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5 }}>
+                <span style={{ color: T.paperDim }}>{l}: </span><strong style={{ color: T.gold }}>{v}</strong><span style={{ color: T.paperDim, fontSize: 10.5 }}> (αυτόματα)</span>
+              </div>
+            ))}
+          </div>
+        ) : null;
+      })()}
+      {TISSUE_REFS[tissue.id] && (
+        <details style={{ marginTop: 12 }}>
+          <summary style={{ cursor: "pointer", fontSize: 12, color: T.gold, fontWeight: 600 }}>Βιβλιογραφία ({TISSUE_REFS[tissue.id].refs.length})</summary>
+          <div style={{ marginTop: 8, fontSize: 11.5, color: T.paperDim, lineHeight: 1.55 }}>
+            {TISSUE_REFS[tissue.id].refs.map((r, i) => (
+              <div key={i} style={{ marginBottom: 8 }}>
+                <a href={r.u} target="_blank" rel="noopener noreferrer" style={{ color: T.paper, textDecoration: "underline", textDecorationColor: T.terracottaDim }}>{r.c}</a>
+                <div style={{ color: T.gold, opacity: 0.9 }}>↳ {r.s}</div>
+              </div>
+            ))}
+            <div style={{ fontStyle: "italic", marginTop: 4 }}>{TISSUE_REFS[tissue.id].nosrc} Οι τιμές στα πεδία είναι ενδεικτικά placeholders, όχι συστάσεις.</div>
+          </div>
+        </details>
+      )}
+    </div>
+  );
+}
 function ExtraMetrics({ items, onChange, suggestions }) {
   const sug = suggestions && suggestions.length ? suggestions : PARAM_PRESETS;
   const listId = "pm" + React.useId().replace(/[^a-zA-Z0-9]/g, "");
@@ -642,7 +840,7 @@ function PrintDoc({ blank, patient, date, week, visitNo, a, sess, dayEntries, da
         <React.Fragment>
           <H>Καταγραφή φορτίου της ημέρας</H>
           {dayEntries.map((e) => (
-            <div key={e.id} style={{ fontSize: 12, margin: "3px 0" }}>• <b>{e.activity}</b> — {e.loadType}{e.resistance ? ` · ${e.resistance} ${e.resistanceUnit}` : ""}{(e.sets || e.reps) ? ` · ${e.sets || "–"}×${e.reps || "–"}` : ""}{e.tempo ? ` · ${e.tempo}` : ""} · RPE {rpeOf(e)}{e.rom ? ` · ROM ${e.rom}°` : ""}{e.strengthGrade ? ` · MMT ${e.strengthGrade}` : ""}{extraText(e) ? ` · ${extraText(e)}` : ""}</div>
+            <div key={e.id} style={{ fontSize: 12, margin: "3px 0" }}>• <b>{e.activity}</b> — {e.loadType}{e.resistance ? ` · ${e.resistance} ${e.resistanceUnit}` : ""}{(e.sets || e.reps) ? ` · ${e.sets || "–"}×${e.reps || "–"}` : ""}{e.tempo ? ` · ${e.tempo}` : ""} · RPE {rpeOf(e)}{e.rom ? ` · ROM ${e.rom}°` : ""}{e.strengthGrade ? ` · MMT ${e.strengthGrade}` : ""}{calcText(e) ? ` · ${calcText(e)}` : ""}{tpText(e) ? ` · ${tpText(e)}` : ""}{extraText(e) ? ` · ${extraText(e)}` : ""}</div>
           ))}
         </React.Fragment>
       )}
@@ -769,10 +967,18 @@ function TissueLoadLog() {
   const [cardioMode, setCardioMode] = useState("other");
   const [exercises, setExercises] = useState(() => {
     const saved = store.get("trl_exercises", null);
-    if (saved) return saved;
+    if (saved) {
+      if (!saved.some((e) => e.id === "seed-heel-m")) {
+        const merged = [...saved, ...SEED_EXERCISES.filter((e) => e.id === "seed-heel-m" || e.id === "seed-heel-t")];
+        store.set("trl_exercises", merged);
+        return merged;
+      }
+      return saved;
+    }
     store.set("trl_exercises", SEED_EXERCISES);
     return SEED_EXERCISES;
   });
+  const exercisesHere = exercises.filter((e) => !e.tissue || e.tissue === tissueId);
   const [showLibrary, setShowLibrary] = useState(false);
   const [exDraft, setExDraft] = useState({ name: "", category: EXERCISE_CATEGORIES[0], defaultLoadType: "", notes: "" });
 
@@ -787,7 +993,7 @@ function TissueLoadLog() {
     duration: "", heartRateAvg: "", heartRatePercent: "",
     speed: "", pace: "", incline: "", resistanceLevel: "",
     rom: "", romType: "Ενεργητικό", strengthGrade: "", strengthForce: "", power: "", oneRM: "",
-    painDuring: 0, pain24h: 0, sessionRPE: 3, notes: "", extra: [],
+    painDuring: 0, pain24h: 0, sessionRPE: 3, notes: "", extra: [], tp: {},
   };
   const [form, setForm] = useState(emptyForm);
 
@@ -796,7 +1002,7 @@ function TissueLoadLog() {
   const [jumpForm, setJumpForm] = useState(emptyJumpForm);
   const [isoForm, setIsoForm] = useState(emptyIsoForm);
 
-  useEffect(() => { setForm((f) => ({ ...f, loadType: allLoadTypes[0] })); setAddingType(false); }, [tissueId]);
+  useEffect(() => { setForm((f) => ({ ...f, loadType: allLoadTypes[0], tp: {} })); setAddingType(false); }, [tissueId]);
 
   useEffect(() => {
     if (!activePatient) { setEntries([]); setMeasurements([]); return; }
@@ -884,8 +1090,8 @@ function TissueLoadLog() {
   const addExercise = () => {
     const name = exDraft.name.trim();
     if (!name) return;
-    if (exercises.some((ex) => ex.name.toLowerCase() === name.toLowerCase())) { flashToast("Υπάρχει ήδη στη βάση"); return; }
-    const ex = { id: `${Date.now()}`, name, category: exDraft.category, defaultLoadType: exDraft.defaultLoadType, notes: exDraft.notes.trim() };
+    if (exercisesHere.some((ex) => ex.name.toLowerCase() === name.toLowerCase())) { flashToast("Υπάρχει ήδη στη βάση για αυτόν τον ιστό"); return; }
+    const ex = { id: `${Date.now()}`, name, category: exDraft.category, tissue: tissueId, defaultLoadType: exDraft.defaultLoadType, notes: exDraft.notes.trim() };
     const next = [...exercises, ex];
     setExercises(next);
     store.set("trl_exercises", next);
@@ -899,7 +1105,7 @@ function TissueLoadLog() {
   };
   const pickExercise = (name) => {
     setForm((f) => {
-      const match = exercises.find((e) => e.name === name);
+      const match = exercisesHere.find((e) => e.name === name);
       return { ...f, activity: name, loadType: match && match.defaultLoadType ? match.defaultLoadType : f.loadType };
     });
   };
@@ -915,6 +1121,8 @@ function TissueLoadLog() {
       week: patient ? weekNumber(patient.startDate, sessionDate) : null,
       ...form,
       extra: (form.extra || []).filter((x) => x.name.trim() && String(x.value).trim() !== ""),
+      calc: calcOf(tissueId, form),
+      tp: Object.fromEntries(tpFieldsFor(tissueId, form.loadType).filter((f) => form.tp && form.tp[f.k] !== undefined && form.tp[f.k] !== "").map((f) => [f.k, form.tp[f.k]])),
     };
     const next = [entry, ...entries];
     setEntries(next);
@@ -1488,15 +1696,16 @@ function TissueLoadLog() {
                       <input list="exercise-options" value={form.activity} onChange={(e) => pickExercise(e.target.value)}
                         placeholder="π.χ. Καθίσματα (Squat) — ή γράψε δική σου"
                         style={{ ...inputStyle, marginBottom: showLibrary ? 10 : 14 }} />
-                      <datalist id="exercise-options">{exercises.map((ex) => <option key={ex.id} value={ex.name} />)}</datalist>
+                      <datalist id="exercise-options">{exercisesHere.map((ex) => <option key={ex.id} value={ex.name} />)}</datalist>
 
                       {showLibrary && (
                         <div style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: 12, marginBottom: 14 }}>
-                          <div style={{ fontSize: 11, color: T.paperDim, marginBottom: 8 }}>Βάση ασκήσεων ({exercises.length})</div>
+                          <div style={{ fontSize: 11, color: T.paperDim, marginBottom: 4 }}>Βάση ασκήσεων — {tissue.label} ({exercisesHere.length})</div>
+                          <div style={{ fontSize: 11, color: T.paperDim, opacity: 0.8, marginBottom: 8 }}>Η ίδια άσκηση (π.χ. ανύψωση πτέρνας) μπορεί να υπάρχει σε περισσότερους ιστούς, με διαφορετική δομή φόρτισης.</div>
                           <div style={{ maxHeight: 140, overflowY: "auto", marginBottom: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-                            {exercises.map((ex) => (
+                            {exercisesHere.map((ex) => (
                               <div key={ex.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12.5, padding: "4px 2px" }}>
-                                <span>{ex.name} <span style={{ color: T.paperDim, fontSize: 11 }}>· {ex.category}</span></span>
+                                <span>{ex.name} <span style={{ color: T.paperDim, fontSize: 11 }}>· {ex.category}{ex.notes ? ` · ${ex.notes}` : ""}</span></span>
                                 <button onClick={() => removeExercise(ex.id)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={12} /></button>
                               </div>
                             ))}
@@ -1507,6 +1716,7 @@ function TissueLoadLog() {
                               {EXERCISE_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
                             </select>
                           </div>
+                          <input value={exDraft.notes} onChange={(e) => setExDraft({ ...exDraft, notes: e.target.value })} placeholder="Στόχος (π.χ. Αχίλλειος, γαστροκνήμιος) — προαιρετικό" style={{ ...inputStyle, fontSize: 12.5, padding: "7px 9px", marginBottom: 8 }} />
                           <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 8 }}>
                             <select value={exDraft.defaultLoadType} onChange={(e) => setExDraft({ ...exDraft, defaultLoadType: e.target.value })} style={{ ...inputStyle, fontSize: 12.5, padding: "7px 9px" }}>
                               <option value="">— προεπιλεγμένος τύπος φόρτισης (προαιρετικό) —</option>
@@ -1537,7 +1747,7 @@ function TissueLoadLog() {
 
                   {!isCardio && (
                     <>
-                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Φορτίο αντίστασης (προαιρετικό)</label>
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>{sscOf(tissueId, form.loadType) ? "Επιπλέον φορτίο — γιλέκο / βάρη (προαιρετικό)" : "Φορτίο αντίστασης (προαιρετικό)"}</label>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 10, marginBottom: 14 }}>
                         <input type="number" inputMode="decimal" value={form.resistance} onChange={(e) => setForm({ ...form, resistance: e.target.value })} placeholder="π.χ. 20" style={inputStyle} />
                         <div style={{ position: "relative" }}>
@@ -1567,11 +1777,13 @@ function TissueLoadLog() {
                         </div>
                       )}
 
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
-                        <NumberField label="Sets" value={form.sets} onChange={(v) => setForm({ ...form, sets: v })} placeholder="3" />
-                        <NumberField label="Reps" value={form.reps} onChange={(v) => setForm({ ...form, reps: v })} placeholder="10" />
-                        <SelectField label="Ρυθμός" value={form.tempo || "—"} onChange={(v) => setForm({ ...form, tempo: v === "—" ? "" : v })} options={["—", "Slow", "Slow Heavy", "Fast", "Quick", "Explosive"]} />
+                      <div style={{ display: "grid", gridTemplateColumns: sscOf(tissueId, form.loadType) ? "1fr 1fr" : "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+                        <NumberField label={sscOf(tissueId, form.loadType) ? "Σετ" : "Sets"} value={form.sets} onChange={(v) => setForm({ ...form, sets: v })} placeholder="3" />
+                        <NumberField label={sscOf(tissueId, form.loadType) ? "Επαφές / σετ" : "Reps"} value={form.reps} onChange={(v) => setForm({ ...form, reps: v })} placeholder="10" />
+                        {!sscOf(tissueId, form.loadType) && <SelectField label="Ρυθμός" value={form.tempo || "—"} onChange={(v) => setForm({ ...form, tempo: v === "—" ? "" : v })} options={["—", "Slow", "Slow Heavy", "Fast", "Quick", "Explosive"]} />}
                       </div>
+
+                      <TissuePanel tissue={tissue} loadType={form.loadType} tp={form.tp || {}} form={form} onChange={(v) => setForm({ ...form, tp: v })} />
 
                       {!isPatientMode && (
                         <div style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: 14, marginBottom: 14 }}>
@@ -1714,6 +1926,8 @@ function TissueLoadLog() {
                           {extraText(e) ? <React.Fragment><strong style={{ color: T.gold }}>{extraText(e)}</strong> · </React.Fragment> : null}
                           RPE {rpeOf(e)} · πόνος {e.painDuring}/{e.pain24h} (κατά/24ω) · {e.recordedBy}
                         </div>
+                        {calcText(e) && <div style={{ marginTop: 5, fontSize: 12, color: T.gold, fontWeight: 600 }}>{calcText(e)}</div>}
+                        {tpText(e) && <div style={{ marginTop: 5, fontSize: 12, color: T.paper, opacity: 0.9 }}><span style={{ color: T.gold, fontWeight: 600 }}>{(TISSUES.find((t) => t.id === e.tissue) || {}).label}:</span> {tpText(e)}</div>}
                         {e.notes && <div style={{ marginTop: 6, color: T.paper, opacity: 0.85 }}>{e.notes}</div>}
                         <EntryParams item={e} onSave={(x) => updateEntryExtra(e.id, x)} suggestions={paramSuggestions} />
                       </div>
