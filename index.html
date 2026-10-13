@@ -17,9 +17,199 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script>
+/* ===== Sports ReHub Load Log — cloud sync (Supabase) ===== */
+(function () {
+  var SB_URL = 'https://kyhegdwzsqucfpzjxdif.supabase.co';
+  var SB_KEY = 'sb_publishable_3pUJ6LS6p9l4ycPSzOnClw_rjndX5s4';
+  var PFX = 'trl_', META = 'll_meta', OUT = 'll_outbox', FLAG = 'll_loggedin';
+  var sb = null, user = null, pollTimer = null, flushTimer = null, flushing = false, stale = false;
+  function lsGet(k, f) { try { var v = localStorage.getItem(k); return v == null ? f : JSON.parse(v); } catch (e) { return f; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  var meta = lsGet(META, {}), outbox = lsGet(OUT, []);
+  function saveMeta() { lsSet(META, meta); }
+  function saveOut() { lsSet(OUT, outbox); }
+  function eq(a, b) { try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; } }
+
+  /* ---------- tiny UI ---------- */
+  var css = document.createElement('style');
+  css.textContent =
+    '.ll-pill{position:fixed;left:10px;bottom:10px;z-index:9999;display:flex;gap:8px;align-items:center;background:rgba(24,17,11,.92);color:#E8DCC8;border:1px solid #4a3a28;border-radius:999px;padding:6px 12px;font:500 12px "IBM Plex Sans",system-ui,sans-serif}' +
+    '.ll-pill button{background:none;border:none;color:#C79A56;font:inherit;cursor:pointer;text-decoration:underline;padding:0}' +
+    '.ll-dot{width:8px;height:8px;border-radius:50%;background:#888}.ll-ok .ll-dot{background:#6FBF73}.ll-busy .ll-dot{background:#C79A56}.ll-off .ll-dot{background:#D9822B}.ll-err .ll-dot{background:#D95C4A}' +
+    '.ll-banner{position:fixed;left:50%;transform:translateX(-50%);top:10px;z-index:9999;background:#C79A56;color:#18110B;border-radius:999px;padding:9px 18px;font:600 13px "IBM Plex Sans",system-ui,sans-serif;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}' +
+    '.ll-login{position:fixed;inset:0;z-index:10000;background:#18110B;display:flex;align-items:center;justify-content:center;padding:20px;font-family:"IBM Plex Sans",system-ui,sans-serif}' +
+    '.ll-login form{width:100%;max-width:340px;background:#241a12;border:1px solid #4a3a28;border-radius:18px;padding:26px;color:#E8DCC8}' +
+    '.ll-login h1{margin:0 0 4px;font:600 20px "Space Grotesk",system-ui,sans-serif}.ll-login p{margin:0 0 18px;color:#a8977e;font-size:13px}' +
+    '.ll-login input{width:100%;margin:0 0 10px;padding:11px 14px;border-radius:999px;border:1px solid #4a3a28;background:#18110B;color:#fff;font:inherit;font-size:15px}' +
+    '.ll-login button{width:100%;padding:12px;border:none;border-radius:999px;background:#C79A56;color:#18110B;font:600 15px inherit;cursor:pointer}' +
+    '.ll-err-t{color:#F08C7C;font-size:13px;min-height:18px;margin-bottom:8px}' +
+    '@media print{.ll-pill,.ll-banner,.ll-login{display:none!important}}';
+  document.head.appendChild(css);
+  var pill = document.createElement('div'); pill.className = 'll-pill ll-busy'; pill.style.display = 'none';
+  pill.innerHTML = '<span class="ll-dot"></span><span class="ll-txt">…</span><button type="button" class="ll-out" style="display:none">Αποσύνδεση</button>';
+  var banner = document.createElement('div'); banner.className = 'll-banner'; banner.textContent = 'Νεότερα δεδομένα από άλλη συσκευή — πάτησε για ανανέωση';
+  banner.onclick = function () { location.reload(); };
+  function mount() { document.body.appendChild(pill); document.body.appendChild(banner); }
+  if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
+  function setStatus(kind, text) {
+    pill.style.display = 'flex'; pill.className = 'll-pill ll-' + kind;
+    pill.querySelector('.ll-txt').textContent = text;
+    pill.querySelector('.ll-out').style.display = user ? '' : 'none';
+  }
+  pill.querySelector('.ll-out').onclick = async function () {
+    if (outbox.length && !confirm('Υπάρχουν αλλαγές που δεν έχουν συγχρονιστεί. Αποσύνδεση ούτως ή άλλως;')) return;
+    try { await sb.auth.signOut(); } catch (e) {}
+    try { localStorage.removeItem(FLAG); } catch (e) {}
+    location.reload();
+  };
+
+  function showLogin() {
+    return new Promise(function (resolve) {
+      var w = document.createElement('div'); w.className = 'll-login';
+      w.innerHTML = '<form><h1>Load Log</h1><p>Σύνδεση για συγχρονισμό μεταξύ συσκευών.</p>' +
+        '<input type="email" id="ll-e" placeholder="Email" autocomplete="username" required>' +
+        '<input type="password" id="ll-p" placeholder="Κωδικός" autocomplete="current-password" required>' +
+        '<div class="ll-err-t" id="ll-t"></div><button type="submit">Σύνδεση</button></form>';
+      (document.body ? Promise.resolve() : new Promise(function (r) { document.addEventListener('DOMContentLoaded', r); })).then(function () {
+        document.body.appendChild(w);
+        w.querySelector('form').onsubmit = async function (ev) {
+          ev.preventDefault();
+          var b = w.querySelector('button'); b.disabled = true; b.textContent = 'Σύνδεση…';
+          var r = await sb.auth.signInWithPassword({ email: w.querySelector('#ll-e').value.trim(), password: w.querySelector('#ll-p').value });
+          if (r.error || !r.data || !r.data.session) { w.querySelector('#ll-t').textContent = 'Λάθος email ή κωδικός.'; b.disabled = false; b.textContent = 'Σύνδεση'; return; }
+          w.remove(); resolve(r.data.session);
+        };
+      });
+    });
+  }
+
+  /* ---------- sync core ---------- */
+  function localKeys() { var ks = []; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(PFX) === 0) ks.push(k); } return ks; }
+  async function pushNow(key, val) {
+    var r = await sb.from('loadlog_data').upsert({ user_id: user.id, key: key, value: val }, { onConflict: 'user_id,key' }).select('updated_at').single();
+    if (r.error) throw r.error;
+    meta[key] = r.data.updated_at; saveMeta();
+  }
+  async function delNow(key) {
+    var r = await sb.from('loadlog_data').delete().eq('key', key);
+    if (r.error) throw r.error;
+    delete meta[key]; saveMeta();
+  }
+  async function flush() {
+    if (!sb || !user || flushing || !outbox.length) return;
+    flushing = true; setStatus('busy', 'Συγχρονισμός…');
+    try {
+      var keys = outbox.slice();
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i], raw = localStorage.getItem(k);
+        if (raw == null) await delNow(k); else await pushNow(k, JSON.parse(raw));
+        outbox = outbox.filter(function (x) { return x !== k; }); saveOut();
+      }
+      setStatus('ok', 'Συγχρονισμένο');
+    } catch (e) {
+      console.error('sync', e);
+      setStatus(navigator.onLine ? 'err' : 'off', navigator.onLine ? 'Σφάλμα συγχρονισμού' : 'Εκτός σύνδεσης — θα συγχρονιστεί');
+    } finally { flushing = false; }
+  }
+  function queue(key) {
+    if (key.indexOf(PFX) !== 0) return;
+    if (outbox.indexOf(key) < 0) { outbox.push(key); saveOut(); }
+    clearTimeout(flushTimer); flushTimer = setTimeout(flush, 700);
+    if (user) setStatus('busy', 'Αποθήκευση…');
+  }
+  function mergeFirst(l, c, key) {
+    try { localStorage.setItem('ll_backup_' + key, JSON.stringify(l)); } catch (e) {}
+    var arr = Array.isArray(l) && Array.isArray(c);
+    if (arr && l.concat(c).every(function (x) { return x && typeof x === 'object' && x.id != null; })) {
+      var seen = {}, out = [];
+      c.forEach(function (x) { seen[x.id] = 1; out.push(x); });
+      l.forEach(function (x) { if (!seen[x.id]) out.push(x); });
+      if (key.indexOf('trl_patients') !== 0 && out.every(function (x) { return /^\d+$/.test(String(x.id)); })) out.sort(function (a, b) { return Number(b.id) - Number(a.id); });
+      return out;
+    }
+    if (!arr && l && c && typeof l === 'object' && typeof c === 'object' && !Array.isArray(l) && !Array.isArray(c)) return Object.assign({}, l, c);
+    return c;
+  }
+  async function initialSync() {
+    setStatus('busy', 'Συγχρονισμός…');
+    var r = await sb.from('loadlog_data').select('key,value,updated_at');
+    if (r.error) {
+      var missing = /relation|does not exist|schema cache|loadlog_data/i.test(r.error.message || '');
+      setStatus('err', missing ? 'Λείπει ο πίνακας στο Supabase' : 'Σφάλμα συγχρονισμού');
+      if (missing) alert('Ο συγχρονισμός δεν είναι έτοιμος: τρέξε το loadlog-sync.sql στο Supabase (SQL Editor). Η εφαρμογή δουλεύει προς το παρόν μόνο τοπικά.');
+      user = null; return;
+    }
+    var cloud = {}; (r.data || []).forEach(function (row) { cloud[row.key] = row; });
+    var keys = {}; Object.keys(cloud).forEach(function (k) { keys[k] = 1; }); localKeys().forEach(function (k) { keys[k] = 1; });
+    var ks = Object.keys(keys);
+    for (var i = 0; i < ks.length; i++) {
+      var key = ks[i], c = cloud[key], has = localStorage.getItem(key) != null, l = has ? lsGet(key, null) : null;
+      if (!c) { if (has) { try { await pushNow(key, l); } catch (e) { if (outbox.indexOf(key) < 0) outbox.push(key); } } continue; }
+      if (!has) { if (outbox.indexOf(key) >= 0) { /* deleted locally while offline */ continue; } lsSet(key, c.value); meta[key] = c.updated_at; continue; }
+      if (eq(l, c.value)) { meta[key] = c.updated_at; continue; }
+      if (outbox.indexOf(key) >= 0) continue;                 /* local newer, will be pushed by flush */
+      if (meta[key]) { if (c.updated_at > meta[key]) { lsSet(key, c.value); meta[key] = c.updated_at; } else { await pushNow(key, l); } continue; }
+      var m = mergeFirst(l, c.value, key); lsSet(key, m); await pushNow(key, m);
+    }
+    saveMeta(); saveOut();
+    await flush();
+  }
+  async function poll() {
+    if (!sb || !user || document.hidden) return;
+    try {
+      var r = await sb.from('loadlog_data').select('key,updated_at');
+      if (r.error) return;
+      var cloud = {}; (r.data || []).forEach(function (x) { cloud[x.key] = x.updated_at; });
+      var changed = false;
+      Object.keys(cloud).forEach(function (k) { if (outbox.indexOf(k) < 0 && (!meta[k] || cloud[k] > meta[k])) changed = true; });
+      Object.keys(meta).forEach(function (k) { if (!(k in cloud) && outbox.indexOf(k) < 0) changed = true; });
+      if (changed) {
+        var full = await sb.from('loadlog_data').select('key,value,updated_at');
+        if (!full.error) {
+          (full.data || []).forEach(function (row) { if (outbox.indexOf(row.key) < 0 && (!meta[row.key] || row.updated_at > meta[row.key])) { if (!eq(lsGet(row.key, null), row.value)) { lsSet(row.key, row.value); stale = true; } meta[row.key] = row.updated_at; } });
+          Object.keys(meta).forEach(function (k) { if (!(k in cloud) && outbox.indexOf(k) < 0) { try { localStorage.removeItem(k); } catch (e) {} delete meta[k]; stale = true; } });
+          saveMeta();
+          if (stale) banner.style.display = 'block';
+        }
+      }
+      if (!outbox.length) setStatus('ok', 'Συγχρονισμένο');
+    } catch (e) { setStatus('off', 'Εκτός σύνδεσης — θα συγχρονιστεί'); }
+  }
+  function background() {
+    window.addEventListener('online', function () { flush(); poll(); });
+    window.addEventListener('offline', function () { setStatus('off', 'Εκτός σύνδεσης — θα συγχρονιστεί'); });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) { flush(); poll(); } });
+    pollTimer = setInterval(function () { flush(); poll(); }, 30000);
+    window.addEventListener('beforeunload', function () { if (outbox.length) flush(); });
+  }
+
+  window.llSync = {
+    push: function (key) { queue(key); },
+    del: function (key) { queue(key); },
+    ready: (async function () {
+      try {
+        if (!window.supabase) { setStatus('off', 'Μόνο τοπικά (χωρίς σύνδεση)'); return; }
+        sb = window.supabase.createClient(SB_URL, SB_KEY);
+        var session = null;
+        try { var g = await sb.auth.getSession(); session = g && g.data && g.data.session; } catch (e) {}
+        if (!session) {
+          if (!navigator.onLine && localStorage.getItem(FLAG)) { setStatus('off', 'Εκτός σύνδεσης — θα συγχρονιστεί'); return; }
+          session = await showLogin();
+        }
+        user = session.user; try { localStorage.setItem(FLAG, '1'); } catch (e) {}
+        await initialSync();
+        if (user) background();
+      } catch (e) { console.error(e); setStatus('off', 'Μόνο τοπικά'); }
+    })()
+  };
+})();
+</script>
+
 <style>
   html, body { margin: 0; padding: 0; background: #18110B; }
   * { box-sizing: border-box; }
@@ -420,8 +610,8 @@ function autoDomain(values) {
 
 const store = {
   get(key, fallback) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } },
-  set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } },
-  remove(key) { try { localStorage.removeItem(key); } catch {} },
+  set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); if (window.llSync) window.llSync.push(key); return true; } catch { return false; } },
+  remove(key) { try { localStorage.removeItem(key); if (window.llSync) window.llSync.del(key); } catch {} },
 };
 
 function daysBetween(a, b) { return Math.floor((b - a) / 86400000); }
@@ -571,6 +761,8 @@ function TissueLoadLog() {
     store.set("trl_patients", next);
     store.remove(`trl_entries_${id}`);
     store.remove(`trl_measurements_${id}`);
+    store.remove(`trl_assess_${id}`);
+    store.remove(`trl_sessions_${id}`);
   };
 
   const addCustomType = () => {
@@ -1535,7 +1727,7 @@ function TissueLoadLog() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<TissueLoadLog />);
+(window.llSync ? window.llSync.ready : Promise.resolve()).catch(() => {}).then(() => ReactDOM.createRoot(document.getElementById("root")).render(<TissueLoadLog />));
 </script>
 
 <script>
