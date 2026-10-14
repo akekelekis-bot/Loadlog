@@ -3322,7 +3322,6 @@ function TissueLoadLog() {
             <div className="mac-tabs" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, marginBottom: 20 }}>
               {[
                 { id: "assessment", label: "Ιατρική Εκτίμηση", icon: "stethoscope", main: true, clin: true },
-                { id: "bodymap", label: "Χάρτης Σώματος", icon: "user", clin: true },
                 { id: "load", label: "Καταγραφή Φορτίου", icon: "activity" },
                 { id: "rtp", label: "Κριτήρια RTP", icon: "flag", clin: true },
                 { id: "daily", label: "Ημερήσια Συνεδρία", icon: "folder", clin: true },
@@ -3345,7 +3344,6 @@ function TissueLoadLog() {
 
             <div className="mac-main">
             {view === "assessment" && !isPatientMode && assessmentView}
-            {view === "bodymap" && !isPatientMode && <BodyMapModule patient={patient} onGo={bodyMapGo} />}
             {view === "rtp" && !isPatientMode && <RtpModule patientId={activePatient} patientName={patient && patient.name} assessments={assessments} sessionDate={sessionDate} />}
             {view === "daily" && !isPatientMode && dailyView}
             {view === "sources" && !isPatientMode && <SourcesModule />}
