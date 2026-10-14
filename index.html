@@ -259,6 +259,8 @@
     .mac-ptitle { display: block; min-width: 0; }
     .mac-tabs { display: flex !important; gap: 4px !important; margin: 0 0 0 auto !important; padding: 4px; background: #050505; border: 1px solid #232323; border-radius: 11px; }
     .mac-tabs button { grid-column: auto !important; padding: 9px 15px !important; font-size: 13px !important; border: none !important; border-radius: 8px !important; background: transparent !important; color: #A8A8A8 !important; white-space: nowrap; }
+    .mac-tabs { flex-wrap: wrap !important; justify-content: flex-end; max-width: 100%; }
+    .mac-tabs button { padding: 8px 12px !important; white-space: nowrap; }
     .mac-tabs button:hover { color: #FFFFFF !important; }
     .mac-tabs button.on { background: #F26A10 !important; color: #0A0A0A !important; }
     .mac-main { flex: 1; min-height: 0; overflow-y: auto; padding: 26px 32px 48px; order: 0; }
@@ -396,6 +398,34 @@ const TISSUE_FIELDS = {
 const TISSUE_REFS = {
   tendon: {
     refs: [
+      { c: "Cook JL, Rio E, Purdam CR, Docking SI. Revisiting the continuum model of tendon pathology: what is its merit in clinical practice and research? Br J Sports Med 2016;50:1187-1191." },
+      { c: "Malliaras P, Cook J, Purdam C, Rio E. Patellar tendinopathy: clinical diagnosis, load management, and advice for challenging case presentations. J Orthop Sports Phys Ther 2015;45(11):887-898." },
+      { c: "Rio E, Kidgell D, Purdam C, et al. Isometric exercise induces analgesia and reduces inhibition in patellar tendinopathy. Br J Sports Med 2015;49:1277-1283." },
+      { c: "Rio E, Moseley L, Purdam C, et al. The pain of tendinopathy: physiological or pathophysiological? Sports Med 2014;44:9-23." },
+      { c: "Cardoso TB, Pizzari T, Kinsella R, Hope D, Cook JL. Current trends in tendinopathy management. Best Pract Res Clin Rheumatol 2019;33:122-140." },
+      { c: "Visentini PJ, Khan KM, Cook JL, Kiss ZS, Harcourt PR, Wark JD. The VISA score: an index of severity of symptoms in patients with jumper's knee (patellar tendinosis). J Sci Med Sport 1998;1(1):22-28." },
+      { c: "Lewis J, McCreesh K, Roy JS, Ginn K. Rotator cuff tendinopathy: navigating the diagnosis-management conundrum. J Orthop Sports Phys Ther 2015;45(11):923-937." },
+      { c: "Salamh P, Lewis J. It is time to put special tests for rotator cuff-related shoulder pain out to pasture. J Orthop Sports Phys Ther 2020;50(5):222-225." },
+      { c: "Lewis J, Mintken PE, McDevitt AW. What's in a name? The case for using 'rotator cuff-related shoulder pain' in clinical practice. J Orthop Sports Phys Ther 2025;55(7):451-453." },
+      { c: "Cook T, Lewis J, Powell J. Rethinking strength testing in rotator cuff-related shoulder pain: a clinical tradition that lacks muscle. J Man Manip Ther 2026;34(3):193-198." },
+      { c: "Powell JK, Schram B, Lewis J, Hing W. Is exercise therapy the right treatment for rotator cuff-related shoulder pain? Uncertainties, theory, and practice. Musculoskelet Care 2024;22(2)." },
+      { c: "Powell JK et al. 'You have RCRSP and to treat it I recommend exercise': a scoping review of the possible mechanisms underpinning exercise therapy. Musculoskelet Sci Pract 2022;62:102646." },
+      { c: "Powell JK et al. Physiotherapists nearly always prescribe exercise for rotator cuff-related shoulder pain (international survey of beliefs on mechanisms). Musculoskelet Care 2022." },
+      { c: "Hadjisavvas S et al. Can resistance training improve throwing performance in handball players? Systematic review and meta-analysis. BMC Sports Sci Med Rehabil 2024;16:85." },
+      { c: "Salamh P et al. An international consensus on the etiology, risk factors, diagnosis and management of frozen shoulder: a Delphi study. J Man Manip Ther 2025;33(4):309-320." },
+      { c: "Lewis J, Mintken PE, McDevitt AW. Treating musculoskeletal conditions with a bit of exercise and manual therapy: are you kidding me? J Man Manip Ther 2025;33(3):167-172." },
+      { c: "Brady N et al. Physiotherapist beliefs and perspectives on virtual reality supported rehabilitation for musculoskeletal shoulder pain: a focus group study. PLOS ONE 2023;18(4):e0284445." },
+      { c: "Naunton J, Barrett S, Kidgell D, Bennell K, Haines T, Malliaras P. The Shoulder HD Pilot Trial: a qualitative study of patient and therapist experience of high and low load-volume exercise for rotator cuff tendinopathy. J Sci Med Sport 2026;29:501-511." },
+      { c: "Barros et al. Isometric vs isotonic exercise for rotator cuff-related shoulder pain: RCT protocol. PLOS ONE 2023;18(11):e0293457." },
+      { c: "Croci et al. Load-induced glenohumeral translation after rotator cuff tears: study protocol. JMIR Res Protoc 2022;11(12):e43769." },
+      { c: "Malcarney HL, Murrell GAC. The rotator cuff: biological adaptations to its environment. Sports Med 2003." },
+      { c: "Sun et al. Neuromuscular adaptations in degenerative rotator cuff tears. IEEE Trans Neural Syst Rehabil Eng 2026." },
+      { c: "Diao et al. Eccentric contraction enhances healing of the bone-tendon interface after rotator cuff repair (mouse). Am J Sports Med 2023." },
+      { c: "Nasr et al. Shear wave elastography of supraspinatus/infraspinatus after isometric exercise in shoulders with and without rotator cuff tears. PLOS ONE 2026;21(5):e0347233." },
+      { c: "Bohm S, Mersmann F, Arampatzis A. Human tendon adaptation in response to mechanical loading: a systematic review and meta-analysis of exercise intervention studies on healthy adults. Sports Med Open 2015;1:7." },
+      { c: "Docking SI, Cook J. How do tendons adapt? Going beyond tissue responses to understand positive adaptation and pathology development: a narrative review. J Musculoskelet Neuronal Interact 2019;19(3):300-310." },
+      { c: "Reeves ND. Adaptation of the tendon to mechanical usage. J Musculoskelet Neuronal Interact 2006;6(2):174-180." },
+      { c: "Maganaris CN, Chatzistergos P, Reeves ND, Narici MV. Quantification of internal stress-strain fields in human tendon: unraveling the mechanisms that underlie regional tendon adaptations and mal-adaptations to mechanical loading and the effectiveness of therapeutic eccentric exercise. Front Physiol 2017;8:91." },
       { c: "Rio E, Kidgell D, Purdam C, Gaida J, Moseley GL, Pearce AJ, Cook J. Isometric exercise induces analgesia and reduces inhibition in patellar tendinopathy. Br J Sports Med 2015;49(19):1277–83.", u: "https://bjsm.bmj.com/content/49/19/1277.abstract", s: "Ισομετρικές συσπάσεις μείωσαν τον πόνο έναντι ισοτονικών (μικρή cross-over μελέτη, n = 6) → πεδία Ένταση και Διάρκεια κράτησης." },
       { c: "Kongsgaard M, et al. Corticosteroid injections, eccentric decline squat training and heavy slow resistance training in patellar tendinopathy. Scand J Med Sci Sports 2009;19(6):790–802.", u: "https://pubmed.ncbi.nlm.nih.gov/19793213/", s: "Heavy slow resistance → Ρυθμός φόρτισης, Χρόνος υπό τάση." },
       { c: "Bohm S, Mersmann F, Arampatzis A. Human tendon adaptation in response to mechanical loading: a systematic review and meta-analysis of exercise intervention studies on healthy adults. Sports Med Open 2015;1:7.", u: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4532714", s: "Παράμετροι μηχανικής φόρτισης και προσαρμογή τένοντα → Ένταση, Χρόνος υπό τάση." },
@@ -438,6 +468,12 @@ const GMAP = {
   ligament: { perturb: "int", angle: "int", holdSec: "dur", plane: "type", stance: "type", surface: "type", vision: "type" },
 };
 const TP_GROUPS = [["freq", "Συχνότητα"], ["int", "Ένταση"], ["dur", "Διάρκεια"], ["type", "Τύπος σύσπασης / άσκησης"], ["rest", "Διάρκεια ξεκούρασης"], ["prog", "Πρόοδος (progression)"], ["oth", "Εκτέλεση / παρακολούθηση"]];
+const REST_HINTS = {
+  tendon: "Gabbett & Oetter 2024: αντιδραστικός / υπερυδατωμένος τένοντας μετά από έντονη SSC → περίπου 48 ώρες πριν από παρόμοια δόση. Υγιής τένοντας ανέχεται καθημερινή φόρτιση αν η SSC και το strain είναι μικρά· < 24 ώρες ανάπαυσης μπορεί να οδηγήσει σε απώλεια κολλαγόνου.",
+  muscle: "Gabbett & Oetter 2024: έως ≥72 ώρες μετά από γρήγορες έκκεντρες συσπάσεις (βλάβη/πόνος). Μέγιστες ισομετρικές συσπάσεις: χαμηλή κόπωση και ταχεία ανάκαμψη. Μετά από sprint, η δύναμη οπισθίων μηριαίων επανέρχεται σε 48–72 ώρες.",
+  bone: "Gabbett & Oetter 2024: η μηχανοευαισθησία του οστού χάνεται μετά από ~20 κύκλους φόρτισης και αποκαθίσταται ~90% σε 8 ώρες· επιπλέον δόση (≤60 κύκλοι, π.χ. πλειομετρία) μετά από 4–8 ώρες.",
+  cardio: "Gabbett & Oetter 2024: χαμηλή ένταση (κυρίως αερόβια) μπορεί να επαναληφθεί σε ≤24 ώρες· υψηλή (κυρίως αναερόβια) χρειάζεται ≥72 ώρες.",
+};
 Object.keys(TISSUE_FIELDS).forEach((t) => {
   TISSUE_FIELDS[t].forEach((f) => { f.g = (GMAP[t] && GMAP[t][f.k]) || "oth"; });
   const extra = t === "ligament" ? [{ k: "restSet", l: "Ανάπαυση μεταξύ σετ", u: "sec", t: "number", ph: "60", g: "rest" }] : [];
@@ -448,7 +484,7 @@ Object.keys(TISSUE_FIELDS).forEach((t) => {
     { k: "rom", l: "Εύρος κίνησης / γωνία άρθρωσης (μήκος μυός)", t: "text", ph: "π.χ. πλήρες ROM, 0–60°, επιμηκυμένη θέση", g: "type" },
     { k: "prog", l: "Πρόοδος από την προηγούμενη συνεδρία", t: "select", o: ["Αύξηση φορτίου", "Αύξηση επαναλήψεων", "Αύξηση σετ", "Αύξηση ταχύτητας / δυσκολίας", "Διατήρηση", "Μείωση (regression)", "Αλλαγή άσκησης"], g: "prog" },
     { k: "weeks", l: "Εβδομάδα προγράμματος φόρτισης", u: "εβδ.", t: "number", ph: "4", g: "prog" },
-    { k: "restSess", l: "Ξεκούραση ιστού έως την επόμενη φόρτιση", u: "ώρες", t: "number", ph: "48", g: "rest" },
+    { k: "restSess", l: "Ξεκούραση ιστού έως την επόμενη φόρτιση", u: "ώρες", t: "number", ph: "48", g: "rest", hint: REST_HINTS[t] },
   ];
 });
 const sscOf = (tissueId, lt) => tissueId === "tendon" && plyoLT(lt);
@@ -483,12 +519,573 @@ const SOC_ONSET = ["—", "Ξαφνική (τραυματισμός)", "Σταδ
 const SOC_CHARACTER = ["Οξύς / διαξιφιστικός", "Αμβλύς", "Βαθύς", "Καυστικός", "Σφύζων", "Πιεστικός", "Τράβηγμα / σύσπαση", "Μυρμήγκιασμα / μούδιασμα", "Άλλο"];
 const SOC_TIME = ["—", "Συνεχής", "Διαλείπων", "Μόνο με κίνηση / φόρτιση", "Μόνο με ανάπαυση", "Νυχτερινός", "Πρωινή δυσκαμψία"];
 const RED_FLAGS = ["Ανεξήγητη απώλεια βάρους", "Νυχτερινός πόνος που δεν ανακουφίζεται", "Πυρετός / γενική αδιαθεσία", "Ιστορικό καρκίνου", "Νευρολογικά συμπτώματα (αδυναμία, αναισθησία)", "Δυσλειτουργία εντέρου / κύστης", "Σοβαρό τραύμα", "Άλλο"];
+
+const JOINT_MOVES = {
+  "Ώμος": ["Κάμψη", "Έκταση", "Απαγωγή", "Προσαγωγή", "Έξω στροφή", "Έσω στροφή"],
+  "Αγκώνας": ["Κάμψη", "Έκταση", "Πρηνισμός", "Υπτιασμός"],
+  "Καρπός": ["Κάμψη", "Έκταση", "Κερκιδική απόκλιση", "Ωλένια απόκλιση"],
+  "Ισχίο": ["Κάμψη", "Έκταση", "Απαγωγή", "Προσαγωγή", "Έξω στροφή", "Έσω στροφή"],
+  "Γόνατο": ["Κάμψη", "Έκταση"],
+  "Ποδοκνημική": ["Ραχιαία κάμψη (dorsiflexion)", "Πελματιαία κάμψη", "Ανάσπαση (inversion)", "Έκσπαση (eversion)"],
+  "Αυχενική": ["Κάμψη", "Έκταση", "Πλάγια κάμψη", "Στροφή"],
+  "Οσφυϊκή": ["Κάμψη", "Έκταση", "Πλάγια κάμψη", "Στροφή"],
+  "Άλλο": ["Άλλο"],
+};
+const S_METHODS = { "MMT (0–5)": "MMT", "Δυναμόμετρο χειρός (HHD)": "N", "Ισομετρικό (ForceFrame / άλλο)": "N", "Ισοκινητικό": "Nm", "Λειτουργικό (επαναλήψεις)": "reps", "Άλλο": "N" };
+const S_UNITS = ["N", "kg", "Nm", "N/kg", "Nm/kg", "reps", "MMT"];
+const ENDFEELS = ["—", "Σκληρό (οστικό)", "Σφιχτό (ελαστικό)", "Μαλακό", "Κενό (πόνος)", "Σπασμός"];
+const SCALE_0_10 = ["—", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+const pnum = (v) => { const x = parseFloat(String(v).replace(",", ".")); return isNaN(x) ? null : x; };
+const symOf = (L, R, aff) => {
+  const l = pnum(L), r = pnum(R);
+  if (l === null || r === null || l <= 0 || r <= 0) return null;
+  if (aff === "Δεξί") return Math.round((r / l) * 100);
+  if (aff === "Αριστερό") return Math.round((l / r) * 100);
+  return Math.round((Math.min(l, r) / Math.max(l, r)) * 100);
+};
+const srKey = (x) => [x.joint, x.move, x.method || x.type].join("|");
+function StrengthRomPanel({ draft, ad, assessments, sessionDate, affected }) {
+  const [kind, setKind] = useState("strength");
+  const blank = { joint: "Γόνατο", move: "Έκταση", method: "Δυναμόμετρο χειρός (HHD)", type: "Ενεργητικό", unit: "N", L: "", R: "", rpe: "—", pain: "—", endfeel: "—", note: "" };
+  const [f, setF] = useState(blank);
+  const set = (k, v) => setF((o) => ({ ...o, [k]: v }));
+  const list = draft[kind] || [];
+  const isStr = kind === "strength";
+  const add = () => {
+    if (String(f.L).trim() === "" && String(f.R).trim() === "") return;
+    const row = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), joint: f.joint, move: f.move, L: f.L, R: f.R, rpe: f.rpe, pain: f.pain, note: f.note };
+    if (isStr) { row.method = f.method; row.unit = f.unit; } else { row.type = f.type; row.endfeel = f.endfeel; }
+    ad(kind, [...list, row]);
+    setF((o) => ({ ...o, L: "", R: "", note: "", rpe: "—", pain: "—", endfeel: "—" }));
+  };
+  const prevOf = (row) => {
+    const dates = Object.keys(assessments || {}).filter((d) => d < sessionDate).sort().reverse();
+    for (const d of dates) { const hit = ((assessments[d] || {})[kind] || []).find((x) => srKey(x) === srKey(row)); if (hit) return { d, row: hit }; }
+    return null;
+  };
+  const delta = (cur, prev) => { const c = pnum(cur), p = pnum(prev); if (c === null || p === null || p === 0) return null; const pc = Math.round(((c - p) / Math.abs(p)) * 1000) / 10; return pc; };
+  const chipStyle = (on) => ({ padding: "8px 18px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const numUnit = isStr ? f.unit : "°";
+  return (
+    <Panel title="Αξιολόγηση Δύναμης & ROM">
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        <button type="button" onClick={() => setKind("strength")} style={chipStyle(isStr)}>Δύναμη ({(draft.strength || []).length})</button>
+        <button type="button" onClick={() => setKind("rom")} style={chipStyle(!isStr)}>ROM ({(draft.rom || []).length})</button>
+      </div>
+      <div className="ll-sr-form" style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 12, padding: 12, marginBottom: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 10 }}>
+          <SelectField label="Άρθρωση / περιοχή" value={f.joint} onChange={(v) => setF((o) => ({ ...o, joint: v, move: JOINT_MOVES[v][0] }))} options={Object.keys(JOINT_MOVES)} />
+          <SelectField label="Κίνηση" value={f.move} onChange={(v) => set("move", v)} options={JOINT_MOVES[f.joint]} />
+          {isStr ? (
+            <SelectField label="Μέθοδος" value={f.method} onChange={(v) => setF((o) => ({ ...o, method: v, unit: S_METHODS[v], L: "", R: "" }))} options={Object.keys(S_METHODS)} />
+          ) : (
+            <SelectField label="Τύπος ROM" value={f.type} onChange={(v) => set("type", v)} options={ROM_TYPES} />
+          )}
+          {isStr && <SelectField label="Μονάδα" value={f.unit} onChange={(v) => set("unit", v)} options={S_UNITS} />}
+          {!isStr && <SelectField label="End-feel" value={f.endfeel} onChange={(v) => set("endfeel", v)} options={ENDFEELS} />}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))", gap: 10, marginBottom: 10 }}>
+          {isStr && f.unit === "MMT" ? (
+            <>
+              <SelectField label="Αριστερά (MMT)" value={f.L} onChange={(v) => set("L", v)} options={MMT_GRADES} />
+              <SelectField label="Δεξιά (MMT)" value={f.R} onChange={(v) => set("R", v)} options={MMT_GRADES} />
+            </>
+          ) : (
+            <>
+              <NumberField label="Αριστερά" unit={numUnit} value={f.L} onChange={(v) => set("L", v)} />
+              <NumberField label="Δεξιά" unit={numUnit} value={f.R} onChange={(v) => set("R", v)} />
+            </>
+          )}
+          <SelectField label={isStr ? "RPE προσπάθειας (0–10)" : "RPE / ένταση διάτασης (0–10)"} value={f.rpe} onChange={(v) => set("rpe", v)} options={SCALE_0_10} />
+          <SelectField label="Πόνος (0–10)" value={f.pain} onChange={(v) => set("pain", v)} options={SCALE_0_10} />
+        </div>
+        <div style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
+          <div style={{ flex: 1 }}><TextField label="Σχόλιο (προαιρετικό)" value={f.note} onChange={(v) => set("note", v)} placeholder="θέση δοκιμής, γωνία, όργανο…" /></div>
+          <button type="button" onClick={add} style={{ background: T.terracotta, color: T.bg, border: "none", borderRadius: 999, padding: "10px 20px", fontSize: 13.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}><Icon name="plus" size={13} /> Προσθήκη</button>
+        </div>
+      </div>
+      {list.length === 0 && <div style={{ fontSize: 12.5, color: T.paperDim }}>Δεν έχουν προστεθεί μετρήσεις για αυτή την ημέρα. Αποθήκευσε την εκτίμηση για να κρατηθούν.</div>}
+      <div style={{ display: "grid", gap: 8 }}>
+        {list.map((r) => {
+          const unit = isStr ? r.unit : "°";
+          const sym = symOf(r.L, r.R, affected);
+          const prev = prevOf(r);
+          const dL = prev ? delta(r.L, prev.row.L) : null, dR = prev ? delta(r.R, prev.row.R) : null;
+          const D = ({ v }) => v === null ? null : <span style={{ color: v > 0 ? T.gold : v < 0 ? "#F08C7C" : T.paperDim, fontSize: 11.5 }}> {v > 0 ? "▲" : v < 0 ? "▼" : "="} {Math.abs(v)}%</span>;
+          return (
+            <div key={r.id} className="ll-sr-row" style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 12, padding: "10px 12px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+                <div style={{ fontWeight: 600, fontSize: 13.5 }}>{r.joint} · {r.move} <span style={{ color: T.paperDim, fontWeight: 400, fontSize: 12 }}>· {isStr ? r.method : r.type}{!isStr && r.endfeel && r.endfeel !== "—" ? ` · ${r.endfeel}` : ""}</span></div>
+                <button type="button" aria-label="Διαγραφή" onClick={() => ad(kind, list.filter((x) => x.id !== r.id))} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={14} /></button>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 16px", marginTop: 6, fontSize: 13 }}>
+                <span><span style={{ color: T.paperDim }}>Αριστ.:</span> <strong style={{ color: T.gold }}>{r.L !== "" ? `${r.L} ${unit}` : "—"}</strong><D v={dL} /></span>
+                <span><span style={{ color: T.paperDim }}>Δεξ.:</span> <strong style={{ color: T.gold }}>{r.R !== "" ? `${r.R} ${unit}` : "—"}</strong><D v={dR} /></span>
+                {sym !== null && <span><span style={{ color: T.paperDim }}>Συμμετρία:</span> <strong style={{ color: sym < 90 ? "#F08C7C" : T.paper }}>{sym}%</strong></span>}
+                {r.rpe !== "—" && r.rpe !== undefined && <span><span style={{ color: T.paperDim }}>RPE:</span> {r.rpe}</span>}
+                {r.pain !== "—" && r.pain !== undefined && <span><span style={{ color: T.paperDim }}>Πόνος:</span> <span style={{ color: Number(r.pain) >= 4 ? "#F08C7C" : T.paper }}>{r.pain}</span></span>}
+              </div>
+              {(r.note || prev) && <div style={{ fontSize: 11.5, color: T.paperDim, marginTop: 4 }}>{r.note}{r.note && prev ? " · " : ""}{prev ? `προηγ. ${fmtDay(prev.d)}: Α ${prev.row.L || "—"} / Δ ${prev.row.R || "—"} ${unit}` : ""}</div>}
+            </div>
+          );
+        })}
+      </div>
+      {!isStr && (() => {
+        const er = list.find((x) => x.joint === "Ώμος" && x.move === "Έξω στροφή"), ir = list.find((x) => x.joint === "Ώμος" && x.move === "Έσω στροφή");
+        if (!er || !ir) return null;
+        const t = (a, b) => (pnum(a) !== null && pnum(b) !== null) ? pnum(a) + pnum(b) : null;
+        const tl = t(er.L, ir.L), tr = t(er.R, ir.R);
+        if (tl === null || tr === null) return null;
+        const d = Math.abs(tl - tr);
+        return <div className="ll-total-rot" style={{ marginTop: 10, fontSize: 12.5, padding: "8px 12px", borderRadius: 12, border: `1px solid ${d >= 10 ? "#F08C7C" : T.panelLine}`, background: T.bgSoft }}>Συνολική στροφική κίνηση ώμου (ΕΣ+ΕΞ): Α <strong style={{ color: T.gold }}>{tl}°</strong> · Δ <strong style={{ color: T.gold }}>{tr}°</strong> · διαφορά <strong style={{ color: d >= 10 ? "#F08C7C" : T.paper }}>{d}°</strong><div style={{ fontSize: 11, color: T.paperDim, marginTop: 4 }}>Lewis 2016 (Man Ther): ο όρος «RCRSP» (πόνος ώμου σχετιζόμενος με το στροφικό πέταλο) καλύπτει πρόσκρουση, τενοντοπάθεια και ρήξεις· τα τεστ δεν ταυτοποιούν δομή με βεβαιότητα, γι' αυτό χρησιμοποίησε διαδικασία τροποποίησης συμπτωμάτων (θωρακική, ωμοπλάτη, θέση) και δες αν ο πόνος αλλάζει· ο δομημένος προοδευτικός φόρτος έχει αποτελέσματα ισοδύναμα με χειρουργείο σε πολλές περιπτώσεις, και η εξήγηση προς τον ασθενή δεν πρέπει να ενοχοποιεί το ακρώμιο. Moroder et al. 2020 (JSES): η λειτουργική αστάθεια ώμου (παθολογικό πρότυπο μυϊκής ενεργοποίησης, κυρίως οπίσθια) διακρίνεται σε θεσιακή/μη θεσιακή και ελεγχόμενη/μη ελεγχόμενη — αν η αστάθεια «δείχνεται» εύκολα, κάνε MRI πριν κλείσεις τη διάγνωση (δομική βλάβη μπορεί να μοιάζει λειτουργική)· συνήθως αποφεύγεται η χειρουργική. Whiteley (Aspetar): στον ρίπτη συγκρίνεται η ΣΥΝΟΛΙΚΗ στροφή και των δύο ώμων· διαφορά ~10° είναι κλινικά σημαντική και ~20° σχεδόν σίγουρα.</div></div>;
+      })()}
+      {affected && affected !== "Αμφοτερόπλευρα" && <div style={{ fontSize: 11, color: T.paperDim, marginTop: 10 }}>Συμμετρία = πάσχον ({affected.toLowerCase()}) ως % του υγιούς.</div>}
+    </Panel>
+  );
+}
+
+const SIN_LEVELS = ["—", "Χαμηλή", "Μέτρια", "Υψηλή"];
+const SIN_NATURE = ["Μηχανική", "Φλεγμονώδης", "Νευροπαθητική", "Κεντρική ευαισθητοποίηση (nociplastic)", "Αγγειακή", "Συστηματική / μη μηχανική"];
+const NEURO_ROWS = {
+  "Άνω άκρο": [
+    { k: "C5", myo: "Απαγωγή ώμου / κάμψη αγκώνα", der: "Έξω βραχίονας", ref: "Δικέφαλος" },
+    { k: "C6", myo: "Έκταση καρπού / κάμψη αγκώνα", der: "Αντίχειρας / κερκιδική πλευρά", ref: "Βραχιονοκερκιδικός" },
+    { k: "C7", myo: "Έκταση αγκώνα / κάμψη καρπού", der: "Μέσος δάκτυλος", ref: "Τρικέφαλος" },
+    { k: "C8", myo: "Κάμψη δακτύλων", der: "Παράμεσος / μικρός" },
+    { k: "T1", myo: "Απαγωγή δακτύλων", der: "Έσω αντιβράχιο" },
+  ],
+  "Κάτω άκρο": [
+    { k: "L2", myo: "Κάμψη ισχίου", der: "Πρόσθιος μηρός" },
+    { k: "L3", myo: "Έκταση γόνατος", der: "Έσω γόνατο", ref: "Επιγονατιδικό" },
+    { k: "L4", myo: "Ραχιαία κάμψη ποδοκνημικής", der: "Έσω κνήμη", ref: "Επιγονατιδικό" },
+    { k: "L5", myo: "Έκταση μεγάλου δακτύλου", der: "Ραχιαία επιφάνεια ποδιού" },
+    { k: "S1", myo: "Πελματιαία κάμψη / έκσπαση", der: "Έξω πόδι / πτέρνα", ref: "Αχίλλειος" },
+    { k: "S2", myo: "Κάμψη γόνατος", der: "Οπίσθιος μηρός / γάμπα" },
+  ],
+};
+const NEURO_TESTS = {
+  "Άνω άκρο": ["ULNT1 (μέσο νεύρο)", "ULNT2 (κερκιδικό νεύρο)", "ULNT3 (ωλένιο νεύρο)", "Spurling", "Hoffmann"],
+  "Κάτω άκρο": ["SLR", "Slump", "Prone knee bend (PKB)", "Babinski", "Κλόνος (clonus) ποδοκνημικής"],
+};
+const NEURO_SENS = ["—", "Φυσιολογική", "Μειωμένη", "Απούσα", "Υπερ-/παραισθησία"];
+const NEURO_REFL = ["—", "0", "1+", "2+", "3+", "4+"];
+const NEURO_TEST = ["—", "(+)", "(−)"];
+function IrritabilityPanel({ draft, ad }) {
+  const lvl = (label, key, hint) => (
+    <div>
+      <SelectField label={label} value={draft[key]} onChange={(v) => ad(key, v)} options={SIN_LEVELS} />
+      <div style={{ fontSize: 10.5, color: T.paperDim, marginTop: 4 }}>{hint}</div>
+    </div>
+  );
+  return (
+    <Panel title="Ευερεθιστότητα (SIN) — Severity · Irritability · Nature">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginBottom: 12 }}>
+        {lvl("Severity — βαρύτητα", "sinSeverity", "πόσο περιορίζει τη λειτουργία / ένταση πόνου")}
+        {lvl("Irritability — ευερεθιστότητα", "sinIrr", "πόση δραστηριότητα προκαλεί συμπτώματα και πόσο αργούν να υποχωρήσουν")}
+      </div>
+      <div style={{ fontSize: 11, color: T.paperDim, marginBottom: 6 }}>Nature — φύση</div>
+      <ChipGroup options={SIN_NATURE} value={draft.sinNature || []} onChange={(v) => ad("sinNature", v)} />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 12 }}>
+        <TextField label="Τι / πόση δραστηριότητα προκαλεί συμπτώματα" value={draft.sinProvoke} onChange={(v) => ad("sinProvoke", v)} placeholder="π.χ. τρέξιμο >10 λεπτά" />
+        <TextField label="Χρόνος υποχώρησης" value={draft.sinSettle} onChange={(v) => ad("sinSettle", v)} placeholder="π.χ. 2–3 ώρες, επόμενο πρωί" />
+      </div>
+      <div style={{ marginTop: 10 }}><TextField label="Σχόλιο" value={draft.sinNote} onChange={(v) => ad("sinNote", v)} placeholder="συνέπεια για τη φόρτιση / τον χειρισμό" /></div>
+    </Panel>
+  );
+}
+function NeuroPanel({ draft, ad }) {
+  const [reg, setReg] = useState("Κάτω άκρο");
+  const nr = draft.neuro || {};
+  const put = (key, side, v) => ad("neuro", { ...nr, [key]: { ...(nr[key] || {}), [side]: v === "—" ? "" : v } });
+  const val = (key, side) => (nr[key] && nr[key][side]) || "—";
+  const mini = { ...inputStyle, padding: "6px 4px", fontSize: 12, appearance: "none", textAlign: "center", minWidth: 0 };
+  const Sel = ({ k, side, opts }) => <select aria-label={k + side} value={val(k, side)} onChange={(e) => put(k, side, e.target.value)} style={mini}>{opts.map((o) => <option key={o} value={o}>{o}</option>)}</select>;
+  const th = { textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.06em", color: T.paperDim, fontWeight: 600, padding: "4px 6px", whiteSpace: "nowrap" };
+  const td = { padding: "5px 4px", borderTop: `1px solid ${T.panelLine}`, fontSize: 12, verticalAlign: "middle" };
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  return (
+    <Panel title="Νευρολογική εξέταση">
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        {Object.keys(NEURO_ROWS).map((r) => <button key={r} type="button" onClick={() => setReg(r)} style={chip(reg === r)}>{r}</button>)}
+      </div>
+      <div style={{ overflowX: "auto" }}>
+        <table className="ll-neuro" style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead><tr>
+            <th style={th}>Επίπεδο</th><th style={th}>Μυότομο</th><th style={th}>Δύναμη Α</th><th style={th}>Δύναμη Δ</th>
+            <th style={th}>Δερμάτιο</th><th style={th}>Αισθ. Α</th><th style={th}>Αισθ. Δ</th><th style={th}>Αντανακλ.</th><th style={th}>Α</th><th style={th}>Δ</th>
+          </tr></thead>
+          <tbody>
+            {NEURO_ROWS[reg].map((r) => (
+              <tr key={r.k}>
+                <td style={{ ...td, fontWeight: 700, color: T.gold }}>{r.k}</td>
+                <td style={{ ...td, color: T.paperDim, minWidth: 120 }}>{r.myo}</td>
+                <td style={td}><Sel k={"myo_" + r.k} side="L" opts={MMT_GRADES.map((g) => g || "—")} /></td>
+                <td style={td}><Sel k={"myo_" + r.k} side="R" opts={MMT_GRADES.map((g) => g || "—")} /></td>
+                <td style={{ ...td, color: T.paperDim, minWidth: 110 }}>{r.der}</td>
+                <td style={td}><Sel k={"der_" + r.k} side="L" opts={NEURO_SENS} /></td>
+                <td style={td}><Sel k={"der_" + r.k} side="R" opts={NEURO_SENS} /></td>
+                <td style={{ ...td, color: T.paperDim }}>{r.ref || ""}</td>
+                <td style={td}>{r.ref ? <Sel k={"ref_" + r.k} side="L" opts={NEURO_REFL} /> : null}</td>
+                <td style={td}>{r.ref ? <Sel k={"ref_" + r.k} side="R" opts={NEURO_REFL} /> : null}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, margin: "14px 0 6px" }}>Νευροδυναμικά / δοκιμασίες</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 8 }}>
+        {NEURO_TESTS[reg].map((t) => (
+          <div key={t} style={{ display: "flex", alignItems: "center", gap: 6, background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 999, padding: "5px 6px 5px 12px" }}>
+            <span style={{ flex: 1, fontSize: 12.5 }}>{t}</span>
+            <span style={{ fontSize: 10.5, color: T.paperDim }}>Α</span><div style={{ width: 58 }}><Sel k={"nd_" + t} side="L" opts={NEURO_TEST} /></div>
+            <span style={{ fontSize: 10.5, color: T.paperDim }}>Δ</span><div style={{ width: 58 }}><Sel k={"nd_" + t} side="R" opts={NEURO_TEST} /></div>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 12 }}><TextAreaField label="Σχόλιο / νευρολογικά ευρήματα" value={nr.note || ""} onChange={(v) => ad("neuro", { ...nr, note: v })} rows={2} placeholder="π.χ. αναπαραγωγή συμπτωμάτων, διαφοροποίηση με κίνηση αυχένα/αστραγάλου" /></div>
+    </Panel>
+  );
+}
+function NeuroPrint({ a, blank, H }) {
+  const cell = { border: "1px solid #111", padding: "3px 6px", fontSize: 11.5 };
+  const nr = a.neuro || {};
+  const g = (k, s) => (nr[k] && nr[k][s]) || "";
+  const rows = [];
+  Object.entries(NEURO_ROWS).forEach(([reg, rs]) => rs.forEach((r) => rows.push({ reg, ...r })));
+  const used = rows.filter((r) => ["myo_", "der_", "ref_"].some((p) => g(p + r.k, "L") || g(p + r.k, "R")));
+  const tests = [];
+  Object.entries(NEURO_TESTS).forEach(([reg, ts]) => ts.forEach((t) => { if (g("nd_" + t, "L") || g("nd_" + t, "R")) tests.push(t); }));
+  if (!blank && used.length === 0 && tests.length === 0 && !nr.note) return null;
+  const list = blank ? rows : used;
+  return (
+    <>
+      <H>Νευρολογική εξέταση</H>
+      <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 6 }}>
+        <thead><tr>{["Επίπεδο", "Δύναμη Α/Δ", "Αίσθηση Α/Δ", "Αντανάκλαση Α/Δ"].map((h) => <th key={h} style={{ ...cell, textAlign: "left", background: "#eee" }}>{h}</th>)}</tr></thead>
+        <tbody>{list.map((r) => (
+          <tr key={r.k} style={{ height: blank ? 22 : undefined }}>
+            <td style={cell}>{r.k}</td>
+            <td style={cell}>{blank ? "" : `${g("myo_" + r.k, "L") || "—"} / ${g("myo_" + r.k, "R") || "—"}`}</td>
+            <td style={cell}>{blank ? "" : `${g("der_" + r.k, "L") || "—"} / ${g("der_" + r.k, "R") || "—"}`}</td>
+            <td style={cell}>{blank || !r.ref ? "" : `${g("ref_" + r.k, "L") || "—"} / ${g("ref_" + r.k, "R") || "—"}`}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+      {blank ? <div style={{ fontSize: 12, margin: "4px 0" }}>Νευροδυναμικά: SLR ☐ Slump ☐ PKB ☐ ULNT1 ☐ ULNT2 ☐ ULNT3 ☐ Spurling ☐ Hoffmann ☐ Babinski ☐ Clonus ☐</div>
+        : tests.length > 0 && <div style={{ fontSize: 12, margin: "4px 0" }}>Νευροδυναμικά: {tests.map((t) => `${t} (Α ${g("nd_" + t, "L") || "—"} / Δ ${g("nd_" + t, "R") || "—"})`).join(" · ")}</div>}
+      {!blank && nr.note && <div style={{ fontSize: 12, margin: "4px 0" }}>Σχόλιο: {nr.note}</div>}
+    </>
+  );
+}
+function SINPrint({ a, blank, H }) {
+  if (!blank && a.sinSeverity === "—" && a.sinIrr === "—" && !(a.sinNature || []).length && !a.sinProvoke && !a.sinSettle && !a.sinNote) return null;
+  const row = (l, v) => <div style={{ margin: "4px 0", fontSize: 12.5 }}><span style={{ fontWeight: 600 }}>{l}:</span> {blank ? "☐ Χαμηλή  ☐ Μέτρια  ☐ Υψηλή" : v}</div>;
+  return (
+    <>
+      <H>Ευερεθιστότητα (SIN)</H>
+      {row("Severity", a.sinSeverity !== "—" ? a.sinSeverity : "")}
+      {row("Irritability", a.sinIrr !== "—" ? a.sinIrr : "")}
+      <div style={{ margin: "4px 0", fontSize: 12.5 }}><span style={{ fontWeight: 600 }}>Nature:</span> {blank ? SIN_NATURE.map((n) => "☐ " + n).join("  ") : (a.sinNature || []).join(", ")}</div>
+      <div style={{ margin: "4px 0", fontSize: 12.5 }}><span style={{ fontWeight: 600 }}>Προκαλείται από / υποχωρεί σε:</span> {blank ? "" : [a.sinProvoke, a.sinSettle].filter(Boolean).join(" / ")}</div>
+    </>
+  );
+}
+const SPECIAL_TESTS = {
+  "Ώμος": {
+    "Υποακρωμιακή πρόσκρουση": [["Neer", "πρόσκρουση / υποακρωμιακός χώρος · Gismervik 2017: sens 0,59 / spec 0,60"], ["Hawkins-Kennedy", "πρόσκρουση (έσω στροφή σε κάμψη 90°) · Gismervik 2017: sens 0,58 / spec 0,67, καλύτερο των SIS αλλά μέτριο"], ["Painful arc (60–120°)", "πρόσκρουση / τροχιά απαγωγής"], ["Yocum", "πρόσκρουση"]],
+    "Στροφικό πέταλο (rotator cuff)": [["Empty can (Jobe)", "υπερακάνθιος · Gismervik 2017: πλήρης ρήξη sens 0,74 / spec 0,77 (DOR 9,2)· θετικό = αδυναμία"], ["Full can", "υπερακάνθιος"], ["Drop arm", "ρήξη υπερακάνθιου"], ["External rotation lag sign", "υπακάνθιος / υπερακάνθιος"], ["Hornblower's", "ελάσσων στρογγύλος / υπακάνθιος"], ["Resisted external rotation", "υπακάνθιος"], ["Belly press", "υπωμοπλάτιος"], ["Lift-off (Gerber)", "υπωμοπλάτιος"], ["Bear hug", "υπωμοπλάτιος"], ["Internal rotation lag sign", "υπωμοπλάτιος"]],
+    "Δικέφαλος / χείλος (SLAP)": [["Speed's", "μακρά κεφαλή δικεφάλου · Gismervik 2017 (SLAP): sens 0,20 / spec 0,88"], ["Yergason", "τένοντας δικεφάλου / εγκάρσιος σύνδεσμος · Gismervik 2017 (SLAP): sens 0,20 / spec 0,92"], ["Upper cut", "δικέφαλος"], ["O'Brien (active compression)", "SLAP / ΑΚ άρθρωση · Gismervik 2017 (SLAP): sens 0,66 / spec 0,36 — περιορισμένη αξία"], ["Crank", "χείλος · Gismervik 2017 (SLAP): sens 0,46 / spec 0,72"], ["Biceps load II", "SLAP"], ["Kim", "οπίσθιο κάτω χείλος"], ["Compression-rotation", "χείλος · Gismervik 2017 (SLAP): sens 0,43 / spec 0,89"], ["Jerk", "οπίσθιο χείλος"]],
+    "Αστάθεια": [["Apprehension (πρόσθιο)", "πρόσθια αστάθεια · Gismervik 2017 (ως SLAP): sens 0,74 / spec 0,45"], ["Relocation (Jobe)", "πρόσθια αστάθεια · Gismervik 2017 (ως SLAP): sens 0,61 / spec 0,47"], ["Surprise / release", "πρόσθια αστάθεια"], ["Load and shift", "γληνοβραχιόνιος χαλαρότητα"], ["Sulcus sign", "κάτω / πολυκατευθυντική αστάθεια"], ["Posterior jerk", "οπίσθια αστάθεια"], ["Anterior drawer", "πρόσθια χαλαρότητα"], ["Gagey (hyperabduction)", "κάτω γληνοβραχιόνιος σύνδεσμος / υπερχαλάρωση (Beighton ≥5 σε ~1/3 FSI, Moroder 2020)"]],
+    "Παγωμένος ώμος — κριτήρια συναίνεσης (Salamh 2025, Delphi)": [["Νυχτερινός πόνος / πόνος στην κατάκλιση", "100% συναίνεση ειδικών"], ["Ηλικία >35 ετών", "100%"], ["Μειωμένη παθητική έξω στροφή (περισσότερο από τις άλλες κινήσεις)", "100%· διαγνωστικό κλειδί"], ["Έξω στροφή που μειώνεται όσο αυξάνεται η απαγωγή", "100%"], ["Ολική απώλεια ενεργητικού + παθητικού εύρους", "93%"], ["Πόνος στο τέλος του εύρους σε όλες τις κατευθύνσεις", "79%"], ["Πόνος στην περιοχή πρόσφυσης δελτοειδούς (άνω βραχίονας)", "92%"], ["Ελάχιστος πόνος στις αντιστάσεις (έξω στροφή, απαγωγή)", "79% — διαφοροποιεί από πρόβλημα πετάλου"], ["Φάση: πόνος > δυσκαμψία (πρώιμη) ή δυσκαμψία > πόνος (όψιμη)", "οδηγός θεραπείας: ύπνος, κυρίαρχο σύμπτωμα, τάση τελευταίων 3 εβδομάδων"]],
+    "Ακρωμιοκλειδική (ΑΚ)": [["Cross-body adduction", "ΑΚ άρθρωση / οπίσθια κάψα"], ["AC palpation", "ΑΚ άρθρωση"], ["Resisted extension (ΑΚ)", "ΑΚ άρθρωση"]],
+    "Ωμοπλάτη": [["Scapular dyskinesis test", "ρυθμός ωμοπλάτης"], ["Scapular assistance test", "άνω στροφή ωμοπλάτης"], ["Scapular retraction test", "δύναμη / πρόσκρουση"], ["Wall push-up (winging)", "μακρός κλιδοειδής / ωμοπλατιαία πτέρυγα"], ["Lateral scapular slide", "ωμοπλατιαία θέση"]],
+    "Θωρακική έξοδος / αυχενική": [["Roos (EAST)", "θωρακική έξοδος"], ["Adson", "θωρακική έξοδος"], ["Wright (hyperabduction)", "θωρακική έξοδος"], ["Costoclavicular", "θωρακική έξοδος"], ["Spurling", "αυχενική ριζοπάθεια"], ["Distraction", "αυχενική ριζοπάθεια"], ["Shoulder abduction relief (Bakody)", "αυχενική ρίζα"]],
+  },
+  "Ισχίο": {
+    "Πρόσκρουση / χείλος": [["FADIR", "femoroacetabular πρόσκρουση / χείλος · υψηλή sens, χαμηλή spec: ένα αρνητικό αποκλείει το ισχίο ως πηγή, ένα θετικό δεν επιβεβαιώνει (Reiman & Thorborg 2014· ESSKA-EHPA-ESMA 2026)"], ["FABER (Patrick)", "ισχίο / ΙΛ άρθρωση / ψοΐτης"], ["Hip scour (quadrant)", "χόνδρος / χείλος"], ["Posterior impingement", "οπίσθια πρόσκρουση"], ["DIRI (dynamic IR impingement)", "χείλος / πρόσκρουση"], ["Log roll", "ενδοαρθρική παθολογία / χαλαρότητα λαγονομηριαίου · καλή αξιοπιστία (κ 0,61), χωρίς τεκμηριωμένη διαγνωστική ισχύ (Reiman & Thorborg 2014)"], ["Resisted SLR (Stinchfield)", "ενδοαρθρική παθολογία"], ["Heel strike", "οστική / ενδοαρθρική"], ["IR σε κάμψη 90° — πόνος / περιορισμός", "ενδοαρθρική παθολογία"]],
+    "Αστάθεια / χαλαρότητα": [["Dial test", "κάψα / ilio-femoral σύνδεσμος"], ["AB-HEER", "πρόσθια αστάθεια / χείλος"], ["Prone apprehension (έκταση-ΕΞ)", "πρόσθια αστάθεια"], ["Beighton", "γενικευμένη υπερκινητικότητα"]],
+    "Βουβωνική / προσαγωγοί": [["Adductor squeeze (45°)", "προσαγωγοί / βουβωνικός πόνος · καταγραφή δύναμης (σφυγμομανόμετρο/δυναμόμετρο) + πόνου 0–10· έλλειμμα >20% συχνό σε προσαγωγούς/κοιλιακούς (Thorborg 2018)"], ["Adductor squeeze (90°)", "προσαγωγοί"], ["Long lever squeeze", "προσαγωγοί / ηβική σύμφυση"], ["Resisted adduction", "προσαγωγός μακρός"], ["Cross-over test", "ηβική σύμφυση"], ["Palpation ηβικής σύμφυσης", "ηβικός πόνος"], ["Resisted hip flexion (ψοΐτης)", "ιλιοψοΐτης"], ["Cough / Valsalva impulse", "κήλη (αποκλεισμός)"]],
+    "Βουβώνας — οντότητες Doha (διαφορική)": [["Ψηλάφηση: πρόσφυση μακρού προσαγωγού", "προσαγωγοί — Doha: ευαισθησία ΚΑΙ πόνος σε αντίσταση προσαγωγής· ο μακρός προσαγωγός θετικός στο 94%, ενώ η ψηλάφηση άλλων προσαγωγών έχει χαμηλή αξιοπιστία (κ 0,02–0,54, Heijboer 2023)"], ["Αντίσταση προσαγωγής", "προσαγωγοί / ηβική σύμφυση · squeeze 0°/45°/90° κ 0,50–0,53 (μέτρια), προσαγωγή σε μέγιστη απαγωγή κ 0,74 (ουσιαστική)· η διάταση προσαγωγών δεν βοηθά στην ταξινόμηση (Heijboer 2023)· δεν υπάρχει ειδικό τεστ για ηβική (Doha)"], ["Ψηλάφηση ψοΐτη (2 σημεία: ανάμεσα σύνδεσμο–σαρτόριο–μηριαία αρτηρία & επίπεδο ΠΑΙΑ)", "ιλιοψοΐτης — Doha: ευαισθησία· πιθανότερο αν υπάρχει πόνος σε αντίσταση κάμψης Ή διάταση"], ["Αντίσταση κάμψης ισχίου / παθητική διάταση ψοΐτη", "ιλιοψοΐτης / ορθός μηριαίος"], ["Εξέταση βουβωνικού πόρου (invagination)", "βουβωνικό· σε ~20% ο πόνος αναπαράγεται μόνο εδώ (ESSKA 2026) — να γίνεται ρουτίνα"], ["Αντίσταση κοιλιακών / Valsalva / βήχας / φτέρνισμα", "βουβωνικό (κοιλιακή παθολογία)"], ["Ψηλάφηση ηβικής σύμφυσης & γειτονικού οστού", "ηβικό — Doha: τοπική ευαισθησία σύμφυσης ΚΑΙ γειτονικού οστού· κ 0,37–0,45 (Heijboer 2023)"], ["Bent-knee fall-out (BKFO)", "ισχίο — ROM (κάμψη, απαγωγή, έξω στροφή)· διακρίνει αθλητές με/χωρίς πόνο"], ["FADIR + ROM ισχίου", "ενδοαρθρικό — αποκλείουν όταν είναι ανώδυνα"], ["Οσφυϊκή / ΙΛ / κοιλιά", "εξωτερικές πηγές βουβωνικού πόνου"]],
+    "Groin-MAP — γρήγορο πρωτόκολλο 6 σημείων (~100 s)": [["1. Ψηλάφηση μακρού προσαγωγού (πρόσφυση + 2 cm περιφερικά)", "προσαγωγοί"], ["2. Παθητική απαγωγή σε τέρμα + ισομετρική αντίσταση προσαγωγής", "προσαγωγοί (κ 0,74 σε μέγιστη απαγωγή)"], ["3. Ψηλάφηση ψοΐτη (έσω του σαρτορίου, ακριβώς κάτω από τον βουβωνικό σύνδεσμο)", "ιλιοψοΐτης"], ["4. Αντίσταση κάμψης ισχίου στις 90° (ύπτια· επανάληψη καθιστός αν αβέβαιο)", "ιλιοψοΐτης"], ["5. Ψηλάφηση ηβικής σύμφυσης: μέση γραμμή και αριστερά/δεξιά παρασυμφυσιακά (σταθεροποίηση αντίπλευρου ηβικού)", "ηβικό"], ["6. FADDIR (90° κάμψη, προσαγωγή + έσω στροφή, σταθεροποίηση λεκάνης)", "ισχίο / ενδοαρθρικό"]],
+    "Μείζων τροχαντήρας / απαγωγοί": [["Palpation μείζονα τροχαντήρα", "GTPS"], ["Single-leg stance 30 s", "τενοντοπάθεια απαγωγών"], ["Resisted external derotation", "GTPS"], ["FABER με αντίσταση απαγωγών", "τένοντες γλουτιαίων"], ["Trendelenburg", "γλουτιαίος μέσος / ισχύς απαγωγών"], ["Ober / modified Ober", "ιλιοκνημιαία ταινία"]],
+    "Ευλυγισία / μυϊκό μήκος": [["Thomas", "ψοΐτης / ορθός μηριαίος"], ["Ely", "ορθός μηριαίος"], ["Hamstring 90/90", "οπίσθιοι μηριαίοι"], ["Piriformis (FAIR)", "πυραμοειδής"], ["Craig's (anteversion)", "στροφή / πρόσθιο γωνίωμα"], ["Straight leg raise", "οπίσθιοι / νευρική"]],
+    "Ιερολαγόνιος (ΙΛ) / οσφυϊκή": [["Thigh thrust", "ΙΛ άρθρωση"], ["Distraction (ΙΛ)", "ΙΛ άρθρωση"], ["Compression (ΙΛ)", "ΙΛ άρθρωση"], ["Sacral thrust", "ΙΛ άρθρωση"], ["Gaenslen", "ΙΛ άρθρωση"], ["Slump", "νευροδυναμικό"], ["Femoral nerve stretch", "νευροδυναμικό (L2–L4)"]],
+    "Οστική καταπόνηση": [["Fulcrum", "στρες κάταγμα μηριαίου · sens 88% αλλά −LR 0,92 — περιορισμένη χρησιμότητα αποκλεισμού (Thorborg 2018)"], ["Patellar-pubic percussion", "κάταγμα ηβικού / αυχένα μηριαίου · sens 95%, −LR 0,07 (αποκλεισμός αυχενικού κατάγματος· Thorborg 2018)"], ["Single-leg hop (πόνος)", "οστική καταπόνηση"]],
+  },
+  "Σπονδυλική στήλη": {
+    "Αυχενική — ριζοπάθεια (cluster Wainner)": [["Spurling A", "αυχενική ριζοπάθεια"], ["Distraction", "ριζοπάθεια (ανακούφιση)"], ["ULNT1 (μέσο νεύρο)", "ριζοπάθεια / νευροδυναμικό"], ["Στροφή προς πάσχοντα < 60°", "ριζοπάθεια (cluster)"], ["Shoulder abduction relief (Bakody)", "ριζοπάθεια"]],
+    "Αυχενική — κεφαλαλγία / έλεγχος": [["Cervical flexion-rotation test", "C1–C2 / αυχενογενής κεφαλαλγία"], ["Deep neck flexor endurance", "αντοχή εν τω βάθει καμπτήρων"], ["Craniocervical flexion test", "έλεγχος εν τω βάθει καμπτήρων"], ["Segmental PA springing (αυχενικά)", "τοπικός πόνος / κινητικότητα"]],
+    "Αυχενική — ανώτερη αστάθεια / ΚΝΣ": [["Sharp-Purser", "αστάθεια άτλαντα-άξονα"], ["Alar ligament stress", "χαλαρότητα ligament alare"], ["Transverse ligament (anterior shear)", "εγκάρσιος σύνδεσμος"], ["Hoffmann", "ανώτερος κινητικός νευρώνας"], ["Babinski", "ανώτερος κινητικός νευρώνας"], ["Clonus (ποδοκνημική)", "ανώτερος κινητικός νευρώνας"], ["Inverted supinator sign", "μυελοπάθεια"], ["Lhermitte", "μυελοπάθεια / ΚΝΣ"], ["Tandem gait / Romberg", "ισορροπία / μυελοπάθεια"]],
+    "Θωρακική / πλευρές": [["Rib springing", "πλευροσπονδυλικές"], ["Thoracic rotation (κινητικότητα)", "θωρακική κινητικότητα"], ["Schepelmann (πλάγια κάμψη)", "μεσοπλεύριος πόνος"], ["Chest expansion", "αγκυλοποιητική / πλευρική κινητικότητα"], ["Segmental PA springing (θωρακικά)", "τοπικός πόνος"]],
+    "Οσφυϊκή — νευροδυναμικά / ριζοπάθεια": [["SLR", "L5–S1 ρίζες"], ["Crossed SLR (well-leg raise)", "δισκοκήλη"], ["Slump", "νευροδυναμικό"], ["Prone knee bend (PKB)", "L2–L4"], ["Bragard", "ισχιαλγία"], ["Valsalva", "αύξηση ενδοραχιαίας πίεσης"]],
+    "Οσφυϊκή — μηχανικά / αστάθεια": [["Kemp (quadrant)", "πλάγιες αρθρώσεις / τρήμα"], ["Stork (one-leg hyperextension)", "σπονδυλόλυση / σπονδυλολίσθηση"], ["Prone instability test", "κλινική αστάθεια"], ["Passive lumbar extension (PLE)", "αστάθεια"], ["Active SLR (ASLR)", "έλεγχος φόρτισης λεκάνης"], ["Aberrant movement (painful arc / Gowers / shift)", "ποιότητα κίνησης"], ["Segmental PA springing (οσφυϊκά)", "τοπικός πόνος / κινητικότητα"], ["Repeated flexion / extension (McKenzie)", "κατευθυντική προτίμηση"]],
+    "Ιερολαγόνιος — cluster Laslett": [["Distraction (ΙΛ)", "ΙΛ άρθρωση"], ["Thigh thrust", "ΙΛ άρθρωση"], ["Compression (ΙΛ)", "ΙΛ άρθρωση"], ["Sacral thrust", "ΙΛ άρθρωση"], ["Gaenslen", "ΙΛ άρθρωση"], ["FABER (Patrick)", "ΙΛ / ισχίο"]],
+    "Αντοχή κορμού (McGill)": [["Trunk flexor endurance", "αντοχή καμπτήρων κορμού"], ["Trunk extensor (Biering-Sørensen)", "αντοχή εκτεινόντων κορμού"], ["Side bridge", "αντοχή πλάγιων κοιλιακών / QL"]],
+    "Μη οργανικά σημεία / ψυχοκοινωνικά": [["Waddell signs (≥3 θετικά)", "μη οργανικά σημεία"], ["Fear-avoidance (FABQ)", "ψυχοκοινωνικό (κίτρινες σημαίες)"]],
+  },
+  "Αγκώνας / καρπός": {
+    "Αγκώνας — τένοντες": [["Cozen's (πλάγιος επικονδυλίτιδα)", "κοινός εκτείνων τένοντας"], ["Mill's", "πλάγιος επικονδυλίτιδα"], ["Maudsley (μέσου δακτύλου)", "πλάγιος επικονδυλίτιδα"], ["Golfer's — resisted wrist flexion", "έσω επικονδυλίτιδα"], ["Distal biceps hook test", "ρήξη τένοντα δικεφάλου"]],
+    "Αγκώνας — σύνδεσμοι / νεύρα": [["Valgus stress", "έσω πλάγιος (UCL)"], ["Moving valgus stress", "UCL (αθλητές ρίψεων)"], ["Varus stress", "έξω πλάγιος σύνδεσμος"], ["Tinel's (κυβιτικός)", "ωλένιο νεύρο"], ["Elbow flexion test", "ωλένιο νεύρο"], ["Posterolateral rotatory instability", "αστάθεια"]],
+    "Καρπός / χέρι": [["Finkelstein", "De Quervain"], ["Phalen", "καρπιαίος σωλήνας"], ["Tinel's (καρπιαίος)", "μέσο νεύρο"], ["Watson (scaphoid shift)", "σκαφοειδές-μηνοειδές"], ["TFCC load / ulnar fovea", "TFCC"], ["Scaphoid tenderness (snuffbox)", "κάταγμα σκαφοειδούς"]],
+  },
+  "Ποδοκνημική / πόδι": {
+    "Σύνδεσμοι ποδοκνημικής": [["Anterior drawer", "πρόσθιος ταλοπερονιαίος (ATFL) · Larkins 2020: sens 32–83%, spec 38–74% ανάλογα με μελέτη/χρόνο εξέτασης — ROAST 2019 (Delahunt, Int. Ankle Consortium): εξέταση 4–6 ημέρες μετά, sens 0,96 / spec 0,84, (−LR 0,04) — απουσία «sulcus sign» αποκλείει πλήρη ρήξη ATFL· σύγκριση με υγιή"], ["Talar tilt", "πτερνοπερονιαίος (CFL) · sens ~50%· δεν έχει επικυρωθεί ειδικά για CFL (Larkins 2020, Chen et al. 2019)"], ["Squeeze test", "συνδεσμοσύνδεση · sens 30–33%, spec ~93% (Larkins 2020): το αρνητικό δεν αποκλείει"], ["External rotation (Kleiger)", "συνδεσμοσύνδεση / δελτοειδής · sens 20–75%, spec ~85% (Larkins 2020)· σε ραχιαία κάμψη πιο ευαίσθητο"], ["Cotton test", "συνδεσμοσύνδεση · sens 25% (μικρή μελέτη, Larkins 2020)"], ["Palpation ATFL / CFL / δελτοειδούς", "τοπική ευαισθησία"], ["Ottawa ankle rules", "έλεγχος για κάταγμα (πόνος σε ζώνη σφυρών ΚΑΙ αδυναμία 4 βημάτων ή ευαισθησία στην οπίσθια άκρη/άκρο σφυρού)· κάταγμα μόνο ~15% των ακτινογραφιών (Chen et al. 2019)"]],
+    "Αχίλλειος / γάμπα": [["Thompson (calf squeeze)", "ρήξη Αχιλλείου"], ["Royal London Hospital test", "τενοντοπάθεια μέσης μοίρας"], ["Arc sign", "τενοντοπάθεια μέσης μοίρας"], ["Palpation Αχιλλείου (μέση μοίρα / πρόσφυση)", "τενοντοπάθεια"], ["Single-leg heel raise (επαναλήψεις)", "αντοχή γαστροκνημίου / υποκνημίου"], ["Silfverskiöld", "βράχυνση γαστροκνημίου"], ["Weight-bearing lunge", "ραχιαία κάμψη"], ["Hop test (πόνος)", "λειτουργικό"]],
+    "Γάμπα — γαστροκνήμιος / υποκνημίδιος / πλαντάρις": [["Ψηλάφηση: έσω / έξω κεφαλή γαστροκνημίου", "γαστροκνήμιος — πιο καθορισμένο σημείο· μήκος ευαισθησίας ↑ = βαρύτερη βλάβη (Green 2022)"], ["Ψηλάφηση: υποκνημίδιος (κάτω από τον γαστροκνήμιο, πλάγια του Αχιλλείου)", "υποκνημίδιος — διάχυτη ευαισθησία· εστιακός σπασμός στην υποξεία φάση"], ["Ψηλάφηση: έσω όριο, μεταξύ γαστροκνημίου–υποκνημιδίου", "πλαντάρις (ύποπτο) — ξαφνικό «ping», συνήθως μικρή λειτουργική απώλεια"], ["Ορατό έλλειμμα / εκχύμωση", "έλλειμμα στη μυοτενόντια σύνδεση έσω γαστροκνημίου = ρήξη"], ["Παθητική ραχιαία κάμψη, γόνατο εκτεταμένο", "διατείνει γαστροκνήμιο (και υποκνημίδιο)"], ["Παθητική ραχιαία κάμψη, γόνατο λυγισμένο 90°", "διατείνει κυρίως υποκνημίδιο (διαφοροποίηση όχι απόλυτη)"], ["Weight-bearing lunge (γόνατο ευθεία vs λυγισμένο)", "σύγκριση εύρους & συμπτωμάτων με θέση γονάτου"], ["Ισομετρική πελματιαία κάμψη — γόνατο εκτεταμένο", "γαστροκνήμιος"], ["Ισομετρική πελματιαία κάμψη — γόνατο λυγισμένο 90°", "υποκνημίδιος"], ["Single-leg calf raise (εκτεταμένο vs λυγισμένο γόνατο)", "αντοχή/πόνος ανά μυ· όριο ≥ 30 επαν. από το πάτωμα (Green 2022)"], ["Άλματα: διπλά → μονά, κάθετα → προς τα εμπρός", "δυναμική ικανότητα· ήπιες βλάβες φαίνονται μόνο εδώ"], ["Thompson (calf squeeze)", "αποκλεισμός ρήξης Αχιλλείου"], ["Άλλοι μύες: FHL / FDL / οπίσθιος κνημιαίος — τροποποιημένο calf raise & χειρωνακτική δύναμη", "συχνά παραβλέπεται ο FHL (Green 2022)"], ["Οσφυϊκή & νευροδυναμικός έλεγχος (slump)", "παραπεμπόμενος / νευρικός πόνος γάμπας"], ["Homans / οίδημα-ευαισθησία γάμπας", "αποκλεισμός εν τω βάθει φλεβικής θρόμβωσης (red flag)"]],
+    "Πόδι": [["Windlass", "πελματιαία περιτονία"], ["Navicular drop", "στάση ποδιού"], ["Jack's test", "πελματιαία περιτονία"], ["Tinel's (ταρσικός σωλήνας)", "οπίσθιο κνημιαίο νεύρο"], ["Morton's (squeeze)", "νευρίνωμα"], ["Tibialis posterior — single-leg heel raise", "δυσλειτουργία οπίσθιου κνημιαίου"], ["Navicular / 5th metatarsal palpation", "οστική καταπόνηση"]],
+  },
+  "Γόνατο": {
+    "Πρόσθιος χιαστός (ΠΧΣ)": [["Lachman", "ΠΧΣ"], ["Prone Lachman", "ΠΧΣ"], ["Lever sign (Lelli)", "ΠΧΣ"], ["Anterior drawer", "ΠΧΣ"], ["Pivot shift", "ΠΧΣ / ροτ. αστάθεια"], ["Jerk test", "ΠΧΣ"], ["Losee", "ΠΧΣ"], ["Flexion-rotation drawer (Noyes)", "ΠΧΣ"], ["Slocum", "ΠΧΣ / ροτ. αστάθεια"]],
+    "Οπίσθιος χιαστός (ΟΧΣ)": [["Posterior drawer", "ΟΧΣ"], ["Posterior sag (Godfrey)", "ΟΧΣ"], ["Quadriceps active test", "ΟΧΣ"], ["Reverse pivot shift", "ΟΧΣ / ΟΠΜ γωνία"], ["Reverse Lachman", "ΟΧΣ"]],
+    "Πλάγιοι σύνδεσμοι": [["Valgus stress 0°", "έσω πλάγιος + ΠΧΣ/κάψα"], ["Valgus stress 30°", "έσω πλάγιος σύνδεσμος (ΕΠΣ)"], ["Varus stress 0°", "έξω πλάγιος + οπισθοπλάγια γωνία"], ["Varus stress 30°", "έξω πλάγιος σύνδεσμος (ΕΠΣ)"]],
+    "Οπισθοπλάγια γωνία (PLC)": [["Dial test 30°", "PLC"], ["Dial test 90°", "PLC + ΟΧΣ"], ["External rotation recurvatum", "PLC"], ["Posterolateral drawer", "PLC"], ["Varus recurvatum", "PLC"]],
+    "Μηνίσκοι": [["McMurray", "μηνίσκοι"], ["Thessaly (5° / 20°)", "μηνίσκοι"], ["Apley compression", "μηνίσκοι"], ["Apley distraction", "σύνδεσμοι / κάψα"], ["Joint-line tenderness", "μηνίσκοι"], ["Ege's", "μηνίσκοι"], ["Steinmann", "μηνίσκοι"], ["Merke", "μηνίσκοι"], ["Payr", "οπίσθιο κέρας έσω μηνίσκου"], ["Bounce home", "κλείδωμα / μηνίσκος"], ["Childress duck walk", "οπίσθιο κέρας"]],
+    "Επιγονατιδομηριαία": [["Patellar grind (Clarke)", "επιγονατιδομηριαίος πόνος"], ["Patellar apprehension (Fairbank)", "αστάθεια επιγονατίδας"], ["Patellar glide / mobility", "κινητικότητα επιγονατίδας"], ["Patellar tilt", "πλάγια σύσπαση / τάση"], ["J-sign", "ανιχνευτική πορεία επιγονατίδας"], ["Q-angle", "ευθυγράμμιση έκτασης"], ["Noble compression", "ιλιοκνημιαία ταινία"], ["Renne", "ιλιοκνημιαία ταινία"], ["Waldron", "επιγονατιδομηριαίος πόνος"], ["Zohler", "επιγονατιδομηριαίος"]],
+    "Εξίδρωμα / πτυχές / λιπώδες σώμα": [["Sweep / stroke test", "μικρό εξίδρωμα"], ["Ballottement (patellar tap)", "μεγάλο εξίδρωμα"], ["Bulge sign", "εξίδρωμα"], ["Mediopatellar plica (Hughston)", "πτυχή"], ["Stutter test", "πτυχή"], ["Hoffa", "συμπίεση λιπώδους σώματος"], ["Wilson", "οστεοχονδρίτιδα (OCD)"]],
+    "Επιπλέον (The Knee Made Easy)": [["Active extension lag", "δύναμη / αδυναμία έκτασης"], ["Quadriceps resistance strength test", "δύναμη τετρακεφάλου"], ["Passive patellofemoral compression", "επιγονατιδομηριαίος πόνος"], ["Medial patellar eversion", "έσω επιγονατιδικός υποστηρικτήρας"], ["Lateral patellar eversion", "έξω επιγονατιδικός υποστηρικτήρας"], ["Valgus thrust (βάδιση)", "έσω πλάγια αστάθεια"], ["Varus thrust (βάδιση)", "έξω / οπισθοπλάγια αστάθεια"], ["Fluid fluctuation test", "μικρό εξίδρωμα"], ["Pes anserinus tenderness", "βουρσίτιδα / τένοντες"], ["Thigh girth (μέτρηση μυϊκού όγκου)", "ατροφία τετρακεφάλου"], ["Single-leg squat", "λειτουργικός έλεγχος"], ["Basic bridge", "έλεγχος οπίσθιων / γλουτιαίων"], ["Passive knee extension test", "ευλυγισία οπίσθιων μηριαίων"]],
+    "Τένοντες / ευλυγισία": [["Palpation επιγονατιδικού τένοντα", "τενοντοπάθεια"], ["Decline squat (πόνος)", "επιγονατιδικός τένοντας"], ["Ely", "ορθός μηριαίος"], ["Ober", "ιλιοκνημιαία ταινία"], ["Hamstring tightness (90/90)", "οπίσθιοι"], ["Thomas", "ψοΐτης"]],
+  },
+};
+const SPECIAL_NOTES = {
+  "Γόνατο": "Charalambous, The Knee Made Easy (κεφ. 6): πολλές ειδικές δοκιμασίες δεν είναι υψηλής ευαισθησίας/ειδικότητας και έχουν μεγάλη μεταβλητότητα μεταξύ εξεταστών — χρησιμοποίησέ τες ως «ένα κομμάτι του διαγνωστικού παζλ». Σύγκρινε με το υγιές γόνατο (η πρόσθια μετατόπιση διαφέρει <2 mm μεταξύ δεξιού-αριστερού στο 95%). Στην οξεία φάση το Lachman υπερέχει του anterior drawer· το pivot shift εξαρτάται από την ακεραιότητα της ιλιοκνημιαίας ταινίας.",
+  "Ώμος": "Gismervik et al. 2017 (BMC Musculoskelet Disord, meta-ανάλυση): καμία μεμονωμένη δοκιμασία δεν είναι αξιόπιστη μόνη της (χαμηλή ποιότητα μελετών)· η ίδια δοκιμασία έχει διαφορετικά ονόματα (Empty can = Jobe = υπερακάνθιος) και διαφορετικά κριτήρια θετικότητας — συνδυάζουμε ιστορικό, κίνηση και πολλαπλά τεστ. Allen 2018 (J Ultrason): θεραπεύουμε τον ασθενή, όχι την εικόνα — ευρήματα υπερήχων/MRI υπάρχουν και σε ασυμπτωματικούς ώμους. Whiteley (Aspetar): στον ρίπτη οι δοκιμασίες φυσικής εξέτασης δεν επιβεβαιώνουν αξιόπιστα βλάβη SLAP· ιστορικό «κλικ/μάγκωμα» βελτιώνει την ακρίβεια, ενώ η MRI εμφανίζει ευρήματα ακόμη και σε ασυμπτωματικούς ώμους. Στροφικό πέταλο — βιολογία/νευρομυϊκά (Malcarney & Murrell 2003: η σύσταση του ιστού αντανακλά τη μηχανική λειτουργία, με ινοχόνδρινα χαρακτηριστικά από συμπίεση· Sun 2026, EMG: σε εκφυλιστικές ρήξεις υπάρχει αλλαγμένος συντονισμός δελτοειδούς–ωμοπλάτης στην απαγωγή πέρα από την επίδραση της ηλικίας → αξιολόγησε/εκπαίδευσε κινητικό έλεγχο, όχι μόνο δύναμη· Nasr 2026: σε ρήξη ο υπερακάνθιος είναι πιο ελαστικός παθητικά και η δύναμη πέφτει μετά από επαναλαμβανόμενες ισομετρικές — υπολόγισε κόπωση στο φορτίο). Μελέτη σε ποντίκια (Diao 2023): η έκκεντρη άσκηση βελτίωσε την επούλωση τένοντα–οστού μετά από επισκευή — ζωική μελέτη, δεν μεταφέρεται άμεσα στον άνθρωπο. RCRSP άσκηση — Powell 2024 (κριτική ανασκόπηση): η άσκηση παραμένει θεραπεία πρώτης γραμμής, αλλά το ΕΙΔΟΣ συστολής (ισομετρική/ισοτονική/έκκεντρη), η ένταση και η δόση δεν έχουν αποδειχθεί ανώτερα και εξαρτώνται από ανοχή/στόχους· βασικό εύρημα: η εξειδίκευση ασκήσεων έχει μικρή σημασία για τον πόνο αλλά ίσως περισσότερη για τη λειτουργία (ένταση, όγκος, συχνότητα, πλειομετρικά αν ο ώμος θα δεχθεί επαναλαμβανόμενα φορτία). «Πείραμα άσκησης»: δοκιμάζεις τύπο/φορτίο/εύρος/μοχλό/θέση και ρωτάς: γνώριμος πόνος ή «κάψιμο»; υποχωρεί σε ~30 λεπτά; βελτιώνεται με περισσότερες επαναλήψεις (χαμηλός ερεθισμός → μεγαλύτερη δόση) ή χειροτερεύει (μικρότερη δόση); εμπιστεύεται ο ασθενής να το κάνει μόνος του; επίσης εποπτευόμενη ≈ μη εποπτευόμενη άσκηση. Μηχανισμοί: Powell 2022 (scoping, 110 RCT): 32 προτεινόμενοι μηχανισμοί, 77% νευρομυϊκοί και 95% βιοϊατρικοί παρά την έλλειψη τεκμηρίωσης· Powell 2022 (έρευνα σε 480 φυσικοθεραπευτές): κυριότεροι αναμενόμενοι μηχανισμοί δύναμη, αντοχή, αυτοαποτελεσματικότητα πόνου και μείωση φόβου κίνησης — εκπαίδευση και αυτοπεποίθηση είναι μέρος της δόσης. Lewis, Mintken & McDevitt 2025: στην αξιολόγηση μπαίνουν και τρόπος ζωής/κοινωνικοί προσδιοριστές (ύπνος, φυσική δραστηριότητα, διατροφή, στρες) — συν-απόφαση. Ρίπτες: Hadjisavvas 2024 (30 RCT, handball): ισχυρή τεκμηρίωση μόνο για προπόνηση με ελεύθερα βάρη (barbell, σύνθετες ασκήσεις, π.χ. bench press/pull-over, συνήθως 2×/εβδ., 4–10 εβδ.) για ταχύτητα ρίψης· ελαστικά/medicine ball/core δεν έδειξαν σαφές όφελος ή έχουν λίγα δεδομένα· ανεπαρκής τεκμηρίωση για απόσταση, και medicine ball/ελαστικά δεν βελτίωσαν ακρίβεια. Παγωμένος ώμος (Salamh 2025, Delphi 14 ειδικών — γνώμη, όχι αποδείξεις): θεραπεία ανά φάση — πρώιμη (πόνος>δυσκαμψία): ενημέρωση, καθησυχασμός, ενδοαρθρική κορτικοστεροειδής· όχι μασάζ, ακινητοποίηση, κρύο/θερμότητα, ηλεκτροθεραπεία, υπέρηχος· όψιμη (δυσκαμψία>πόνος): χειρισμοί/κινητοποιήσεις, υδροδιαστολή, χειρουργείο, εκπαίδευση· πρόγραμμα ασκήσεων στο σπίτι και αποκλεισμός σοβαρής παθολογίας βοηθούν· δεν υποχωρεί πλήρως χωρίς θεραπεία. Παράγοντες: διαβήτης, θυρεοειδής, τραύμα/χειρουργείο, ακινητοποίηση· ψυχοκοινωνικά: φόβος-αποφυγή, κατάθλιψη/άγχος, αυτοαποτελεσματικότητα. VR (Brady 2023, focus groups φυσικοθεραπευτών): ενδιαφέρον ως εργαλείο αποκατάστασης ώμου, ποιοτικά δεδομένα χωρίς αποτελέσματα αποτελεσματικότητας. Ειδικά τεστ ώμου — Salamh & Lewis 2020 (viewpoint): υπάρχουν >70 τεστ αλλά κανένα δεν απομονώνει δομή (στο empty can ενεργοποιούνται 9 μύες, στο full can 8)· τα ευρήματα απεικόνισης (πάχυνση θυλάκου, οστεόφυτα, εκφύλιση/ρήξεις πετάλου, αλλοιώσεις ΑΚ) υπάρχουν και σε ασυμπτωματικούς, άρα το «χρυσό πρότυπο» δεν είναι χρυσό. Πρακτικά: αν τα χρησιμοποιείς, ερμήνευσέ τα μόνο ως αναπαραγωγή συμπτωμάτων, όχι ως απόδειξη δομής· έμφαση σε ιστορικό (αλλαγή φορτίου, πεποιθήσεις, ψυχοκοινωνικά, τρόπος ζωής), red flags και συνολική εικόνα. Lewis, Mintken & McDevitt 2025 (JOSPT, editorial): το «RCRSP» προτιμήθηκε από κλινικούς έναντι «μη ειδικού πόνου ώμου»· οι ετικέτες τενοντοπάθεια/τενόντωση/θυλακίτιδα δεν είναι επαληθεύσιμες και η υποακρωμιακή πρόσκρουση δεν στηρίζεται (η ακρωμιοπλαστική δεν ξεπερνά placebo χειρουργείο)· ψευδείς διαγνώσεις έχουν κόστος (φόβος, αποφυγή κίνησης). Lewis 2015 (JOSPT, RC tendinopathy): κύριος παράγοντας η υπερβολική (σχετική) φόρτιση· ταξινόμηση ΕΡΕΘΙΣΤΙΚΗ vs ΜΗ ΕΡΕΘΙΣΤΙΚΗ — ερεθιστική (σταθερός/νυχτερινός/παρατεινόμενος πόνος): σχετική ανάπαυση, αργές ασκήσεις με στήριξη του βραχίονα και μειωμένο εύρος, ισομετρικές προς την κατεύθυνση του πόνου, έγχυση μόνο αν δεν βοηθούν· μη ερεθιστική: σταδιακή επαναφόρτιση από απλές σε σύνθετες κινήσεις, χωρίς ανεξέλεγκτη επιδείνωση, με τη «διαδικασία τροποποίησης συμπτωμάτων» (αλλαγή θέσης/ωμοπλάτης/στάσης). Ισοδύναμα αποτελέσματα με χειρουργείο σε μελέτες. Αν υπάρχει υψηλός ανεξήγητος πόνος ηρεμίας, αποκλείονται σοβαρές παθολογίες. Δοκιμές δύναμης — Cook, Lewis & Powell 2026 (JMMT): δεν υπάρχει συναινετική τεχνική (MMT υποκειμενικό, HHD πολύ μεταβλητό, ισοκινητικό μη πρακτικό)· η μέγιστη ισομετρική δύναμη σε απομόνωση έχει μικρή αξία απόφασης στο RCRSP και δεν είναι σαφές αν η αδυναμία είναι αιτία ή συνέπεια· πιο χρήσιμα: επαναλήψεις μέχρι πόνο/κόπωση, παραγωγή δύναμης χωρίς πόνο, λειτουργικά τεστ στόχου (π.χ. ανύψωση 10 kg από το δάπεδο σε ύψος ντουλαπιού) — ταυτίζονται με τον στόχο της άσκησης.",
+  "Ποδοκνημική / πόδι": "Larkins et al. 2020 (J Chiropr Med): τα περισσότερα τεστ αστραγάλου έχουν περιορισμένη τεκμηρίωση — ευρήματα ιστορικού + ψηλάφηση + σύγκριση με την υγιή πλευρά. Chen, McInnis & Borg-Stein 2019 (Curr Sports Med Rep): πρώιμη κινητοποίηση και νευρομυϊκή εκπαίδευση από την πρώτη εβδομάδα μειώνουν υποτροπές· η ΑΙΤFL (high ankle) χρειάζεται μεγαλύτερο χρόνο επιστροφής· ROAST 2019 (Delahunt et al., Br J Sports Med): ελάχιστη διαγνωστική εξέταση = μηχανισμός τραυματισμού (εξωτερική στροφή/υπερ-ραχιαία κάμψη → σκέψου συνδεσμοσύνδεση), προηγούμενες διαστρέμματα, φόρτιση βάρους, Ottawa, έλεγχος συνδέσμων· στη συνέχεια αξιολόγηση πόνου (NRS/FADI), οιδήματος (figure-of-eight), ROM (weight-bearing lunge), αρθροκινηματικής (posterior talar glide), δύναμης (δυναμόμετρο χειρός), στατικής/δυναμικής ισορροπίας (BESS/Foot Lift, SEBT), βάδισης, επιπέδου δραστηριότητας (Tegner) και PROMs (FAAM). ο χρόνος ανάρρωσης πόνου δεν ισούται με επούλωση συνδέσμου (6–12 εβδ.), άρα προσοχή στην πρόωρη επιστροφή.",
+  "Ισχίο": "Doha / ESSKA-EHPA-ESMA 2026 (Hölmich κ.ά.): 5 κλινικές οντότητες — προσαγωγοί, ιλιοψοΐτης, βουβωνικό, ηβικό, ενδοαρθρικό (συνυπάρχουν συχνά)· ρουτίνα: ψηλάφηση προσαγωγών/ψοΐτη/βουβωνικού πόρου/ηβικής, αντίσταση προσαγωγής-κάμψης-κοιλιακών, FADIR + ROM (αν ανώδυνα, το ισχίο απίθανη πηγή). Doha (Weir 2015): ορισμοί — προσαγωγοί = ευαισθησία + πόνος σε αντίσταση προσαγωγής· ψοΐτης = ευαισθησία (+ πόνος σε αντίσταση/διάταση)· βουβωνικό = πόνος & ευαισθησία πόρου χωρίς ψηλαφητή κήλη (+ πόνος σε κοιλιακή αντίσταση/Valsalva)· ηβικό = ευαισθησία σύμφυσης & γειτονικού οστού· πάντα να εξετάζεται το ισχίο (FADIR/FABER, παθητικό ROM). Heijboer 2023: αξιοπιστία ψηλάφησης χαμηλή–μέτρια, αντίστασης προσαγωγών ικανοποιητική έως ουσιαστική (κ 0,22–0,74). Mosler 2015: ο πόνος στο adductor squeeze (OR 4,3) και ο περιορισμός έσω στροφής/BKFO διαφοροποιούν καλύτερα αθλητές με/χωρίς πόνο. O'Connor 2026 (Groin-MAP): 6 σημεία για προσαγωγούς, ψοΐτη, ηβικό, ισχίο, χωρίς ελέγχους με αύξηση ενδοκοιλιακής πίεσης. Reiman & Thorborg 2014: πρώτα έλεγχος σοβαρής παθολογίας & οσφυϊκής/ΙΛ, μετά ευαίσθητα τεστ (ρυθμίζουν αποκλεισμό), μετά ειδικά. Serner 2015: στις οξείες βουβωνικές βλάβες το 66% είναι προσαγωγοί (κυρίως μακρός προσαγωγός), 15–25% ψοΐτης/ορθός μηριαίος· 22–25% χωρίς απεικονιστικά ευρήματα· η κλινική διάγνωση ψοΐτη/ορθού συχνά εντοπίζεται αλλού στην απεικόνιση (35–46%). Thorborg 2018: παρακολούθηση με squeeze (δύναμη + πόνος), HAGOS (<50 στον αθλητισμό = ζητούν θεραπεία)· εποπτευόμενη ενεργός άσκηση > παθητικά μέσα, 50–75% επιστρέφουν στο προηγούμενο επίπεδο.",
+  "Σπονδυλική στήλη": "Οι δοκιμασίες χρησιμοποιούνται σε συστάδες (cluster) και σε συνδυασμό με ιστορικό και νευρολογικό έλεγχο· η ακρίβεια μεμονωμένων δοκιμασιών είναι περιορισμένη.",
+};
+const SPECIAL_RES = ["—", "(+)", "(−)"];
+function SpecialTestsPanel({ draft, ad }) {
+  const [reg, setReg] = useState(() => (window.__llSpecial && SPECIAL_TESTS[window.__llSpecial]) ? window.__llSpecial : "Ώμος");
+  const [q, setQ] = useState("");
+  const sp = draft.special || {};
+  const key = (t) => reg + "|" + t;
+  const put = (t, side, v) => ad("special", { ...sp, [key(t)]: { ...(sp[key(t)] || {}), [side]: v === "—" ? "" : v } });
+  const val = (t, side) => (sp[key(t)] && sp[key(t)][side]) || "—";
+  const mini = { ...inputStyle, padding: "6px 4px", fontSize: 12, appearance: "none", textAlign: "center", minWidth: 0, width: 62 };
+  const nq = (x) => String(x).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const posAll = Object.entries(sp).filter(([k, v]) => v && (v.L === "(+)" || v.R === "(+)"));
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const count = (r) => Object.keys(sp).filter((k) => k.startsWith(r + "|") && (sp[k].L || sp[k].R)).length;
+  return (
+    <Panel title="Ειδικές ορθοπεδικές δοκιμασίες">
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+        {Object.keys(SPECIAL_TESTS).map((r) => <button key={r} type="button" onClick={() => setReg(r)} style={chip(reg === r)}>{r}{count(r) ? ` · ${count(r)}` : ""}</button>)}
+        <input className="ll-sp-search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Αναζήτηση δοκιμασίας…" style={{ ...inputStyle, flex: "1 1 180px", borderRadius: 999, padding: "8px 14px" }} />
+      </div>
+      {posAll.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+          <span style={{ fontSize: 11, color: T.paperDim, alignSelf: "center" }}>Θετικά:</span>
+          {posAll.map(([k, v]) => <span key={k} style={{ background: "rgba(240,140,124,0.12)", border: "1px solid #F08C7C", color: "#F08C7C", borderRadius: 999, padding: "3px 10px", fontSize: 11.5 }}>{k.replace("|", " · ")} ({[v.L === "(+)" ? "Α" : "", v.R === "(+)" ? "Δ" : ""].filter(Boolean).join("/")})</span>)}
+        </div>
+      )}
+      {Object.entries(SPECIAL_TESTS[reg]).map(([grp, tests]) => {
+        const shown = tests.filter(([n, h]) => !q.trim() || nq(n + " " + h + " " + grp).includes(nq(q.trim())));
+        if (!shown.length) return null;
+        return (
+          <details key={grp} open={!!q.trim() || undefined} className="ll-sp-grp" style={{ marginBottom: 10, background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 16, padding: "8px 12px" }}>
+            <summary style={{ cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13.5, color: T.gold }}>{grp} <span style={{ color: T.paperDim, fontWeight: 400, fontSize: 11.5 }}>· {shown.length} δοκιμασίες</span></summary>
+            <div style={{ display: "grid", gap: 4, marginTop: 8 }}>
+              {shown.map(([n, h]) => (
+                <div key={n} className="ll-sp-row" style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", borderTop: `1px solid ${T.panelLine}` }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13 }}>{n}</div>
+                    <div style={{ fontSize: 10.5, color: T.paperDim }}>{h}</div>
+                  </div>
+                  <span style={{ fontSize: 10.5, color: T.paperDim }}>Α</span>
+                  <select aria-label={n + " Α"} value={val(n, "L")} onChange={(e) => put(n, "L", e.target.value)} style={{ ...mini, color: val(n, "L") === "(+)" ? "#F08C7C" : T.paper }}>{SPECIAL_RES.map((o) => <option key={o} value={o}>{o}</option>)}</select>
+                  <span style={{ fontSize: 10.5, color: T.paperDim }}>Δ</span>
+                  <select aria-label={n + " Δ"} value={val(n, "R")} onChange={(e) => put(n, "R", e.target.value)} style={{ ...mini, color: val(n, "R") === "(+)" ? "#F08C7C" : T.paper }}>{SPECIAL_RES.map((o) => <option key={o} value={o}>{o}</option>)}</select>
+                </div>
+              ))}
+            </div>
+          </details>
+        );
+      })}
+      {reg === "Ποδοκνημική / πόδι" && <div className="ll-calf-diff" style={{ marginTop: 10, overflowX: "auto" }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: T.gold, marginBottom: 6 }}>Διαφοροποίηση γάμπας: γαστροκνήμιος · υποκνημίδιος · πλαντάρις</div>
+        <table style={{ borderCollapse: "collapse", fontSize: 11.5, minWidth: 560, width: "100%", color: T.paper }}>
+          <thead><tr>{["", "Γαστροκνήμιος", "Υποκνημίδιος", "Πλαντάρις"].map((h) => <th key={h} style={{ textAlign: "left", padding: "6px 8px", borderBottom: `1px solid ${T.panelLine}`, color: T.gold }}>{h}</th>)}</tr></thead>
+          <tbody>{[
+            ["Συχνά σε", "Rugby, μπάσκετ, σπρίντ, μπαλέτο", "Δρομείς μεγάλων αποστάσεων, Australian football, ποδόσφαιρο", "Σπάνια· ξαφνική κίνηση / επιτάχυνση"],
+            ["Έναρξη", "Ξαφνικό «shotgun» χτύπημα στην πίσω γάμπα", "Αργή, «σφίξιμο / κράμπα» που δεν περνά, συχνά σωρευτική", "Ξαφνικό «ping»"],
+            ["Θέση πόνου", "Έσω κεφαλή (μυοτενόντια σύνδεση)· καθορισμένη", "Βαθιά, διάχυτη, κάτω-πλάγια του Αχιλλείου", "Έσω γάμπα, ανάμεσα σε γαστροκνήμιο–υποκνημίδιο"],
+            ["Θέση γονάτου", "Έκταση: ↑ πόνος στη διάταση / αδυναμία", "Κάμψη 90°: ↑ πόνος στη διάταση / αδυναμία", "Δεν διαφοροποιείται αξιόπιστα"],
+            ["Ψηλάφηση", "Σαφής, ευαισθησία μεγάλου μήκους = βαρύτερο", "Δύσκολη (βαθύς), εστιακός σπασμός αργότερα", "Μικρή περιοχή· συνήθως ήπια ευρήματα"],
+            ["Λειτουργία", "Αδυναμία στο calf raise με εκτεταμένο γόνατο", "Αδυναμία στο calf raise με λυγισμένο γόνατο· δύσκολη ανοχή φόρτου", "Συνήθως ελάχιστη απώλεια δύναμης"],
+            ["Απεικόνιση", "Έλλειμμα / υγρό στη μυοτενόντια σύνδεση", "Συχνά διάχυτο οίδημα· MRI δεν προβλέπει πάντα πρόγνωση", "Υγρό ανάμεσα στους δύο μυς (υπέρηχος / MRI)"],
+            ["Πρόγνωση / φόρτιση", "Ρήξεις έσω κεφαλής = μεγαλύτερη βαρύτητα", "Θέλει περισσότερο χρόνο/ανοχή φόρτου, ιδίως σε υποτροπές", "Συχνά επιστροφή χωρίς μεγάλο περιορισμό"],
+          ].map((r) => <tr key={r[0]}>{r.map((c, i) => <td key={i} style={{ padding: "6px 8px", borderBottom: `1px solid ${T.panelLine}`, verticalAlign: "top", color: i === 0 ? T.gold : T.paper, fontWeight: i === 0 ? 600 : 400 }}>{c}</td>)}</tr>)}</tbody>
+        </table>
+        <div style={{ fontSize: 10.5, color: T.paperDim || T.paper, marginTop: 6, opacity: 0.8 }}>Βάση: Green et al. 2022 (20 ειδικοί)· η θέση του γονάτου διαφοροποιεί μόνο σε βαθμό — σοβαρές βλάβες περιορίζουν σε κάθε θέση. Τα στοιχεία για πλαντάρις είναι περιορισμένα (εμπειρία ειδικών) και η επιβεβαίωση γίνεται με υπέρηχο/MRI.</div>
+      </div>}
+      {SPECIAL_NOTES[reg] && <div className="ll-sp-note" style={{ fontSize: 11.5, color: T.paper, marginTop: 8, padding: "8px 12px", borderRadius: 12, background: T.bgSoft, border: `1px solid ${T.panelLine}`, lineHeight: 1.5 }}>{SPECIAL_NOTES[reg]}</div>}
+      <div style={{ fontSize: 11, color: T.paperDim, marginTop: 6 }}>Για τεχνική εκτέλεση και διαγνωστική ακρίβεια κάθε δοκιμασίας: <em>Netter's Orthopaedic Clinical Examination</em>. «—» = δεν ελέγχθηκε. Η αξία κάθε δοκιμασίας εξαρτάται από το σύνολο των ευρημάτων· τα ονόματα και οι στοχεύσεις είναι ενδεικτικά.</div>
+      <div style={{ marginTop: 10 }}><TextAreaField label="Σχόλιο / παρατηρήσεις δοκιμασιών" value={sp.note || ""} onChange={(v) => ad("special", { ...sp, note: v })} rows={2} /></div>
+    </Panel>
+  );
+}
+function SpecialPrint({ a, blank, H }) {
+  const sp = a.special || {};
+  const entries = Object.entries(sp).filter(([k, v]) => k !== "note" && v && (v.L || v.R));
+  if (!blank && entries.length === 0 && !sp.note) return null;
+  const fmt = ([k, v]) => `${k.split("|")[1]} (Α ${v.L || "—"} / Δ ${v.R || "—"})`;
+  return (
+    <>
+      <H>Ειδικές δοκιμασίες</H>
+      {blank ? <div style={{ minHeight: 70, lineHeight: "23px", backgroundImage: "repeating-linear-gradient(transparent 0, transparent 22px, #999 22px, #999 23px)" }} /> : (
+        <>
+          {Object.keys(SPECIAL_TESTS).map((r) => {
+            const es = entries.filter(([k]) => k.startsWith(r + "|"));
+            if (!es.length) return null;
+            const pos = es.filter(([, v]) => v.L === "(+)" || v.R === "(+)"), neg = es.filter(([, v]) => !(v.L === "(+)" || v.R === "(+)"));
+            return <div key={r} style={{ fontSize: 12, margin: "4px 0" }}><span style={{ fontWeight: 700 }}>{r}</span>{pos.length ? <div><b>(+)</b> {pos.map(fmt).join(" · ")}</div> : null}{neg.length ? <div><b>(−)</b> {neg.map(fmt).join(" · ")}</div> : null}</div>;
+          })}
+          {sp.note && <div style={{ fontSize: 12, margin: "4px 0" }}>Σχόλιο: {sp.note}</div>}
+        </>
+      )}
+    </>
+  );
+}
+
+const SPINE_POSTURE = ["Προβολή κεφαλής", "Αυξημένη θωρακική κύφωση", "Μειωμένη οσφυϊκή λόρδωση", "Αυξημένη οσφυϊκή λόρδωση", "Σκολίωση (Adams)", "Πλάγια μετατόπιση (shift)", "Πρόσθια κλίση λεκάνης", "Οπίσθια κλίση λεκάνης", "Ασυμμετρία ώμων", "Βράχυνση σκέλους", "Μυϊκός σπασμός", "Μυϊκή ατροφία (πολυσχιδής κ.ά.)"];
+const SPINE_AROM = {
+  "Αυχενική": ["Κάμψη", "Έκταση", "Πλάγια κάμψη Α", "Πλάγια κάμψη Δ", "Στροφή Α", "Στροφή Δ"],
+  "Θωρακική": ["Κάμψη", "Έκταση", "Πλάγια κάμψη Α", "Πλάγια κάμψη Δ", "Στροφή Α", "Στροφή Δ"],
+  "Οσφυϊκή": ["Κάμψη", "Έκταση", "Πλάγια κάμψη Α", "Πλάγια κάμψη Δ", "Στροφή Α", "Στροφή Δ"],
+};
+const SPINE_RANGE = ["—", "Πλήρης", "Ελαφρά μειωμένη", "Μέτρια μειωμένη", "Σοβαρά μειωμένη", "Υπερκινητική"];
+const SPINE_QUAL = ["—", "Φυσιολογική", "Painful arc", "Aberrant (shift / catch / Gowers)"];
+const SPINE_SYMP = ["—", "Χωρίς συμπτώματα", "Τοπικός πόνος", "Αντανάκλαση στο άκρο", "Κεντρικοποίηση", "Περιφεροποίηση", "Αναπαραγωγή συμπτωμάτων", "Σφίξιμο στο τέλος του εύρους"];
+const SPINE_REP_RESP = ["—", "Κεντρικοποίηση", "Περιφεροποίηση", "Βελτίωση τοπικού πόνου", "Επιδείνωση τοπικού πόνου", "Καμία αλλαγή"];
+const SPINE_PREF = ["—", "Έκταση", "Κάμψη", "Πλάγια ολίσθηση Α", "Πλάγια ολίσθηση Δ", "Καμία (χωρίς κατευθυντική προτίμηση)"];
+const SPINE_LEVELS = (() => {
+  const L = ["C0–C1", "C1–C2"];
+  for (let i = 2; i < 7; i++) L.push(`C${i}–C${i + 1}`);
+  L.push("C7–T1");
+  for (let i = 1; i < 12; i++) L.push(`T${i}–T${i + 1}`);
+  L.push("T12–L1");
+  for (let i = 1; i < 5; i++) L.push(`L${i}–L${i + 1}`);
+  L.push("L5–S1", "ΙΛ αριστερά", "ΙΛ δεξιά");
+  return L;
+})();
+const SPINE_FIND = ["Υποκινητικό", "Υπερκινητικό", "Επώδυνο (PA)", "Μυϊκός σπασμός / τάση", "Αναπαράγει συμπτώματα", "Φυσιολογικό"];
+const SPINE_MEAS = [
+  ["schober", "Modified Schober", "cm"], ["ftf", "Δάχτυλα–πάτωμα", "cm"], ["chest", "Εκπνοή–εισπνοή θώρακα", "cm"],
+  ["dnf", "Αντοχή εν τω βάθει καμπτήρων αυχένα", "sec"], ["flexEnd", "Αντοχή καμπτήρων κορμού (McGill)", "sec"], ["extEnd", "Αντοχή εκτεινόντων (Biering-Sørensen)", "sec"],
+  ["sbL", "Side bridge Αριστερά", "sec"], ["sbR", "Side bridge Δεξιά", "sec"],
+];
+function SpinePanel({ draft, ad }) {
+  const sp = draft.spine || {};
+  const upd = (k, v) => ad("spine", { ...sp, [k]: v });
+  const arom = sp.arom || {}; const rep = sp.rep || {}; const segs = sp.segs || []; const meas = sp.meas || {};
+  const [reg, setReg] = useState(() => window.__llSpineReg || "Οσφυϊκή");
+  const [seg, setSeg] = useState({ level: "L4–L5", finding: SPINE_FIND[0], side: "Κεντρικά" });
+  const ak = (r, m) => r + "|" + m;
+  const putA = (r, m, f, v) => upd("arom", { ...arom, [ak(r, m)]: { ...(arom[ak(r, m)] || {}), [f]: v === "—" ? "" : v } });
+  const gA = (r, m, f) => (arom[ak(r, m)] && arom[ak(r, m)][f]) || "—";
+  const mini = { ...inputStyle, padding: "6px 6px", fontSize: 12, appearance: "none", minWidth: 0 };
+  const th = { textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.06em", color: T.paperDim, fontWeight: 600, padding: "4px 6px", whiteSpace: "nowrap" };
+  const td = { padding: "5px 4px", borderTop: `1px solid ${T.panelLine}`, fontSize: 12.5 };
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const sub = (t) => <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, margin: "16px 0 8px" }}>{t}</div>;
+  const filled = (r) => Object.keys(arom).filter((k) => k.startsWith(r + "|") && Object.values(arom[k]).some(Boolean)).length;
+  const sel = (aria, f, opts, onCh, v) => <select aria-label={aria} value={v} onChange={(e) => onCh(e.target.value)} style={mini}>{opts.map((o) => <option key={o} value={o}>{o}</option>)}</select>;
+  return (
+    <Panel title="Εξέταση σπονδυλικής στήλης">
+      {sub("1 · Παρατήρηση / στάση")}
+      <ChipGroup options={SPINE_POSTURE} value={sp.posture || []} onChange={(v) => upd("posture", v)} />
+      <input value={sp.posNote || ""} onChange={(e) => upd("posNote", e.target.value)} placeholder="σχόλιο στάσης / βάδισης (προαιρετικό)" style={{ ...inputStyle, marginTop: 8 }} />
+
+      {sub("2 · Ενεργητική κινητικότητα (AROM)")}
+      <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+        {Object.keys(SPINE_AROM).map((r) => <button key={r} type="button" onClick={() => setReg(r)} style={chip(reg === r)}>{r}{filled(r) ? ` · ${filled(r)}` : ""}</button>)}
+      </div>
+      <div style={{ overflowX: "auto" }}>
+        <table className="ll-spine" style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead><tr><th style={th}>Κίνηση</th><th style={th}>Εύρος</th><th style={th}>Ποιότητα</th><th style={th}>Συμπτώματα</th><th style={th}>Τιμή (°/cm)</th></tr></thead>
+          <tbody>
+            {SPINE_AROM[reg].map((m) => (
+              <tr key={m}>
+                <td style={{ ...td, fontWeight: 600, whiteSpace: "nowrap" }}>{m}</td>
+                <td style={td}>{sel(`arom ${reg} ${m} εύρος`, "q", SPINE_RANGE, (v) => putA(reg, m, "q", v), gA(reg, m, "q"))}</td>
+                <td style={td}>{sel(`arom ${reg} ${m} ποιότητα`, "ql", SPINE_QUAL, (v) => putA(reg, m, "ql", v), gA(reg, m, "ql"))}</td>
+                <td style={td}>{sel(`arom ${reg} ${m} συμπτώματα`, "s", SPINE_SYMP, (v) => putA(reg, m, "s", v), gA(reg, m, "s"))}</td>
+                <td style={td}><input aria-label={`arom ${reg} ${m} τιμή`} value={(arom[ak(reg, m)] && arom[ak(reg, m)].v) || ""} onChange={(e) => putA(reg, m, "v", e.target.value)} style={{ ...mini, width: 78 }} placeholder="π.χ. 45°" /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {sub("3 · Επαναλαμβανόμενες κινήσεις / κατευθυντική προτίμηση")}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 10 }}>
+        <TextField label="Κίνηση που δοκιμάστηκε" value={rep.tested || ""} onChange={(v) => upd("rep", { ...rep, tested: v })} placeholder="π.χ. 10 εκτάσεις σε πρηνή" />
+        <SelectField label="Απόκριση συμπτωμάτων" value={rep.resp || "—"} onChange={(v) => upd("rep", { ...rep, resp: v })} options={SPINE_REP_RESP} />
+        <SelectField label="Κατευθυντική προτίμηση" value={rep.pref || "—"} onChange={(v) => upd("rep", { ...rep, pref: v })} options={SPINE_PREF} />
+      </div>
+
+      {sub("4 · Ψηλάφηση / τμηματική κινητικότητα")}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, alignItems: "flex-end", marginBottom: 10 }}>
+        <SelectField label="Επίπεδο" value={seg.level} onChange={(v) => setSeg({ ...seg, level: v })} options={SPINE_LEVELS} />
+        <SelectField label="Εύρημα" value={seg.finding} onChange={(v) => setSeg({ ...seg, finding: v })} options={SPINE_FIND} />
+        <SelectField label="Πλευρά" value={seg.side} onChange={(v) => setSeg({ ...seg, side: v })} options={["Κεντρικά", "Αριστερά", "Δεξιά"]} />
+        <button type="button" onClick={() => upd("segs", [...segs, { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), ...seg }])} style={{ background: T.terracotta, color: T.bg, border: "none", borderRadius: 999, padding: "10px 18px", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>+ Προσθήκη</button>
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {segs.map((x) => (
+          <span key={x.id} className="ll-spine-seg" style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 999, padding: "5px 6px 5px 12px", fontSize: 12.5, display: "flex", alignItems: "center", gap: 6 }}>
+            <strong style={{ color: T.gold }}>{x.level}</strong> {x.finding} · {x.side}
+            <button type="button" aria-label="Διαγραφή" onClick={() => upd("segs", segs.filter((y) => y.id !== x.id))} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="x" size={12} /></button>
+          </span>
+        ))}
+      </div>
+
+      {sub("5 · Μετρήσεις & αντοχή κορμού")}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+        {SPINE_MEAS.map(([k, l, u]) => <NumberField key={k} label={l} unit={u} value={meas[k] || ""} onChange={(v) => upd("meas", { ...meas, [k]: v })} />)}
+      </div>
+      <div style={{ fontSize: 11, color: T.paperDim, marginTop: 10 }}>Νευρολογική εξέταση (μυότομα, δερμάτια, αντανακλαστικά): πάνελ «Νευρολογική εξέταση». Ειδικές δοκιμασίες (cluster Wainner, Laslett, νευροδυναμικά, McGill, αστάθεια): πάνελ «Ειδικές δοκιμασίες» → Σπονδυλική στήλη.</div>
+      <div style={{ marginTop: 10 }}><TextAreaField label="Σχόλιο / κλινική σύνθεση σπονδυλικής" value={sp.note || ""} onChange={(v) => upd("note", v)} rows={2} /></div>
+    </Panel>
+  );
+}
+function SpinePrint({ a, blank, H }) {
+  const sp = a.spine || {};
+  const arom = sp.arom || {};
+  const rows = Object.entries(arom).filter(([, v]) => v && Object.values(v).some(Boolean));
+  const meas = SPINE_MEAS.filter(([k]) => (sp.meas || {})[k]);
+  const any = (sp.posture || []).length || sp.posNote || rows.length || (sp.rep && (sp.rep.tested || (sp.rep.resp && sp.rep.resp !== "—") || (sp.rep.pref && sp.rep.pref !== "—"))) || (sp.segs || []).length || meas.length || sp.note;
+  if (!blank && !any) return null;
+  const cell = { border: "1px solid #111", padding: "3px 6px", fontSize: 11.5 };
+  if (blank) return <><H>Εξέταση σπονδυλικής στήλης</H><div style={{ minHeight: 90, lineHeight: "23px", backgroundImage: "repeating-linear-gradient(transparent 0, transparent 22px, #999 22px, #999 23px)" }} /></>;
+  return (
+    <>
+      <H>Εξέταση σπονδυλικής στήλης</H>
+      {(sp.posture || []).length > 0 && <div style={{ fontSize: 12, margin: "4px 0" }}><b>Στάση:</b> {sp.posture.join(", ")}{sp.posNote ? ` — ${sp.posNote}` : ""}</div>}
+      {rows.length > 0 && (
+        <table style={{ width: "100%", borderCollapse: "collapse", margin: "6px 0" }}>
+          <thead><tr>{["Περιοχή · κίνηση", "Εύρος", "Ποιότητα", "Συμπτώματα", "Τιμή"].map((h) => <th key={h} style={{ ...cell, textAlign: "left", background: "#eee" }}>{h}</th>)}</tr></thead>
+          <tbody>{rows.map(([k, v]) => <tr key={k}><td style={cell}>{k.replace("|", " · ")}</td><td style={cell}>{v.q || ""}</td><td style={cell}>{v.ql || ""}</td><td style={cell}>{v.s || ""}</td><td style={cell}>{v.v || ""}</td></tr>)}</tbody>
+        </table>
+      )}
+      {sp.rep && (sp.rep.tested || (sp.rep.resp && sp.rep.resp !== "—") || (sp.rep.pref && sp.rep.pref !== "—")) && <div style={{ fontSize: 12, margin: "4px 0" }}><b>Επαναλαμβανόμενες κινήσεις:</b> {[sp.rep.tested, sp.rep.resp !== "—" ? sp.rep.resp : "", sp.rep.pref !== "—" && sp.rep.pref ? `προτίμηση: ${sp.rep.pref}` : ""].filter(Boolean).join(" · ")}</div>}
+      {(sp.segs || []).length > 0 && <div style={{ fontSize: 12, margin: "4px 0" }}><b>Τμηματικά:</b> {sp.segs.map((x) => `${x.level} ${x.finding} (${x.side})`).join(" · ")}</div>}
+      {meas.length > 0 && <div style={{ fontSize: 12, margin: "4px 0" }}><b>Μετρήσεις:</b> {meas.map(([k, l, u]) => `${l}: ${sp.meas[k]} ${u}`).join(" · ")}</div>}
+      {sp.note && <div style={{ fontSize: 12, margin: "4px 0" }}>Σχόλιο: {sp.note}</div>}
+    </>
+  );
+}
+
 const emptyAssess = () => ({
   chiefComplaint: "", mechanism: "", goals: "",
   site: "", siteSide: "—", onset: "—", onsetNote: "", character: [], characterNote: "",
   radiation: "", associations: "", timeCourse: "—", timeNote: "", exacerbating: "", relieving: "",
   severityNow: 0, severityBest: 0, severityWorst: 0,
   redFlags: [], redFlagNote: "", impression: "", plan: "",
+  strength: [], rom: [],
+  sinSeverity: "—", sinIrr: "—", sinNature: [], sinProvoke: "", sinSettle: "", sinNote: "",
+  neuro: {}, special: {},
+  spine: { posture: [], posNote: "", arom: {}, rep: { tested: "", resp: "—", pref: "—" }, segs: [], meas: {}, note: "" },
 });
 const emptySession = () => ({ duration: "", sessionRPE: 3, mood: 5, energy: 5, sleep: 5, stress: 5, motivation: 5, notes: "", conclusions: "" });
 const weekStartYmd = (ymd) => { const [y,m,d] = ymd.split("-").map(Number); const dt = new Date(y, m-1, d); const dow = (dt.getDay() + 6) % 7; return localYmd(new Date(y, m-1, d - dow)); };
@@ -509,6 +1106,7 @@ function Icon(props) {
     heart: <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>,
     pencil: <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>,
     book: <React.Fragment><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></React.Fragment>,
+    flag: <path d="M4 22V4M4 4h13l-2 4 2 4H4"/>,
     folder: <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>,
     gauge: <React.Fragment><path d="M12 20a8 8 0 1 0-8-8"/><path d="M12 12l4-4M4 12H2M12 2v2M22 12h-2"/></React.Fragment>,
   };
@@ -675,6 +1273,7 @@ function TissuePanel({ tissue, loadType, tp, onChange, form }) {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 10 }}>
                 {gf.map((f) => {
                   const v = tp[f.k] === undefined ? "" : tp[f.k];
+                  if (f.hint) return <div key={f.k} style={{ gridColumn: "1 / -1" }}><NumberField label={f.l} unit={f.u} value={v} onChange={(x) => set(f.k, x)} placeholder={f.ph} /><div className="ll-hint" style={{ fontSize: 11, color: T.paperDim, marginTop: 5, lineHeight: 1.45 }}>{f.hint}</div></div>;
                   if (f.t === "select") return <SelectField key={f.k} label={f.l} value={v || "—"} onChange={(x) => set(f.k, x === "—" ? "" : x)} options={["—", ...f.o]} />;
                   if (f.t === "number") return <NumberField key={f.k} label={f.l} unit={f.u} value={v} onChange={(x) => set(f.k, x)} placeholder={f.ph} />;
                   return <TextField key={f.k} label={f.l} value={v} onChange={(x) => set(f.k, x)} placeholder={f.ph} />;
@@ -684,6 +1283,32 @@ function TissuePanel({ tissue, loadType, tp, onChange, form }) {
           </div>
         );
       })}
+      {tissue.id === "tendon" && (
+        <details className="ll-tendon-stages" style={{ margin: "4px 0 12px", fontSize: 12, color: T.paper, lineHeight: 1.55 }}>
+          <summary style={{ cursor: "pointer", color: T.gold, fontWeight: 600 }}>Σταδιακή φόρτιση τένοντα — πλαίσιο αποκατάστασης (Malliaras 2015, Cardoso 2019, Rio 2014/2015)</summary>
+          <ul style={{ margin: "8px 0 0", paddingLeft: 18 }}>
+            <li><b>Στάδιο 1 — ισομετρικά (πόνος/ανοχή):</b> παρατεταμένη σύσπαση 30–45 s × 5 επαναλήψεις, ~70% MVC, ξεκούραση ~2 min ανάμεσα, σε μέσο–εσωτερικό εύρος (λιγότερη συμπίεση)· μπορούν να γίνονται και πολλές φορές την ημέρα, ή πριν από προκλητικές δραστηριότητες/δυναμική δουλειά. Rio 2015 (6 βολεϊμπολίστες με επιγονατιδική, cross-over): ο πόνος στο single-leg decline squat έπεσε από 7,0 σε 0,2 μετά ισομετρικά (5×45 s στο 70% MVC) και παρέμεινε χαμηλός στα 45 min, ενώ μετά ισοτονικά (4×8 στο 8RM) έπεσε από 6,3 σε 3,8 και δεν διατηρήθηκε· μειώθηκε και η φλοιϊκή αναστολή. Μικρό δείγμα, επιγονατιδικός.</li>
+            <li><b>Στάδιο 2 — ισοτονικά / heavy slow resistance (HSR):</b> 3–4 σετ ανά άσκηση, πρόοδος από ~15RM σε ~6RM (Kongsgaard, μέσω Malliaras)· σε επιγονατιδικό παρόμοιο αποτέλεσμα VISA-P στους 6 μήνες με decline squat, αλλά μεγαλύτερη ικανοποίηση (70% vs 22%). Πρόοδος εύρους 10–60° κάμψης και έπειτα 90° αν το επιτρέπει ο πόνος· ισοτονικά στόχος η μυϊκή μάζα/δύναμη.</li>
+            <li><b>Στάδιο 3 — αποθήκευση ενέργειας (άλματα, επιτάχυνση, επιβράδυνση, αλλαγή κατεύθυνσης):</b> ξεκινά με κριτήρια δύναμης και πόνου· η επιλογή ακολουθεί τις απαιτήσεις του αθλήματος. Ο πόνος που εμφανίζεται μέσα σε ~24 ώρες μετά από δραστηριότητες αποθήκευσης ενέργειας μπορεί να είναι αποδεκτός· πόνος που διαρκεί &gt;24 ώρες θεωρείται «ερεθιστικός» και μειώνει το φορτίο.</li>
+            <li><b>Στάδιο 4 — σταδιακή επιστροφή:</b> ειδική προπόνηση με όγκο/ένταση ίδια με τις απαιτήσεις του αθλήματος· τα ισοτονικά/ισομετρικά συνεχίζονται καθ' όλη τη διάρκεια.</li>
+            <li><b>Πόνος ως οδηγός:</b> έως ~3/10 στην παρακολούθηση φορτίου θεωρείται αποδεκτός (Malliaras)· πλήρης ανάπαυση βλάπτει τον τένοντα (Cardoso). Κοινό πλαίσιο για όλους τους τένοντες κάτω άκρου, προσαρμοσμένο σε θέση/λειτουργία. Για τον τένοντα δεν έχει αποδειχθεί βέλτιστο πρόγραμμα ανά στάδιο (Cardoso 2019).</li>
+            <li><b>Μοντέλο συνέχειας (Cook, Rio, Purdam &amp; Docking 2016):</b> το αρχικό μοντέλο (Cook &amp; Purdam 2009) ταξινομεί τον τένοντα σε αντιδραστικό → εκφυλιστικό ανάλογα με την αποδιοργάνωση της δομής· στην αναθεώρηση δίνεται έμφαση στο «αντιδραστικό πάνω σε εκφυλιστικό» (φυσιολογικό τμήμα που μπαίνει και βγαίνει από αντιδραστική απάντηση, ενώ το εκφυλισμένο τμήμα δεν μεταφέρει φορτίο). Η δομή από μόνη της δεν οδηγεί τη θεραπεία: δομικές αλλαγές αυξάνουν τον κίνδυνο συμπτωμάτων (RR 14,6· OR 3,9–16,2), αλλά η επιδείνωση στον χρόνο μετρά περισσότερο από την έκταση. Προτείνεται φαινοτυποποίηση με βάση δομή, πόνο, δυσλειτουργία και ικανότητα φόρτισης· στόχος η αύξηση ικανότητας φόρτισης του ευθυγραμμισμένου ινώδους τμήματος και η προσαρμογή ολόκληρου του τένοντα («θεράπευσε το ντόνατ, όχι την τρύπα»). Σε υγιή τένοντα η απεικόνιση (υπέρηχος-χαρακτηρισμός ιστού) αλλάζει ~2 ημέρες μετά από υψηλό φορτίο και επανέρχεται έως την 4η ημέρα — δεν είναι σαφές αν είναι προσαρμοστικό ή παθολογικό. Παρεμβάσεις μόνο για τον πόνο (π.χ. ενέσεις, κρουστικά) δεν αντιμετωπίζουν την ικανότητα του ιστού και μπορεί να οδηγήσουν σε υποτροπή.</li>
+            <li><b>Γιατί πονά ο τένοντας (Rio 2014):</b> η σχέση πόνου–δομικής βλάβης είναι ασθενής· πιθανοί ρόλοι τενοκυττάρων, ιοντικών διαύλων και κεντρικών μηχανισμών — γι' αυτό η εκπαίδευση και η σταδιακή έκθεση μετράνε περισσότερο από τη «θεραπεία της εικόνας». Η απεικόνιση συσχετίζεται ανεπαρκώς με πόνο/λειτουργία.</li>
+            <li><b>PROMs:</b> VISA (Visentini 1998): 8 ερωτήσεις, 0–100 (100 = πλήρης λειτουργία)· στην πρωτότυπη μελέτη: ασυμπτωματικοί ~95, ασθενείς κλινικής ~55, πριν χειρουργείο ~22, με άριστη αξιοπιστία (r&gt;0,95). Ισχύει για Αχίλλειο, οπίσθιο μηριαίο, γλουτιαίο και επιγονατιδικό (VISA-A/H/G/P).</li>
+          </ul>
+        </details>
+      )}
+      {tissue.id === "tendon" && (
+        <details className="ll-tendon-adapt" style={{ margin: "4px 0 12px", fontSize: 12, color: T.paper, lineHeight: 1.55 }}>
+          <summary style={{ cursor: "pointer", color: T.gold, fontWeight: 600 }}>Προσαρμογή τένοντα στη φόρτιση — τι δείχνουν οι πηγές</summary>
+          <ul style={{ margin: "8px 0 0", paddingLeft: 18 }}>
+            <li><b>Ένταση πάνω από τον τύπο σύσπασης (Bohm 2015, 27 μελέτες σε Αχίλλειο/επιγονατιδικό υγιών):</b> η δυσκαμψία αυξάνεται (SMD 0,70), το modulus (0,69) και λιγότερο το μέγεθος (0,24). Η προσαρμογή εξαρτάται από το μέγεθος της φόρτισης (συνήθως &gt;70% MVC/RM), όχι από το αν είναι ισομετρική, έκκεντρη ή συγκεντρική· διάρκεια ≥12 εβδομάδων φαίνεται καλύτερη. Η πλειομετρία μόνη δεν θεωρείται η βέλτιστη για προσαρμογή του ιστού.</li>
+            <li><b>Αδράνεια και ηλικία (Reeves 2006):</b> στους ηλικιωμένους η δυσκαμψία είναι ~10% και το modulus ~14% χαμηλότερα· με προπόνηση αντίστασης αυξήθηκαν ~65% και ~69%. Πλήρης αποφόρτιση (κλινοστατισμός, τραυματισμός νωτιαίου) μειώνει τον τένοντα.</li>
+            <li><b>Παράδοξη απόκριση (Docking &amp; Cook 2019):</b> το φορτίο προσαρμόζει αλλά και προκαλεί παθολογία· η προσωρινή πτώση δυσκαμψίας μετά την άσκηση επανέρχεται σε ~24 ώρες και μπορεί να είναι φυσιολογική. Αλλαγές του ιστού δεν σημαίνουν απαραίτητα βελτίωση στον ασθενή — η κλινική πρόοδος μπορεί να οφείλεται σε νευρομυϊκή προσαρμογή (ημέρες–εβδομάδες) πριν από την ιστική (μήνες). Μετρήστε και λειτουργία/δύναμη, όχι μόνο πόνο.</li>
+            <li><b>Περιοχική προσαρμογή (Maganaris 2017):</b> οι αλλαγές δεν είναι ομοιόμορφες κατά μήκος του τένοντα· ο επιγονατιδικός προσβάλλεται σχεδόν πάντα στην πρόσφυση, ο Αχίλλειος και στην πρόσφυση και στο σώμα. Στην πρόσφυση ρόλο παίζει και η συμπίεση, γι' αυτό η θέση φόρτισης έχει σημασία.</li>
+          </ul>
+        </details>
+      )}
       {(() => {
         const c = calcOf(tissue.id, form || {});
         const items = [];
@@ -945,6 +1570,496 @@ function EntryParams({ item, onSave, suggestions }) {
 }
 const extraText = (m) => (m.extra || []).filter((x) => x.name && x.value !== "").map((x) => `${x.name}: ${x.value}${x.unit ? " " + x.unit : ""}`).join(" · ");
 
+
+function SRPrint({ a, blank, H, patient }) {
+  const cell = { border: "1px solid #111", padding: "3px 6px", fontSize: 11.5 };
+  const aff = patient && patient.affectedSide;
+  const mk = (title, rows, isStr) => {
+    const data = blank ? Array.from({ length: 6 }, () => ({})) : (rows || []);
+    if (!blank && data.length === 0) return null;
+    return (
+      <>
+        <H>{title}</H>
+        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 6 }}>
+          <thead><tr>{["Άρθρωση", "Κίνηση", isStr ? "Μέθοδος" : "Τύπος", "Αριστ.", "Δεξ.", "Συμμ.", "RPE", "Πόνος"].map((h) => <th key={h} style={{ ...cell, textAlign: "left", background: "#eee" }}>{h}</th>)}</tr></thead>
+          <tbody>{data.map((r, i) => (
+            <tr key={i} style={{ height: blank ? 22 : undefined }}>
+              <td style={cell}>{r.joint || ""}</td><td style={cell}>{r.move || ""}</td><td style={cell}>{isStr ? (r.method || "") : (r.type || "")}</td>
+              <td style={cell}>{r.L ? `${r.L} ${isStr ? r.unit : "°"}` : ""}</td><td style={cell}>{r.R ? `${r.R} ${isStr ? r.unit : "°"}` : ""}</td>
+              <td style={cell}>{symOf(r.L, r.R, aff) !== null ? `${symOf(r.L, r.R, aff)}%` : ""}</td>
+              <td style={cell}>{r.rpe && r.rpe !== "—" ? r.rpe : ""}</td><td style={cell}>{r.pain && r.pain !== "—" ? r.pain : ""}</td>
+            </tr>
+          ))}</tbody>
+        </table>
+      </>
+    );
+  };
+  return <>{mk("Αξιολόγηση δύναμης", a.strength, true)}{mk("Αξιολόγηση ROM", a.rom, false)}</>;
+}
+
+const RTP_PHASES = [
+  { id: "participation", label: "Return to Participation", sub: "Επιστροφή στη συμμετοχή (τροποποιημένη προπόνηση)" },
+  { id: "sport", label: "Return to Sport", sub: "Επιστροφή στο άθλημα (πλήρης προπόνηση / αγώνας)" },
+  { id: "performance", label: "Return to Performance", sub: "Επιστροφή στην απόδοση (προ-τραυματικό επίπεδο)" },
+];
+const RTP_DOMAINS = ["Πόνος / συμπτώματα", "Οίδημα / φλεγμονή", "ROM", "Δύναμη", "Άλμα / ισχύς", "Λειτουργικά τεστ", "Τρέξιμο / ταχύτητα", "Αλλαγή κατεύθυνσης", "Ειδικό για το άθλημα", "Ανοχή φορτίου", "Ψυχολογική ετοιμότητα", "PROMs", "Ιατρική έγκριση", "Άλλο"];
+const RTP_STATUS = [["na", "Δεν ελέγχθηκε"], ["no", "Δεν πληρείται"], ["yes", "Πληρείται"]];
+const C = (phase, domain, name, target, required = true) => ({ phase, domain, name, target, required });
+const RTP_TEMPLATES = {
+  "Γενικό (κάθε τραυματισμός)": [
+    C("participation", "Πόνος / συμπτώματα", "Πόνος στις καθημερινές δραστηριότητες", "≤ 2/10, χωρίς επιδείνωση 24ω"),
+    C("participation", "Οίδημα / φλεγμονή", "Οίδημα / effusion", "Απουσία ή ελάχιστο"),
+    C("participation", "ROM", "Εύρος κίνησης σε σχέση με το υγιές", "≥ 90% / πλήρες"),
+    C("participation", "Δύναμη", "Δύναμη πάσχοντος (LSI)", "≥ 80%"),
+    C("participation", "Ιατρική έγκριση", "Έγκριση από θεράποντα / ομάδα", "Ναι"),
+    C("sport", "Δύναμη", "Δύναμη πάσχοντος (LSI)", "≥ 90%"),
+    C("sport", "Λειτουργικά τεστ", "Hop tests / μονοποδικά τεστ (LSI)", "≥ 90%"),
+    C("sport", "Άλμα / ισχύς", "CMJ — ασυμμετρία / ύψος", "ασυμμετρία < 10%"),
+    C("sport", "Τρέξιμο / ταχύτητα", "Πρόγραμμα τρεξίματος έως μέγιστη ταχύτητα", "Ολοκληρώθηκε χωρίς πόνο"),
+    C("sport", "Αλλαγή κατεύθυνσης", "Αλλαγές κατεύθυνσης / επιτάχυνση-επιβράδυνση", "100% χωρίς πόνο"),
+    C("sport", "Ειδικό για το άθλημα", "Προπόνηση ομάδας χωρίς περιορισμούς", "Ναι"),
+    C("sport", "Ανοχή φορτίου", "Έκθεση σε sport-specific φόρτιση (π.χ. sprint, conditioning) και όχι μόνο τοπική ενδυνάμωση", "Ναι, προοδευτικά (Gabbett κ.ά. 2021)"),
+    C("sport", "Πόνος / συμπτώματα", "Πόνος κατά και 24ω μετά τη φόρτιση", "≤ 1/10"),
+    C("sport", "Ψυχολογική ετοιμότητα", "Αυτοπεποίθηση επιστροφής", "Υψηλή / βαθμολογία κατωφλίου"),
+    C("performance", "Ανοχή φορτίου", "Εβδομαδιαίο φορτίο προπόνησης σε σχέση με πριν τον τραυματισμό", "≥ 100% του βασικού"),
+    C("performance", "Ανοχή φορτίου", "Αποφυγή απότομων αυξήσεων φορτίου (spikes) στη σταδιακή επιστροφή", "Ομαλή αύξηση", false),
+    C("performance", "Ειδικό για το άθλημα", "Επαναλαμβανόμενες υψηλής έντασης προσπάθειες με σύντομη ανάκαμψη (RHIE, π.χ. ≤10 s)", "Ανοχή όπως στον αγώνα (Gabbett 2022)", false),
+    C("performance", "Ειδικό για το άθλημα", "Έκθεση σε αγώνα (λεπτά)", "Σταδιακά έως πλήρη αγώνα"),
+    C("performance", "Τρέξιμο / ταχύτητα", "Έκθεση σε υψηλές ταχύτητες / sprint", "≥ βασικού επιπέδου"),
+    C("performance", "Άλμα / ισχύς", "Δείκτες απόδοσης σε σχέση με προ-τραυματικές τιμές", "≥ 100%"),
+    C("performance", "Πόνος / συμπτώματα", "Απουσία συμπτωμάτων μετά από αγώνα", "Ναι, ≥ 2 συνεχόμενοι αγώνες", false),
+  ],
+  "Οπίσθιοι μηριαίοι (HSI)": [
+    C("participation", "Δύναμη", "Ισομετρική κάμψη γόνατος (LSI)", "≥ 90%"),
+    C("participation", "Πόνος / συμπτώματα", "Palpation / stretch test", "Χωρίς πόνο"),
+    C("sport", "Δύναμη", "Έκκεντρη δύναμη (Nordic / ForceFrame)", "LSI ≥ 90%"),
+    C("sport", "Τρέξιμο / ταχύτητα", "Sprint ≥ 95% της μέγιστης ταχύτητας", "Ολοκληρώθηκε"),
+    C("sport", "Λειτουργικά τεστ", "Askling H-test", "Χωρίς πόνο"),
+  ],
+  "ΧΣΑ (ACL)": [
+    C("participation", "Δύναμη", "Τετρακέφαλος — ισομετρική / ισοκινητική (LSI)", "≥ 90%"),
+    C("sport", "Δύναμη", "Quadriceps index (University of Delaware)", "LSI > 90"),
+    C("sport", "Λειτουργικά τεστ", "4 single-leg hop tests (University of Delaware)", "LSI > 90 σε κάθε τεστ"),
+    C("sport", "PROMs", "KOOS-ADLS (University of Delaware)", "> 90%"),
+    C("sport", "PROMs", "Global Rating Scale (University of Delaware)", "> 90%"),
+    C("sport", "Λειτουργικά τεστ", "Ποιότητα προσγείωσης (π.χ. LESS) — ενδεικτικό", "Χωρίς σημαντικά σφάλματα", false),
+    C("sport", "Ψυχολογική ετοιμότητα", "ACL-RSI", "Κατώφλι που ορίζεις (π.χ. υψηλή βαθμολογία)"),
+    C("sport", "Αλλαγή κατεύθυνσης", "Pivoting / cutting χωρίς φόβο ή αστάθεια", "Ναι"),
+    C("performance", "Ανοχή φορτίου", "Χρονικό ορόσημο από χειρουργείο", "Ελέγχεται με τον χειρουργό"),
+  ],
+  "Θλάση γάμπας (calf strain)": [
+    C("participation", "Πόνος / συμπτώματα", "Πόνος, σφίξιμο, «κράμπα» στην ηρεμία και στο βάδισμα", "0/10"),
+    C("participation", "Πόνος / συμπτώματα", "Ευαισθησία στο σημείο της βλάβης", "0/10, 0 cm"),
+    C("participation", "ROM", "Weight-bearing knee-to-wall lunge (cm) και straight leg stretch", "ασυμμετρία ≤ 10%"),
+    C("participation", "Δύναμη", "Ισομετρική φόρτιση γάμπας (γόνατο εκτεταμένο / λυγισμένο)", "Χωρίς πόνο"),
+    C("sport", "Δύναμη", "Single-leg calf raise από το πάτωμα (μετρονόμος 30 bpm)", "≥ 30 επαναλήψεις, ασυμμετρία ≤ 10%"),
+    C("sport", "Δύναμη", "Φορτισμένη δύναμη: γόνατο εκτεταμένο (γαστροκνήμιος) / λυγισμένο 90° (υποκνημίδιος)", "≥ 1,0×BW / ≥ 1,5×BW, ασυμμετρία ≤ 10%"),
+    C("sport", "Άλμα / ισχύς", "Κάθετη λειτουργία: single-leg CMJ / drop jump (RSI)", "ασυμμετρία ≤ 10%"),
+    C("sport", "Λειτουργικά τεστ", "Οριζόντια λειτουργία: forward hop / bound", "ασυμμετρία ≤ 10%, ποιότητα κίνησης"),
+    C("sport", "Λειτουργικά τεστ", "Μονοποδικά άλματα πριν το τρέξιμο", "20 επαναλήψεις χωρίς συμπτώματα"),
+    C("sport", "Τρέξιμο / ταχύτητα", "Πρόοδος τρεξίματος: όγκος, ταχύτητες, επιταχύνσεις/επιβραδύνσεις", "Ολοκληρώθηκε χωρίς πόνο"),
+    C("sport", "Αλλαγή κατεύθυνσης", "Cutting, reactive agility, άλματα, μέγιστη ταχύτητα/επιτάχυνση", "100% χωρίς πόνο"),
+    C("sport", "Ψυχολογική ετοιμότητα", "Αυτοπεποίθηση επιστροφής", "Υψηλή"),
+    C("performance", "Ειδικό για το άθλημα", "Πλήρης προπόνηση ομάδας ≥ 1 συνεδρία", "Ναι"),
+    C("performance", "Ιατρική έγκριση", "Συμφωνία όλων των εμπλεκομένων για την ετοιμότητα", "Ναι (Green κ.ά. 2022)"),
+  ],
+  "Αχίλλειος τένοντας": [
+    C("participation", "Λειτουργικά τεστ", "Μονοποδική ανύψωση πτέρνας — επαναλήψεις", "Συγκρίσιμες με το υγιές"),
+    C("participation", "PROMs", "VISA-A", "Κατώφλι που ορίζεις"),
+    C("sport", "Άλμα / ισχύς", "Hopping / plyometrics χωρίς πόνο", "Ναι"),
+    C("sport", "Πόνος / συμπτώματα", "Πρωινή δυσκαμψία / πόνος 24ω μετά", "≤ 2/10"),
+    C("performance", "Ανοχή φορτίου", "Τρέξιμο & άλματα σε πλήρη όγκο", "Ναι, χωρίς φλεγμονή"),
+  ],
+  "Βουβωνική (groin)": [
+    C("participation", "Δύναμη", "Squeeze test (προσαγωγοί)", "Χωρίς πόνο"),
+    C("sport", "Δύναμη", "Λόγος προσαγωγών/απαγωγών & LSI", "≥ 90%"),
+    C("sport", "Αλλαγή κατεύθυνσης", "COD / shooting / κλωτσιές", "Χωρίς πόνο"),
+    C("sport", "PROMs", "HAGOS", "Κατώφλι που ορίζεις"),
+  ],
+  "Ποδοκνημική (διάστρεμμα)": [
+    C("participation", "ROM", "Ραχιαία κάμψη (weight-bearing lunge)", "≥ 90% του υγιούς"),
+    C("sport", "Λειτουργικά τεστ", "Y-Balance / hop tests", "LSI ≥ 90%"),
+    C("sport", "PROMs", "CAIT / FAAM", "Κατώφλι που ορίζεις"),
+  ],
+  "Επιγονατιδικός τένοντας": [
+    C("participation", "Λειτουργικά τεστ", "Decline squat — πόνος", "≤ 2/10"),
+    C("participation", "PROMs", "VISA-P", "Κατώφλι που ορίζεις"),
+    C("sport", "Άλμα / ισχύς", "Άλματα (single-leg) χωρίς πόνο", "Ναι"),
+  ],
+  "Οστική καταπόνηση (BSI)": [
+    C("participation", "Πόνος / συμπτώματα", "Πόνος στην πίεση / hop test", "Χωρίς πόνο"),
+    C("participation", "Ιατρική έγκριση", "Απεικόνιση / ένδειξη επούλωσης", "Ναι"),
+    C("sport", "Ανοχή φορτίου", "Σταδιακή προσαρμογή φορτίου κρούσης", "Ολοκληρώθηκε χωρίς πόνο"),
+  ],
+};
+const rtpId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+function RtpModule({ patientId, patientName, assessments, sessionDate }) {
+  const emptyRtp = () => ({ criteria: [], decision: { level: "", date: "", note: "" }, template: "" });
+  const [data, setData] = useState(emptyRtp);
+  const [phase, setPhase] = useState("participation");
+  const [tpl, setTpl] = useState(() => (window.__llRtp && RTP_TEMPLATES[window.__llRtp]) ? window.__llRtp : Object.keys(RTP_TEMPLATES)[0]);
+  const [nf, setNf] = useState({ domain: RTP_DOMAINS[0], name: "", target: "" });
+  const loaded = useRef(false);
+  useEffect(() => {
+    loaded.current = false;
+    setData({ ...emptyRtp(), ...(patientId ? store.get(`trl_rtp_${patientId}`, {}) : {}) });
+    setTimeout(() => { loaded.current = true; }, 0);
+  }, [patientId]);
+  const save = (next) => { setData(next); if (patientId) store.set(`trl_rtp_${patientId}`, next); };
+  const upd = (id, patch) => save({ ...data, criteria: data.criteria.map((c) => c.id === id ? { ...c, ...patch } : c) });
+  const setStatus = (c, st) => upd(c.id, { status: st, date: st === "yes" ? (c.date || sessionDate) : (st === "na" ? "" : c.date) });
+  const stats = (ph) => {
+    const list = data.criteria.filter((c) => c.phase === ph);
+    const req = list.filter((c) => c.required);
+    const met = list.filter((c) => c.status === "yes").length;
+    const reqMet = req.filter((c) => c.status === "yes").length;
+    return { total: list.length, met, req: req.length, reqMet, pct: list.length ? Math.round((met / list.length) * 100) : 0, ready: req.length > 0 && reqMet === req.length };
+  };
+  const loadTemplate = () => {
+    const have = new Set(data.criteria.map((c) => [c.phase, c.name].join("|")));
+    const add = RTP_TEMPLATES[tpl].filter((c) => !have.has([c.phase, c.name].join("|"))).map((c) => ({ ...c, id: rtpId(), status: "na", value: "", date: "", note: "" }));
+    if (!add.length) return;
+    save({ ...data, template: tpl, criteria: [...data.criteria, ...add] });
+  };
+  const addCrit = () => {
+    if (!nf.name.trim()) return;
+    save({ ...data, criteria: [...data.criteria, { id: rtpId(), phase, domain: nf.domain, name: nf.name.trim(), target: nf.target.trim(), required: true, status: "na", value: "", date: "", note: "" }] });
+    setNf({ ...nf, name: "", target: "" });
+  };
+  // τελευταία συμμετρία από την εκτίμηση
+  const latestSym = (() => {
+    const dates = Object.keys(assessments || {}).sort().reverse();
+    for (const d of dates) {
+      const rows = (assessments[d].strength || []).map((r) => ({ r, v: symOf(r.L, r.R, null) })).filter((x) => x.v !== null);
+      if (rows.length) return { d, rows: rows.sort((a, b) => a.v - b.v).slice(0, 4) };
+    }
+    return null;
+  })();
+  const cur = data.criteria.filter((c) => c.phase === phase);
+  const st = stats(phase);
+  const chipS = (on, col) => ({ padding: "6px 12px", borderRadius: 999, fontSize: 12, fontWeight: 600, cursor: "pointer", border: `1px solid ${on ? col : T.panelLine}`, background: on ? col : "transparent", color: on ? T.bg : T.paperDim });
+  if (!patientId) return <Panel title="Κριτήρια RTP">Επίλεξε ασθενή.</Panel>;
+  return (
+    <>
+      <Panel title={`Κριτήρια επιστροφής στην απόδοση (RTP) — ${patientName || ""}`} accent>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 14 }}>
+          {RTP_PHASES.map((p, i) => {
+            const s = stats(p.id); const on = phase === p.id;
+            return (
+              <button key={p.id} type="button" className="ll-rtp-phase" onClick={() => setPhase(p.id)} style={{ textAlign: "left", cursor: "pointer", background: on ? "rgba(255,122,26,0.14)" : T.bgSoft, border: `1px solid ${on ? T.gold : T.panelLine}`, borderRadius: 16, padding: 14, color: T.paper }}>
+                <div style={{ fontSize: 11, color: T.paperDim, marginBottom: 2 }}>ΦΑΣΗ {i + 1}</div>
+                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: on ? T.gold : T.paper }}>{p.label}</div>
+                <div style={{ fontSize: 11, color: T.paperDim, margin: "3px 0 10px" }}>{p.sub}</div>
+                <div style={{ height: 6, borderRadius: 999, background: T.panelLine, overflow: "hidden" }}><div style={{ width: `${s.pct}%`, height: "100%", background: s.ready ? "#7BC47F" : T.terracotta }} /></div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, marginTop: 6, color: T.paperDim }}>
+                  <span>{s.met}/{s.total} κριτήρια</span><span style={{ color: s.ready ? "#7BC47F" : T.paperDim }}>{s.ready ? "✓ έτοιμος" : `υποχρ. ${s.reqMet}/${s.req}`}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "flex-end" }}>
+          <div style={{ flex: "1 1 240px" }}><SelectField label="Πρότυπο κριτηρίων (ανά τραυματισμό)" value={tpl} onChange={setTpl} options={Object.keys(RTP_TEMPLATES)} /></div>
+          <button type="button" onClick={loadTemplate} style={{ background: T.terracotta, color: T.bg, border: "none", borderRadius: 999, padding: "10px 20px", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>Προσθήκη προτύπου</button>
+        </div>
+        <div style={{ fontSize: 11, color: T.paperDim, marginTop: 8 }}>Οι στόχοι των προτύπων είναι ενδεικτικές προτάσεις και επεξεργάζονται. Προσάρμοσέ τους στην κλινική σου κρίση πριν τη χρήση.</div>
+      </Panel>
+
+      <details className="ll-principles" style={{ marginBottom: 18, background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "12px 18px" }}>
+        <summary style={{ cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: T.gold }}>Αρχές προόδου φορτίου & επιστροφής στην απόδοση</summary>
+        <ul style={{ margin: "12px 0 6px", paddingLeft: 18, fontSize: 13, lineHeight: 1.6, display: "grid", gap: 6 }}>
+          <li><strong>Τοπική ικανότητα ιστού + ικανότητα ειδική για το άθλημα:</strong> η αποκατάσταση της τοπικής ικανότητας δεν αρκεί για ασφαλή επιστροφή· η sport-specific φόρτιση (π.χ. sprint) γεφυρώνει το κενό μεταξύ αποκατάστασης και απόδοσης (Gabbett κ.ά., BJSM 2021).</li>
+          <li><strong>Ο πόνος μόνος του είναι φτωχός οδηγός προόδου</strong> (εκτός από τις οστικές καταπονήσεις): υπάρχει ασυμφωνία πόνου–λειτουργίας–δομής. Προτιμάται η πρόοδος με αναφορά του ασθενή (RPE, VAS) μαζί με το εξωτερικό φορτίο (Gabbett κ.ά. 2021).</li>
+          <li><strong>Κριτήρια τοπικής προόδου (παράδειγμα Αχίλλειου):</strong> έλεγχος πόνου + (α) στάδια, (β) κόπωση — προσθήκη σετ/επαναλήψεων/βάρους αν δεν υπάρχουν σημεία κόπωσης, (γ) υποκειμενική αντίληψη, (δ) προσωρινή γραμμική αύξηση (π.χ. 2.5% εβδομαδιαία). Οι συγγραφείς σημειώνουν ότι βασίζονται σε παράδοση και όχι ισχυρά τεκμήρια.</li>
+          <li><strong>Παράδοξο εκπαίδευσης–πρόληψης τραυματισμών:</strong> τα μη επαφικά τραύματα συνδέονται κυρίως με υπερβολικές και απότομες αυξήσεις φορτίου, όχι με την προπόνηση καθαυτή· τα υψηλά χρόνια φορτία είναι γενικά προστατευτικά (Gabbett, BJSM 2016).</li>
+          <li><strong>Διαφορετικοί ιστοί, διαφορετική ανάκαμψη:</strong> κάρτιλαγε ~30 λεπτά, οστό 4–8 ώρες, τένοντας ~48 ώρες (έντονη SSC), μυς έως ≥72 ώρες· «εκπαίδευση γύρω από τον τραυματισμένο ιστό» διατηρεί τη συνολική ικανότητα (Gabbett & Oetter 2024).</li>
+          <li><strong>Φυσιολογικά και βιομηχανικά μονοπάτια προσαρμογής</strong> έχουν διαφορετικούς ρυθμούς απόκρισης και πρέπει να θεωρούνται χωριστά στον σχεδιασμό αποκατάστασης (Vanrenterghem κ.ά., Sports Med 2017).</li>
+          <li><strong>Αθλητικές απαιτήσεις:</strong> στο rugby league οι περισσότερες επαναλαμβανόμενες προσπάθειες υψηλής έντασης γίνονται με ≤10 s ανάκαμψη — η προετοιμασία για επιστροφή πρέπει να το αντικατοπτρίζει (Gabbett, Sports Health 2022).</li>
+          <li><strong>Αντικειμενικά κριτήρια RTS:</strong> τα τεκμήρια είναι περιορισμένα· τα όρια (π.χ. LSI &gt; 90%) συμπληρώνονται από κλινική κρίση (Aspetar, ACL). Single-leg hop LSI σε 6/9/12 μήνες μετά από ΧΣΑ: 87/90/92% (Abrams, αναφορά στο Aspetar).</li>
+        </ul>
+      </details>
+
+      {latestSym && (
+        <Panel title="Τελευταία συμμετρία δύναμης (από Ιατρική Εκτίμηση)">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {latestSym.rows.map(({ r, v }) => <span key={r.id} style={{ background: T.bgSoft, border: `1px solid ${v < 90 ? "#F08C7C" : T.panelLine}`, borderRadius: 999, padding: "6px 12px", fontSize: 12.5 }}>{r.joint} · {r.move}: <strong style={{ color: v < 90 ? "#F08C7C" : T.gold }}>{v}%</strong></span>)}
+            <span style={{ fontSize: 11.5, color: T.paperDim, alignSelf: "center" }}>{fmtDay(latestSym.d)} · χαμηλότερες τιμές</span>
+          </div>
+        </Panel>
+      )}
+
+      <Panel title={RTP_PHASES.find((p) => p.id === phase).label}>
+        {cur.length === 0 && <div style={{ fontSize: 13, color: T.paperDim, marginBottom: 12 }}>Δεν υπάρχουν κριτήρια σε αυτή τη φάση. Πρόσθεσε πρότυπο ή δικό σου κριτήριο.</div>}
+        <div style={{ display: "grid", gap: 10 }}>
+          {cur.map((c) => (
+            <div key={c.id} className="ll-rtp-row" style={{ background: T.bgSoft, border: `1px solid ${c.status === "yes" ? "#4E8F52" : c.status === "no" ? "#A6412C" : T.panelLine}`, borderRadius: 16, padding: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                <div>
+                  <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold }}>{c.domain}{c.required ? "" : " · προαιρετικό"}</div>
+                  <div style={{ fontWeight: 600, fontSize: 14, marginTop: 2 }}>{c.name}</div>
+                </div>
+                <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                  <button type="button" onClick={() => upd(c.id, { required: !c.required })} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 999, padding: "3px 10px", fontSize: 11, cursor: "pointer" }}>{c.required ? "υποχρεωτικό" : "προαιρετικό"}</button>
+                  <button type="button" aria-label="Διαγραφή" onClick={() => save({ ...data, criteria: data.criteria.filter((x) => x.id !== c.id) })} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer" }}><Icon name="trash" size={14} /></button>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "10px 0" }}>
+                {RTP_STATUS.map(([k, l]) => <button key={k} type="button" onClick={() => setStatus(c, k)} style={chipS((c.status || "na") === k, k === "yes" ? "#7BC47F" : k === "no" ? "#F08C7C" : T.paperDim)}>{l}</button>)}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8 }}>
+                <TextField label="Στόχος" value={c.target} onChange={(v) => upd(c.id, { target: v })} />
+                <TextField label="Μέτρηση / τιμή" value={c.value} onChange={(v) => upd(c.id, { value: v })} placeholder="π.χ. 92%" />
+                <Field label="Ημερομηνία"><input type="date" value={c.date || ""} onChange={(e) => upd(c.id, { date: e.target.value })} style={inputStyle} /></Field>
+                <TextField label="Σχόλιο" value={c.note} onChange={(v) => upd(c.id, { note: v })} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 14, background: T.bgSoft, border: `1px dashed ${T.panelLine}`, borderRadius: 16, padding: 12 }}>
+          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 8 }}>Νέο κριτήριο — {RTP_PHASES.find((p) => p.id === phase).label}</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 8, alignItems: "flex-end" }}>
+            <SelectField label="Τομέας" value={nf.domain} onChange={(v) => setNf({ ...nf, domain: v })} options={RTP_DOMAINS} />
+            <TextField label="Κριτήριο" value={nf.name} onChange={(v) => setNf({ ...nf, name: v })} placeholder="π.χ. Nordic hamstring" />
+            <TextField label="Στόχος" value={nf.target} onChange={(v) => setNf({ ...nf, target: v })} placeholder="π.χ. LSI ≥ 90%" />
+            <button type="button" onClick={addCrit} style={{ background: T.terracotta, color: T.bg, border: "none", borderRadius: 999, padding: "10px 20px", fontSize: 13.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}><Icon name="plus" size={13} /> Προσθήκη</button>
+          </div>
+        </div>
+      </Panel>
+
+      <Panel title="Απόφαση ομάδας">
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+          {["Δεν είναι έτοιμος", ...RTP_PHASES.map((p) => p.label)].map((l) => (
+            <button key={l} type="button" onClick={() => save({ ...data, decision: { ...data.decision, level: data.decision.level === l ? "" : l, date: data.decision.date || sessionDate } })} style={chipS(data.decision.level === l, T.gold)}>{l}</button>
+          ))}
+        </div>
+        {RTP_PHASES.filter((p) => stats(p.id).ready).length > 0 && <div style={{ fontSize: 12, color: "#7BC47F", marginBottom: 10 }}>Όλα τα υποχρεωτικά κριτήρια πληρούνται για: {RTP_PHASES.filter((p) => stats(p.id).ready).map((p) => p.label).join(", ")}.</div>}
+        <div style={{ display: "grid", gridTemplateColumns: "180px 1fr", gap: 10 }}>
+          <Field label="Ημερομηνία"><input type="date" value={data.decision.date || ""} onChange={(e) => save({ ...data, decision: { ...data.decision, date: e.target.value } })} style={inputStyle} /></Field>
+          <TextField label="Σχόλιο / αιτιολόγηση / επόμενα βήματα" value={data.decision.note} onChange={(v) => save({ ...data, decision: { ...data.decision, note: v } })} />
+        </div>
+      </Panel>
+    </>
+  );
+}
+
+const BODY_REGIONS = {
+  cervical: { title: "Αυχενική μοίρα", special: "Σπονδυλική στήλη", spine: "Αυχενική", tissue: "muscle", rtp: null,
+    structs: "C0–C7 σπόνδυλοι, αυχενικοί δίσκοι, πλάγιες αρθρώσεις, εν τω βάθει καμπτήρες, τραπεζοειδής, ανελκτήρας, βραχιόνιο πλέγμα",
+    common: [["Μηχανικός αυχενικός πόνος", "μυς/άρθρωση"], ["Αυχενική ριζοπάθεια", "νεύρο/δίσκος"], ["Αυχενογενής κεφαλαλγία", "C1–C3"], ["Whiplash (WAD)", "σύνδεσμοι/μύες"], ["Burner / stinger (αθλητές επαφής)", "νευρική"]],
+    red: "Τραύμα με πόνο στη μέση γραμμή, πυρετός, νευρολογικά ελλείμματα, μυελοπάθεια, 5Ds/3Ns (κεφαλή/αρτηριακή δυσλειτουργία)",
+    ref: "Αυχένας / αυχενικός πόνος · Κεφαλαλγία · Κακώσεις αυχένα στον αθλητισμό" },
+  shoulder: { title: "Ώμος", special: "Ώμος", tissue: "tendon", rtp: "Γενικό (κάθε τραυματισμός)",
+    structs: "γληνοβραχιόνια, ακρωμιοκλειδική & στερνοκλειδική, στροφικό πέταλο, δικέφαλος (μακρά κεφαλή), χείλος, ωμοπλάτη",
+    common: [["Πρόσκρουση / τενοντοπάθεια στροφικού πετάλου", "τένοντας"], ["Ρήξη στροφικού πετάλου", "τένοντας"], ["Πρόσθια αστάθεια / εξάρθρημα", "σύνδεσμοι/χείλος"], ["SLAP / παθολογία δικεφάλου", "χείλος/τένοντας"], ["Κακώσεις ΑΚ άρθρωσης", "σύνδεσμοι"], ["Σύνδρομο παγωμένου ώμου", "κάψα"], ["Ωμοπλατιαία δυσκινησία", "κινητικός έλεγχος"]],
+    red: "Μη μηχανικός / νυχτερινός πόνος, ιστορικό καρκίνου, παραπεμπόμενος πόνος (καρδιακός, διαφραγματικός), νευρολογικό έλλειμμα",
+    ref: "Ώμος — πόνος, αστάθεια, στροφικό πέταλο, ΑΚ άρθρωση", aspetar: [["Throwing is the Most Important Thing Humans Have Ever Done", "Whiteley"], ["The Athlete’s Shoulder: Anterior Shoulder Instability", "Zhou, Raybin, Bottoni"], ["Long Head of Biceps (LHB) – The Most Controversial Tendon in Shoulder", "Poberaj"], ["Conservative Care is the Best Option For “Usual” Shoulder Pain", "Paquet, Whiteley"], ["An inside look at ‘Swimmer’s Shoulder’", "Delbridge κ.ά."]], tip: "Whiteley (Aspetar): στους ρίπτες ο «μικροεξάρθρημα» μπροστά είναι αμφιλεγόμενος· μετράς τη ΣΥΝΟΛΙΚΗ στροφική κίνηση και των δύο ώμων και τη δύναμη." },
+  elbow: { title: "Αγκώνας", special: "Αγκώνας / καρπός", tissue: "tendon", rtp: "Γενικό (κάθε τραυματισμός)",
+    structs: "κοινός εκτείνων / καμπτήρας τένοντας, UCL, ωλένιο νεύρο, δικέφαλος, τρικέφαλος",
+    common: [["Πλάγια επικονδυλαλγία (tennis elbow)", "τένοντας"], ["Έσω επικονδυλαλγία (golfer's)", "τένοντας"], ["Βλάβη UCL (ρίψεις)", "σύνδεσμος"], ["Ωλένιο νεύρο — παγίδευση", "νεύρο"], ["Οστεοχονδρίτιδα (παιδιά/έφηβοι)", "οστό"]],
+    red: "Οίδημα με πυρετό (σηπτική), παραμόρφωση, απώλεια έκτασης μετά από τραύμα",
+    ref: "Αγκώνας — επικονδυλαλγία, UCL, νευρικές παγιδεύσεις", aspetar: [["Elbow Injuries in the Tennis Player", "Grawe, Dines, Dines"], ["Handball Elbow", "Popovic"], ["Functional Anatomy of the Elbow", "Popovic"]] },
+  wrist: { title: "Καρπός / χέρι", special: "Αγκώνας / καρπός", tissue: "ligament", rtp: "Γενικό (κάθε τραυματισμός)",
+    structs: "σκαφοειδές, TFCC, μηνοειδές, καρπιαίος σωλήνας, εκτείνοντες τένοντες, δακτυλικές αρθρώσεις",
+    common: [["Κάταγμα σκαφοειδούς", "οστό"], ["De Quervain", "τένοντας"], ["Βλάβη TFCC", "χόνδρος/σύνδεσμος"], ["Σύνδρομο καρπιαίου σωλήνα", "νεύρο"], ["Τραυματισμοί δακτύλων (jersey / mallet)", "τένοντας"]],
+    red: "Τραύμα με ευαισθησία στο snuffbox (αποκλεισμός κατάγματος), νευρολογικά ελλείμματα",
+    ref: "Καρπός και χέρι — τραυματισμοί αθλητών", aspetar: [["Wrist Injuries in Tennis – Evaluation and Treatment", "Umansky"], ["Should We Be Repairing All Scaphoid Fractures in the Athletes?", "Cassidy"], ["Acute Finger Injuries in Handball", "Chick"]] },
+  thoracic: { title: "Θωρακική μοίρα / πλευρές", special: "Σπονδυλική στήλη", spine: "Θωρακική", tissue: "muscle", rtp: null,
+    structs: "Θ1–Θ12, πλευροσπονδυλικές αρθρώσεις, μεσοπλεύριοι, ρομβοειδείς, ωμοπλάτη",
+    common: [["Θωρακικός μηχανικός πόνος", "άρθρωση/μυς"], ["Πλευροσπονδυλική δυσλειτουργία", "άρθρωση"], ["Κάταγμα πλευράς (καταπονητικό)", "οστό"], ["Νόσος Scheuermann (έφηβοι)", "οστό"]],
+    red: "Πόνος πνευμονικής/καρδιακής προέλευσης, νυχτερινός πόνος, απώλεια βάρους, ιστορικό καρκίνου — ο θωρακικός πόνος απαιτεί προσεκτικό αποκλεισμό",
+    ref: "Θωρακική μοίρα και πλευρές" },
+  lumbar: { title: "Οσφυϊκή μοίρα", special: "Σπονδυλική στήλη", spine: "Οσφυϊκή", tissue: "muscle", rtp: null,
+    structs: "Ο1–Ο5, δίσκοι, πλάγιες αρθρώσεις, πολυσχιδής, ορθωτήρες, QL, μυϊκή ζώνη κορμού",
+    common: [["Μη ειδικός οσφυαλγία", "μυς/άρθρωση"], ["Ριζοπάθεια / δισκοκήλη", "δίσκος/νεύρο"], ["Σπονδυλόλυση / σπονδυλολίσθηση", "οστό"], ["Στένωση σπονδυλικού σωλήνα", "νεύρο"], ["Πλάγια αρθρική δυσλειτουργία", "άρθρωση"]],
+    red: "Σύνδρομο ιππουρίδας (δυσλειτουργία εντέρου/κύστης, σαγονοειδής αναισθησία), προοδευτικό έλλειμμα, τραύμα, ιστορικό καρκίνου, πυρετός",
+    ref: "Οσφυαλγία — αξιολόγηση και διαχείριση · Στρες κατάγματα οσφυϊκής" },
+  si: { title: "Λεκάνη / ιερολαγόνιος", special: "Σπονδυλική στήλη", spine: "Οσφυϊκή", tissue: "ligament", rtp: null,
+    structs: "ΙΛ αρθρώσεις, ηβική σύμφυση, γλουτιαίοι, πυραμοειδής, ισχιακό νεύρο",
+    common: [["Δυσλειτουργία ΙΛ άρθρωσης", "άρθρωση/σύνδεσμοι"], ["Σύνδρομο πυραμοειδούς / εν τω βάθει γλουτιαίου", "μυς/νεύρο"], ["Πόνος ηβικής σύμφυσης", "χόνδρος/σύνδεσμοι"], ["Τενοντοπάθεια οπίσθιων μηριαίων (εγγύς)", "τένοντας"]],
+    red: "Πόνος με πυρετό / φλεγμονώδη χαρακτηριστικά (αγκυλοποιητική), νυχτερινός πόνος",
+    ref: "Πόνος λεκάνης και ΙΛ άρθρωσης · Οστεΐτιδα ηβικού" },
+  hip: { title: "Ισχίο / βουβωνική", special: "Ισχίο", tissue: "muscle", rtp: "Βουβωνική (groin)",
+    structs: "ισχιομηριαία άρθρωση, χείλος, ψοΐτης, προσαγωγοί, απαγωγοί/γλουτιαίοι, μείζων τροχαντήρας, ευθύς κοιλιακός",
+    common: [["Πόνος σχετιζόμενος με το ισχίο (FAI, χείλος)", "άρθρωση"], ["Βουβωνικός πόνος (προσαγωγοί, ψοΐτης, ηβική, ΤΚ)", "τένοντας/μυς"], ["Τενοντοπάθεια γλουτιαίων / GTPS", "τένοντας"], ["Στρες κάταγμα αυχένα μηριαίου", "οστό"], ["Οστεΐτιδα ηβικού", "οστό"]],
+    red: "Κάταγμα αυχένα μηριαίου (ανεξήγητος πόνος, δυσκολία φόρτισης), κήλη, νυχτερινός πόνος, ιστορικό καρκίνου",
+    ref: "Πόνος ισχίου και βουβώνα — κλασικές κατηγορίες (Doha agreement)", aspetar: [["Approaching Groin Pain in Athletes – “The Falcon’s Perspective”", "Weir κ.ά."], ["Groin Pain in Football Players – A Systematic Diagnostic Approach", "Hölmich"], ["Strength Measurements in Athletes with Groin Pain", "Thorborg"], ["Hip Impingement Syndromes", "Obaid"], ["Conservative Management of Femoroacetabular Impingement", "Kemp, Crossley"], ["So Doc... When Will I Be Ready to Run?", "Hogan"]] },
+  groin: { title: "Βουβωνική περιοχή (Doha)", special: "Ισχίο", tissue: "muscle", rtp: "Βουβωνική (groin)",
+    structs: "μακρός προσαγωγός (πρόσφυση), ιλιοψοΐτης, ηβική σύμφυση, βουβωνικός πόρος & κοιλιακό τοίχωμα, ορθός μηριαίος (εγγύς), ισχιομηριαία άρθρωση",
+    common: [["Πόνος σχετιζόμενος με τους προσαγωγούς (πιο συχνός)", "τένοντας/μυς"], ["Πόνος σχετιζόμενος με τον ιλιοψοΐτη", "τένοντας/μυς"], ["Πόνος σχετιζόμενος με τον βουβωνικό πόρο (κοιλιακό τοίχωμα)", "μαλακά μόρια"], ["Ηβικός πόνος / οστεΐτιδα ηβικού", "οστό"], ["Ενδοαρθρικός πόνος ισχίου (FAI, χείλος)", "άρθρωση"], ["Οξεία θλάση προσαγωγών / ψοΐτη / ορθού μηριαίου", "μυς"]],
+    red: "Κάταγμα αυχένα μηριαίου / στρες κάταγμα ηβικού κλάδου (ανεξήγητος πόνος, δυσκολία φόρτισης), κήλη, όρχεως / ουρογεννητικά αίτια, κοιλιακά αίτια, ιστορικό καρκίνου, πυρετός",
+    ref: "Βουβωνικός πόνος στον αθλητή — 5 κλινικές οντότητες (Doha agreement)", aspetar: [["Approaching Groin Pain in Athletes – “The Falcon’s Perspective”", "Weir κ.ά."], ["Groin Pain in Football Players – A Systematic Diagnostic Approach", "Hölmich"], ["Strength Measurements in Athletes with Groin Pain", "Thorborg"]],
+    tip: "ESSKA-EHPA-ESMA 2026: οι οντότητες (προσαγωγοί, ιλιοψοΐτης, βουβωνικό, ηβικό, ενδοαρθρικό) συνυπάρχουν συχνά — εξέτασε όλες· FADIR/ROM ανώδυνα = το ισχίο απίθανη πηγή. Serner 2015: στις οξείες βλάβες 66% προσαγωγοί, 15–25% ψοΐτης/ορθός μηριαίος· 22–25% χωρίς απεικονιστικά ευρήματα. Thorborg 2018: παρακολούθηση με squeeze (δύναμη + πόνος) και HAGOS· εποπτευόμενη ενεργός άσκηση καλύτερη από παθητικά μέσα." },
+  quad: { title: "Πρόσθιος μηρός (τετρακέφαλος)", special: null, tissue: "muscle", rtp: "Γενικό (κάθε τραυματισμός)",
+    structs: "ορθός μηριαίος, πλατύς πλάγιος / έσω / μέσος, εγγύς & άπω τένοντας",
+    common: [["Θλάση τετρακέφαλου (ορθός μηριαίος)", "μυς"], ["Μώλωπας / οστεοποιητική μυοσίτιδα", "μυς"], ["Τενοντοπάθεια τετρακεφάλου", "τένοντας"]],
+    red: "Μεγάλο αιμάτωμα, σύνδρομο διαμερίσματος, έντονος πόνος εκτός αναλογίας",
+    ref: "Μυϊκές κακώσεις — θλάσεις, μώλωπας, οστεοποιητική μυοσίτιδα" },
+  ham: { title: "Οπίσθιος μηρός (οπίσθιοι μηριαίοι)", special: null, tissue: "muscle", rtp: "Οπίσθιοι μηριαίοι (HSI)",
+    structs: "δικέφαλος μηριαίος, ημιτενοντώδης, ημιυμενώδης, εγγύς κοινός τένοντας, ισχιακό νεύρο",
+    common: [["Θλάση οπίσθιων μηριαίων (HSI)", "μυς/τένοντας"], ["Εγγύς τενοντοπάθεια οπίσθιων", "τένοντας"], ["Έλξη ισχιακού νεύρου (νευρική)", "νεύρο"], ["Παραπεμπόμενος πόνος από οσφυϊκή", "νεύρο/σπονδυλική"]],
+    red: "Αποσπαστικό κάταγμα ισχιακού κυρτώματος (ιδίως έφηβοι), μεγάλο αιμάτωμα",
+    ref: "Θλάσεις οπίσθιων μηριαίων — διάγνωση, πρόγνωση, πρόληψη, επιστροφή", aspetar: [["Hamstring Injury – a Clinical Diagnosis", "Tol, Wangensteen"], ["Rehabilitation and Return to Sport After Hamstring Injury", "Whiteley κ.ά."], ["Return to Play Process for Hamstring Injuries", "Sims, Garza, Matheson"], ["Preventing Hamstring Strains", "Bahr"], ["The Architecture of a Hamstring Strain Injury", "Behan, Timmins, Opar"]], tip: "Gabbett κ.ά. 2021: η sport-specific φόρτιση (sprint) δίνει μεγαλύτερη μυϊκή ενεργοποίηση και αρχιτεκτονικές προσαρμογές από την απομονωμένη έκκεντρη ενδυνάμωση — συνδύασε τοπική ενδυνάμωση και σταδιακή έκθεση σε sprint." },
+  knee: { title: "Γόνατο", special: "Γόνατο", tissue: "tendon", rtp: "ΧΣΑ (ACL)",
+    structs: "ΠΧΣ/ΟΧΣ, έσω & έξω πλάγιοι, μηνίσκοι, επιγονατιδομηριαία, επιγονατιδικός & τετρακεφάλου τένοντας, ΙΚΤ",
+    common: [["Βλάβη ΠΧΣ", "σύνδεσμος"], ["Βλάβη μηνίσκου", "χόνδρος"], ["Βλάβη έσω πλάγιου", "σύνδεσμος"], ["Επιγονατιδικός τένοντας (jumper's knee)", "τένοντας"], ["Επιγονατιδομηριαίος πόνος", "άρθρωση"], ["Σύνδρομο ιλιοκνημιαίας ταινίας", "τένοντας/περιτονία"], ["Οστεοαρθρίτιδα γόνατος", "άρθρωση"]],
+    red: "Αιμάρθρωμα μετά από τραύμα, κλείδωμα, πυρετός με οίδημα (σηπτική), κάταγμα (Ottawa knee rules)",
+    ref: "Γόνατο — τραυματισμοί συνδέσμων, μηνίσκου, επιγονατιδικός πόνος, τενοντοπάθεια", aspetar: [["Rehabilitation and Return to Sports After ACL Reconstruction", "Milandri, van der Merwe"], ["Patellofemoral Pain Syndrome in Athletes", "van Linschoten"], ["Meniscal Pathology – Relevance for Sports Medicine", "Guermazi κ.ά."], ["PCL Injury Diagnosis and Treatment Options", "Landreau"], ["Effects of Exercise on Cartilage Status", "Witvrouw, Van Ginckel"]], tip: "Charalambous, The Knee Made Easy (κεφ. 6): οι ειδικές δοκιμασίες έχουν περιορισμένη ακρίβεια· σύγκρινε με το υγιές γόνατο." },
+  shin: { title: "Κνήμη / γάμπα", special: "Ποδοκνημική / πόδι", tissue: "bone", rtp: "Οστική καταπόνηση (BSI)",
+    structs: "κνήμη & περόνη, γαστροκνήμιος, υποκνημίδιος, πρόσθιο κνημιαίο, μεσοοστέια μεμβράνη",
+    common: [["Σύνδρομο μεσοκνημιαίου στρες (shin splints)", "οστό/περιόστεο"], ["Στρες κάταγμα κνήμης", "οστό"], ["Θλάση γαστροκνημίου (tennis leg)", "μυς"], ["Θλάση υποκνημιδίου", "μυς"], ["Ρήξη πλαντάρις", "τένοντας/μυς"], ["Σύνδρομο διαμερίσματος (χρόνιο)", "μυς/περιτονία"]],
+    red: "Οξύ σύνδρομο διαμερίσματος, εν τω βάθει φλεβική θρόμβωση (πόνος/οίδημα γάμπας)",
+    ref: "Πόνος κνήμης — στρες κατάγματα, shin splints, σύνδρομο διαμερίσματος", aspetar: [["Return to Play in Stress Fractures of the Foot", "D’Hooghe κ.ά."]], tip: "Green κ.ά. 2022 (Sports Med Open, 20 ειδικοί): για θλάση γάμπας φόρτωσε ξεχωριστά γαστροκνήμιο (γόνατο εκτεταμένο) και υποκνημίδιο (γόνατο λυγισμένο)· ο υποκνημίδιος θέλει περισσότερη ανοχή φορτίου, ιδίως σε υποτροπές· «αν δεν αντέχεις άλματα, δεν τρέχεις» — φόρτωσε RTP πρότυπο «Θλάση γάμπας» από την καρτέλα Κριτήρια RTP. Gabbett κ.ά. 2021: ο πόνος είναι έγκυρος οδηγός προόδου στις οστικές καταπονήσεις· η οστική αντοχή του ετερόπλευρου άκρου μπορεί να μειωθεί ~24 εβδομάδες μετά από κνημιαία καταπόνηση. Gabbett & Oetter 2024: η μηχανοευαισθησία του οστού χάνεται μετά από ~20 κύκλους και αποκαθίσταται σε ~8 ώρες." },
+  ankle: { title: "Ποδοκνημική / Αχίλλειος", special: "Ποδοκνημική / πόδι", tissue: "tendon", rtp: "Ποδοκνημική (διάστρεμμα)",
+    structs: "ATFL / CFL / PTFL, δελτοειδής, συνδεσμοσύνδεση, Αχίλλειος τένοντας, περονιαίοι τένοντες, ταλός",
+    common: [["Διάστρεμμα ποδοκνημικής (πλάγιο)", "σύνδεσμοι"], ["Υψηλό διάστρεμμα (συνδεσμοσύνδεση)", "σύνδεσμοι"], ["Τενοντοπάθεια Αχιλλείου (μέση μοίρα / πρόσφυση)", "τένοντας"], ["Ρήξη Αχιλλείου", "τένοντας"], ["Πρόσθια / οπίσθια πρόσκρουση", "άρθρωση"], ["Παθολογία περονιαίων", "τένοντας"]],
+    red: "Αδυναμία φόρτισης (κανόνες Ottawa), θετικό Thompson, παραμόρφωση, νευροαγγειακό έλλειμμα",
+    ref: "Ποδοκνημική — διαστρέμματα, Αχίλλειος τενοντοπάθεια, πρόσκρουση", aspetar: [["Chronic Pain in the Achilles Tendon", "Alfredson, Tol, de Vos"], ["Achilles Tendon Rupture – Surgical or Non-Surgical Treatment?", "Karlsson κ.ά."], ["Ankle Ligament Injury – Conservative Treatment", "Eirale, Tol, Kerkhoffs"], ["Syndesmosis Injuries", "D’Hooghe, Popovic"], ["Posterior Impingement in the Ankle", "D’Hooghe"]], tip: "Gabbett κ.ά. 2021 (Αχίλλειος): τοπική ικανότητα (ακαμψία, δύναμη, αντοχή, ισχύς) + sport-specific ικανότητα· παραδείγματα: HSR/ισομετρικές, ανυψώσεις πτέρνας σε αντοχή, πλειομετρία." },
+  foot: { title: "Πόδι", special: "Ποδοκνημική / πόδι", tissue: "tendon", rtp: "Γενικό (κάθε τραυματισμός)",
+    structs: "πελματιαία περιτονία, μετατάρσια, σκαφοειδές, σησαμοειδή, πρώτη μετατάρσιοφαλαγγική",
+    common: [["Πελματιαία περιτονιοπάθεια", "τένοντας/περιτονία"], ["Στρες κάταγμα μεταταρσίου / σκαφοειδούς", "οστό"], ["Turf toe", "σύνδεσμοι"], ["Νευρίνωμα Morton", "νεύρο"], ["Δυσλειτουργία οπίσθιου κνημιαίου", "τένοντας"]],
+    red: "Στρες κάταγμα σκαφοειδούς / 5ου μεταταρσίου (υψηλός κίνδυνος μη πώρωσης), διαβητικό πόδι",
+    ref: "Πόδι — πελματιαία περιτονία, στρες κατάγματα, αρθρώσεις μεταταρσίου", aspetar: [["Return to Play in Stress Fractures of the Foot", "D’Hooghe, Thomson, Popovic"], ["Foot Orthotic Advances for the Athlete", "Tanner, D’Hooghe"]] },
+};
+const BODY_TENDON = {
+  shoulder: "Στροφικό πέταλο: αποκατάσταση σε 4 φάσεις — (1) πόνος/εύρος, (2) δύναμη: ισομετρικά → συγκεντρικά → έκκεντρα, (3) δυναμική σταθερότητα, (4) επιστροφή στη δραστηριότητα. Αν κυριαρχούν εξωγενείς παράγοντες (στάση, κίνηση ωμοπλάτης, οπίσθια κάψα) στοχεύονται πρώτα αυτοί· ενέσεις/ιατρικές παρεμβάσεις μόνο σε ανθεκτικές περιπτώσεις. Δικέφαλος: ίδιο πρόγραμμα, με όλη την κινητική αλυσίδα και τους σταθεροποιητές ωμοπλάτης· ξεκίνα με ισομετρικά για να μη φορτίζεται ο τένοντας. Δοσολογία/εμπειρία ασθενή (Naunton 2026, ποιοτική μελέτη 12 ατόμων): υψηλό και χαμηλό load-volume (ένταση × σετ × επαναλήψεις) ήταν και τα δύο αποδεκτά· η ένταση που ανέχεται ο ασθενής εξαρτάται από πεποιθήσεις, προηγούμενη εμπειρία και προσδοκίες — εξήγησε γιατί πονά ο ώμος και τι να κάνει αν πονέσει στην άσκηση, δείξε απτή πρόοδο και προσάρμοσε την ένταση στην ικανότητα/προτίμησή του. Powell 2024: ο τύπος συστολής/ένταση/δόση δεν έχουν αποδειχθεί ανώτερα — διάλεξε με «πείραμα άσκησης» (γνώριμος πόνος υποχωρεί σε ~30 min· καλύτερος με επαναλήψεις → αύξησε δόση)· για τον πόνο η εξειδίκευση μετρά λίγο, για τη λειτουργία περισσότερο. Lewis 2015: διάκριση ερεθιστικής (αργά, μειωμένο εύρος, στήριξη βραχίονα, ισομετρικά) και μη ερεθιστικής (σταδιακή επαναφόρτιση)· μέτρηση προόδου με επαναλήψεις/λειτουργικό στόχο, όχι μόνο μέγιστη ισομετρική (Cook 2026). Σχεδιασμοί υπό δοκιμή (πρωτόκολλα, χωρίς αποτελέσματα): ισομετρικά 3×32 s στο 70% της μέγιστης ισομετρικής vs ισοτονικά 3×8 στο 8RM, ίδιος χρόνος υπό τάση 96 s (Barros 2023)· φορτία έως 4 kg στις 30° απαγωγής με απεικόνιση για την ολίσθηση της κεφαλής σε ρήξεις (Croci 2022).",
+  elbow: "Κοινός εκτείνων/καμπτήρας: αυτοπεριοριζόμενος — έως 90% αναρρώνουν σε 1 έτος. Πρώτη γραμμή: φυσικοθεραπεία (διατάσεις + ενδυνάμωση) και counterforce brace· δεν υπάρχει συμφωνία για την ιδανική δοσολογία.",
+  wrist: "Σύνδρομο διασταύρωσης (intersection): ευαισθησία ~4–5 cm εγγύς του καρπού, «wet leather» τριγμός, πόνος σε αντίσταση έκτασης καρπού/αντίχειρα· Finkelstein μπορεί να είναι θετικό αλλά πιο εγγύς από de Quervain. Κλινική διάγνωση· πρώτη γραμμή ανάπαυση + νάρθηκας καρπού ~15° έκτασης (βελτίωση έως ~60%).",
+  groin: "Αθλητική ηβαλγία / προσαγωγοί: αποκατάσταση σε οξεία, ανάρρωσης, λειτουργική και επιστροφής φάση — ισομετρικά και ενδυνάμωση ισχίου, έλεγχος λεκάνης/οσφυϊκής· η ενεργοποίηση του εγκάρσιου κοιλιακού καθυστερεί σε χρόνιο βουβωνικό πόνο, άρα είναι κρίσιμη.",
+  hip: "Μείζων τροχαντήρας (GTPS): πρώτη επιλογή φυσικοθεραπεία — τροποποίηση δραστηριότητας, αποφυγή επώδυνων θέσεων/συμπίεσης (π.χ. αντίθετη προσαγωγή), διόρθωση βάδισης. Ένα πρόγραμμα ασκήσεων στο σπίτι είχε επιτυχία ~80% στους 15 μήνες, καλύτερη από ένεση κορτικοστεροειδούς· για έκκεντρη άσκηση δεν υπάρχουν ειδικές μελέτες στο GTPS.",
+  ham: "Εγγύς οπίσθιοι: 3 φάσεις — (1) πόνος/οίδημα + ήπιος νευρομυϊκός έλεγχος, (2) πλήρες εύρος + έκκεντρη άσκηση σε περιορισμένο εύρος, (3) πρόοδος έκκεντρων + ειδικές κινήσεις αθλήματος. Κριτήρια επιστροφής: πλήρης συγκεντρική και έκκεντρη δύναμη, αθλητικές κινήσεις σε μέγιστη ταχύτητα χωρίς πόνο.",
+  quad: "Εγγύς ορθός μηριαίος (αποσπαστικές κακώσεις): σε σειρά NFL επιστροφή κατά μέσο όρο 55 ημέρες (21–84)· δεν υπάρχει ενιαίο πρωτόκολλο — εξατομίκευση: πρώιμη κινητοποίηση, ισομετρικά, μετά αντιστάσεις.",
+  knee: "Επιγονατιδικός τένοντας (αντοχή σε εφελκυσμό ~64 MPa σε νέους, ~53 MPa σε ηλικιωμένους· 50% των αθλητών έχουν ακόμη πόνο μετά από 15 έτη): η άσκηση είναι ο ακρογωνιαίος λίθος — ισομετρικά → ισοτονικά → φόρτιση αποθήκευσης ενέργειας. Single-leg decline squat (25°) 3×15 δύο φορές/ημέρα έχει δώσει αποτελέσματα, αλλά πιο πρακτικά είναι τα ολοκληρωμένα προγράμματα προοδευτικής φόρτισης από ένα μόνο άσκηση. Απώτεροι οπίσθιοι/πατούσα χήνας/ιγνυακός: συνήθως αρκεί συντηρητική αγωγή· ο ρόλος των ΜΣΑΦ στη επούλωση τένοντα είναι ασαφής. Malliaras 2015/Rio 2015: ισομετρικά 30–45 s × 5 (70% MVC) για άμεση ανάλγηση, έπειτα HSR (15RM→6RM, 3–4 σετ), ύστερα άλματα/αλλαγές κατεύθυνσης· η έκκεντρη άσκηση μόνη της μπορεί να είναι υπερβολικά επιθετική σε ερεθιστικό τένοντα, ειδικά εντός περιόδου. Πόνος &gt;24 ωρών μετά από φόρτιση = ερεθιστικός· VISA-P για παρακολούθηση.",
+  shin: "Τα κεφάλαια τενόντων του βιβλίου αφορούν κυρίως Αχίλλειο, περονιαίους και οπίσθιο κνημιαίο — δες την περιοχή Ποδοκνημική / Αχίλλειος.",
+  ankle: "Αχίλλειος: ο ισχυρότερος τένοντας, αντέχει έως ~12,5×σωματικό βάρος σε τρέξιμο/άλματα/προσγείωση· μέση μοίρα 5× συχνότερη από πρόσφυση (λιγότερη αιμάτωση). Μέση μοίρα — πρόγραμμα Alfredson — έκκεντρη φόρτιση 3×15 με ευθύ και λυγισμένο γόνατο, 2 φορές/ημέρα, 7 ημέρες/εβδομάδα για 12 εβδομάδες, προοδευτικά φορτίο με σακίδιο· αναφέρονται επιτυχίες έως 90%, μικρότερες στην κλινική εμπειρία. Στην πρόσφυση οι έκκεντρες μόνες δίνουν ~32%. Συντηρητική αγωγή 3–6 μήνες· κορτικοστεροειδή δεν συνιστώνται (κίνδυνος ρήξης). Περονιαίοι: σχετική ανάπαυση, ναρθηκοποίηση/πτερνική σφήνα, ενίοτε CAM boot 3–4 εβδ., BAPS, έκκεντρη άσκηση 20–30 συνεδρίες. Οπίσθιος κνημιαίος (στάδιο I): ακινητοποίηση/ορθωτικό + ενδυνάμωση. Πρόσθιος κνημιαίος: ορθωτικό αψίδας, έκκεντρη άσκηση.",
+  foot: "Πελματιαία περιτονία: οξεία φάση (<4 εβδ.) — ανάπαυση + διατάσεις γαστροκνημίου–υποκνημιδίου και αψίδας· ΜΣΑΦ μείωσαν πόνο/αναπηρία έως 6 μήνες σε μία μελέτη αλλά αμφιλεγόμενα σε οξεία τενοντοπάθεια· η φυσικοθεραπεία προσθέτει εξειδικευμένη άσκηση, myofascial release και διόρθωση βιομηχανικής."
+};
+const BODY_SIDED = ["shoulder", "elbow", "wrist", "hip", "groin", "quad", "ham", "knee", "shin", "ankle", "foot", "si"];
+function BodyMapModule({ patient, onGo }) {
+  const [sel, setSel] = useState("knee");
+  const [side, setSide] = useState("L");
+  const [back, setBack] = useState(false);
+  const [hover, setHover] = useState("");
+  const [notes, setNotes] = useState(() => store.get("trl_bodymap_notes", {}));
+  const saveNote = (k, v) => { const n = { ...notes, [k]: v }; setNotes(n); store.set("trl_bodymap_notes", n); };
+  const aff = patient && patient.affectedSide;
+  const r = BODY_REGIONS[sel];
+  const nkey = sel + (BODY_SIDED.includes(sel) && sel !== "si" ? "-" + side : "");
+  const pick = (k, sd) => { setSel(k); if (sd) setSide(sd); };
+  const fill = (k, sd) => {
+    const on = sel === k && (!sd || side === sd) ; const hv = hover === k + (sd || "");
+    return on ? "rgba(242,106,16,0.55)" : hv ? "rgba(242,106,16,0.28)" : "rgba(255,255,255,0.04)";
+  };
+  const Z = ({ k, sd, children, title }) => (
+    <g style={{ cursor: "pointer" }} onClick={() => pick(k, sd)} onMouseEnter={() => setHover(k + (sd || ""))} onMouseLeave={() => setHover("")} role="button" aria-label={(title || BODY_REGIONS[k].title) + (sd ? ` ${sd === "L" ? "Αριστερά" : "Δεξιά"}` : "")} data-region={k + (sd || "")}>
+      {React.Children.map(children, (c) => React.cloneElement(c, { fill: fill(k, sd), stroke: sel === k && (!sd || side === sd) ? T.gold : "#5A5A5A", strokeWidth: sel === k && (!sd || side === sd) ? 2 : 1.2 }))}
+    </g>
+  );
+  // Δ-πλευρά ασθενούς στην εμπρόσθια όψη βρίσκεται αριστερά στην οθόνη
+  const W = 300, Hh = 560;
+  const front = (
+    <svg viewBox={`0 0 ${W} ${Hh}`} style={{ width: "100%", maxWidth: 300, height: "auto" }} aria-label="Εμπρόσθια όψη">
+      <circle cx="150" cy="40" r="26" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" />
+      <Z k="cervical"><rect x="136" y="64" width="28" height="24" rx="10" /></Z>
+      <Z k="shoulder" sd="R"><circle cx="100" cy="106" r="19" /></Z>
+      <Z k="shoulder" sd="L"><circle cx="200" cy="106" r="19" /></Z>
+      <Z k="thoracic"><rect x="116" y="96" width="68" height="68" rx="22" /></Z>
+      <Z k="lumbar" title="Οσφυϊκή / κοιλιακοί"><rect x="120" y="168" width="60" height="46" rx="16" /></Z>
+      <rect x="64" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(8 77 155)" />
+      <rect x="210" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-8 223 155)" />
+      <Z k="elbow" sd="R"><circle cx="66" cy="196" r="14" /></Z>
+      <Z k="elbow" sd="L"><circle cx="234" cy="196" r="14" /></Z>
+      <rect x="46" y="206" width="22" height="62" rx="11" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(5 57 237)" />
+      <rect x="232" y="206" width="22" height="62" rx="11" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-5 243 237)" />
+      <Z k="wrist" sd="R"><rect x="40" y="272" width="26" height="30" rx="12" /></Z>
+      <Z k="wrist" sd="L"><rect x="234" y="272" width="26" height="30" rx="12" /></Z>
+      <Z k="hip" sd="R" title="Ισχίο (πλάγια)"><rect x="106" y="218" width="28" height="44" rx="13" /></Z>
+      <Z k="groin" sd="R" title="Βουβωνική περιοχή"><rect x="136" y="236" width="13" height="34" rx="6" /></Z>
+      <Z k="hip" sd="L" title="Ισχίο (πλάγια)"><rect x="166" y="218" width="28" height="44" rx="13" /></Z>
+      <Z k="groin" sd="L" title="Βουβωνική περιοχή"><rect x="151" y="236" width="13" height="34" rx="6" /></Z>
+      <Z k="quad" sd="R"><rect x="108" y="266" width="38" height="92" rx="18" /></Z>
+      <Z k="quad" sd="L"><rect x="154" y="266" width="38" height="92" rx="18" /></Z>
+      <Z k="knee" sd="R"><circle cx="126" cy="378" r="20" /></Z>
+      <Z k="knee" sd="L"><circle cx="174" cy="378" r="20" /></Z>
+      <Z k="shin" sd="R"><rect x="112" y="402" width="30" height="94" rx="14" /></Z>
+      <Z k="shin" sd="L"><rect x="158" y="402" width="30" height="94" rx="14" /></Z>
+      <Z k="ankle" sd="R"><circle cx="127" cy="508" r="14" /></Z>
+      <Z k="ankle" sd="L"><circle cx="173" cy="508" r="14" /></Z>
+      <Z k="foot" sd="R"><rect x="102" y="524" width="44" height="22" rx="11" /></Z>
+      <Z k="foot" sd="L"><rect x="154" y="524" width="44" height="22" rx="11" /></Z>
+      <text x="14" y="20" fill={T.paperDim} fontSize="11">Δεξιά ασθενή</text><text x="286" y="20" fill={T.paperDim} fontSize="11" textAnchor="end">Αριστερά ασθενή</text>
+    </svg>
+  );
+  const rear = (
+    <svg viewBox={`0 0 ${W} ${Hh}`} style={{ width: "100%", maxWidth: 300, height: "auto" }} aria-label="Οπίσθια όψη">
+      <circle cx="150" cy="40" r="26" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" />
+      <Z k="cervical"><rect x="136" y="64" width="28" height="24" rx="10" /></Z>
+      <Z k="shoulder" sd="L"><circle cx="100" cy="106" r="19" /></Z>
+      <Z k="shoulder" sd="R"><circle cx="200" cy="106" r="19" /></Z>
+      <Z k="thoracic"><rect x="116" y="96" width="68" height="66" rx="22" /></Z>
+      <Z k="lumbar"><rect x="120" y="166" width="60" height="42" rx="16" /></Z>
+      <Z k="si" title="Λεκάνη / ΙΛ"><rect x="116" y="210" width="68" height="42" rx="18" /></Z>
+      <rect x="64" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(8 77 155)" />
+      <rect x="210" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-8 223 155)" />
+      <Z k="elbow" sd="L"><circle cx="66" cy="196" r="14" /></Z>
+      <Z k="elbow" sd="R"><circle cx="234" cy="196" r="14" /></Z>
+      <Z k="ham" sd="L"><rect x="108" y="258" width="38" height="100" rx="18" /></Z>
+      <Z k="ham" sd="R"><rect x="154" y="258" width="38" height="100" rx="18" /></Z>
+      <Z k="knee" sd="L" title="Γόνατο (οπίσθια)"><circle cx="126" cy="378" r="20" /></Z>
+      <Z k="knee" sd="R" title="Γόνατο (οπίσθια)"><circle cx="174" cy="378" r="20" /></Z>
+      <Z k="shin" sd="L" title="Γάμπα"><rect x="112" y="402" width="30" height="94" rx="14" /></Z>
+      <Z k="shin" sd="R" title="Γάμπα"><rect x="158" y="402" width="30" height="94" rx="14" /></Z>
+      <Z k="ankle" sd="L" title="Αχίλλειος / ποδοκνημική"><rect x="116" y="498" width="22" height="26" rx="10" /></Z>
+      <Z k="ankle" sd="R" title="Αχίλλειος / ποδοκνημική"><rect x="162" y="498" width="22" height="26" rx="10" /></Z>
+      <Z k="foot" sd="L"><rect x="102" y="526" width="44" height="20" rx="10" /></Z>
+      <Z k="foot" sd="R"><rect x="154" y="526" width="44" height="20" rx="10" /></Z>
+      <text x="14" y="20" fill={T.paperDim} fontSize="11">Αριστερά ασθενή</text><text x="286" y="20" fill={T.paperDim} fontSize="11" textAnchor="end">Δεξιά ασθενή</text>
+    </svg>
+  );
+  const btn = (primary) => ({ background: primary ? T.terracotta : "transparent", color: primary ? T.bg : T.gold, border: `1px solid ${primary ? T.terracotta : T.gold}`, borderRadius: 999, padding: "9px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" });
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  return (
+    <div className="ll-body" style={{ display: "grid", gridTemplateColumns: "minmax(280px, 380px) minmax(0, 1fr)", gap: 18, alignItems: "start" }}>
+      <Panel title="Χάρτης σώματος">
+        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+          <button type="button" onClick={() => setBack(false)} style={chip(!back)}>Εμπρός</button>
+          <button type="button" onClick={() => setBack(true)} style={chip(back)}>Πίσω</button>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>{back ? rear : front}</div>
+        <div style={{ fontSize: 11.5, color: T.paperDim, marginTop: 10, textAlign: "center" }}>Πάτησε μια περιοχή. Το σώμα είναι σχηματική απεικόνιση.</div>
+        {aff && aff !== "Αμφοτερόπλευρα" && <div style={{ fontSize: 11.5, color: T.gold, textAlign: "center", marginTop: 4 }}>Πάσχον άκρο ασθενή: {aff}</div>}
+      </Panel>
+      <div>
+        <Panel title={r.title + (BODY_SIDED.includes(sel) && sel !== "si" ? ` — ${side === "L" ? "Αριστερά" : "Δεξιά"}` : "")} accent>
+          {BODY_SIDED.includes(sel) && sel !== "si" && (
+            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+              <button type="button" onClick={() => setSide("L")} style={chip(side === "L")}>Αριστερά</button>
+              <button type="button" onClick={() => setSide("R")} style={chip(side === "R")}>Δεξιά</button>
+            </div>
+          )}
+          <div style={{ fontSize: 12.5, color: T.paperDim, marginBottom: 12 }}><strong style={{ color: T.paper }}>Δομές:</strong> {r.structs}</div>
+          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, marginBottom: 6 }}>Συχνές παθήσεις</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+            {r.common.map(([n, t]) => <span key={n} style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5 }}>{n} <span style={{ color: T.paperDim, fontSize: 11 }}>· {t}</span></span>)}
+          </div>
+          <div style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: "1px solid #A6412C", background: "rgba(166,65,44,0.12)" }}><strong style={{ color: "#F08C7C" }}>Red flags:</strong> {r.red}</div>
+          {r.tip && <div className="ll-bm-tip" style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: `1px solid ${T.panelLine}`, background: T.bgSoft, lineHeight: 1.5 }}><strong style={{ color: T.gold }}>Από τις πηγές:</strong> {r.tip}</div>}
+          {BODY_TENDON[sel] && <div className="ll-bm-tendon" style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: `1px solid ${T.panelLine}`, background: T.bgSoft, lineHeight: 1.5 }}><span style={{ color: T.gold, fontWeight: 700 }}>Τενοντοπάθεια (Onishi, Fredericson & Dragoo, 2021): </span>{BODY_TENDON[sel]}</div>}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {r.special && <button type="button" className="ll-bm-tests" onClick={() => onGo({ view: "assessment", special: r.special, spine: r.spine })} style={btn(true)}>Ειδικές δοκιμασίες · {r.special}</button>}
+            <button type="button" className="ll-bm-load" onClick={() => onGo({ view: "load", tissue: r.tissue })} style={btn(false)}>Καταγραφή φορτίου</button>
+            {r.rtp && <button type="button" className="ll-bm-rtp" onClick={() => onGo({ view: "rtp", rtp: r.rtp })} style={btn(false)}>Κριτήρια RTP</button>}
+          </div>
+        </Panel>
+        <Panel title="Οι δικές μου σημειώσεις για την περιοχή">
+          <TextAreaField label={`Σημειώσεις — ${r.title}${BODY_SIDED.includes(sel) && sel !== "si" ? " " + (side === "L" ? "(Αριστ.)" : "(Δεξ.)") : ""}`} value={notes[nkey] || ""} onChange={(v) => saveNote(nkey, v)} rows={4} placeholder="Δικά σου κλινικά σημεία, παραπομπές, πρωτόκολλα…" />
+          {r.aspetar && <div className="ll-bm-asp" style={{ fontSize: 12, marginBottom: 10 }}><div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, marginBottom: 4 }}>Aspetar Sports Medicine Collection — προτεινόμενη ανάγνωση</div>{r.aspetar.map(([t, a]) => <div key={t} style={{ color: T.paperDim, padding: "2px 0" }}>• {t} <span style={{ opacity: 0.8 }}>— {a}</span></div>)}</div>}
+          <div style={{ fontSize: 11.5, color: T.paperDim, marginTop: 8 }}>Για εκτενή ανάγνωση: <em>Brukner & Khan, Clinical Sports Medicine</em> — ενότητα «{r.ref}». Οι περιλήψεις της σελίδας είναι δικές μου και όχι αντίγραφο του βιβλίου.</div>
+        </Panel>
+      </div>
+    </div>
+  );
+}
+
 function PrintDoc({ blank, patient, date, week, visitNo, a, sess, dayEntries, dayMeas }) {
   const ink = "#111", line = "1px solid #111";
   const upperGr = (t) => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().normalize("NFC");
@@ -1006,6 +2121,11 @@ function PrintDoc({ blank, patient, date, week, visitNo, a, sess, dayEntries, da
       <H>Red flags</H>
       <Boxes options={RED_FLAGS} value={a.redFlags} />
       <Line label="Σχόλιο" value={a.redFlagNote} />
+      <SINPrint a={a} blank={blank} H={H} />
+      <SRPrint a={a} blank={blank} H={H} patient={patient} />
+      <SpinePrint a={a} blank={blank} H={H} />
+      <SpecialPrint a={a} blank={blank} H={H} />
+      <NeuroPrint a={a} blank={blank} H={H} />
       <H>Κλινική εκτίμηση &amp; πλάνο</H>
       <Line label="Κλινική εντύπωση" value={a.impression} tall />
       <Line label="Πλάνο / παρέμβαση" value={a.plan} tall />
@@ -1246,6 +2366,7 @@ function TissueLoadLog() {
     store.remove(`trl_measurements_${id}`);
     store.remove(`trl_assess_${id}`);
     store.remove(`trl_sessions_${id}`);
+    store.remove(`trl_rtp_${id}`);
   };
 
   const addCustomType = () => {
@@ -1499,10 +2620,20 @@ function TissueLoadLog() {
         </SocLetter>
       </Panel>
 
+      <IrritabilityPanel draft={assessDraft} ad={ad} />
+
       <Panel title="Red flags">
         <ChipGroup options={RED_FLAGS} value={assessDraft.redFlags} onChange={(v) => ad("redFlags", v)} />
         <input value={assessDraft.redFlagNote} onChange={(e) => ad("redFlagNote", e.target.value)} placeholder="σχόλιο (προαιρετικό)" style={{ ...inputStyle, marginTop: 8 }} />
       </Panel>
+
+      <SpinePanel draft={assessDraft} ad={ad} />
+
+      <SpecialTestsPanel draft={assessDraft} ad={ad} />
+
+      <NeuroPanel draft={assessDraft} ad={ad} />
+
+      <StrengthRomPanel draft={assessDraft} ad={ad} assessments={assessments} sessionDate={sessionDate} affected={patient && patient.affectedSide} />
 
       <Panel title="Κλινική εκτίμηση & πλάνο">
         <div style={{ display: "grid", gap: 12 }}>
@@ -1812,6 +2943,8 @@ function TissueLoadLog() {
               {[
                 { id: "assessment", label: "Ιατρική Εκτίμηση", icon: "stethoscope", main: true, clin: true },
                 { id: "load", label: "Καταγραφή Φορτίου", icon: "activity" },
+                { id: "bodymap", label: "Χάρτης Σώματος", icon: "user", clin: true },
+                { id: "rtp", label: "Κριτήρια RTP", icon: "flag", clin: true },
                 { id: "daily", label: "Ημερήσια Συνεδρία", icon: "folder", clin: true },
                 { id: "measurements", label: "Μετρήσεις (VALD)", icon: "gauge" },
                 { id: "loadmgmt", label: "Διαχείριση Φορτίου", icon: "heart", clin: true },
@@ -1831,6 +2964,12 @@ function TissueLoadLog() {
 
             <div className="mac-main">
             {view === "assessment" && !isPatientMode && assessmentView}
+            {view === "bodymap" && !isPatientMode && <BodyMapModule patient={patient} onGo={(g) => {
+              window.__llSpecial = g.special || null; window.__llSpineReg = g.spine || null; window.__llRtp = g.rtp || null;
+              if (g.tissue) setTissueId(g.tissue);
+              setView(g.view);
+            }} />}
+            {view === "rtp" && !isPatientMode && <RtpModule patientId={activePatient} patientName={patient && patient.name} assessments={assessments} sessionDate={sessionDate} />}
             {view === "daily" && !isPatientMode && dailyView}
             {view === "loadmgmt" && !isPatientMode && loadMgmtView}
 
