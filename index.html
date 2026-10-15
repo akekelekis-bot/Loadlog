@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Καταγραφή Φορτίου ανά Ιστό — Sports ReHub</title>
+<title>ReHub Clinical — Sports ReHub</title>
 
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0A0A0A">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Load Log">
+<meta name="apple-mobile-web-app-title" content="ReHub Clinical">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 
@@ -38,16 +38,16 @@
   /* ---------- tiny UI ---------- */
   var css = document.createElement('style');
   css.textContent =
-    '.ll-pill{position:fixed;left:10px;bottom:10px;z-index:9999;display:flex;gap:8px;align-items:center;background:rgba(10,10,10,.92);color:#F2F2F2;border:1px solid #2E2E2E;border-radius:999px;padding:6px 12px;font:500 12px "IBM Plex Sans",system-ui,sans-serif}' +
-    '.ll-pill button{background:none;border:none;color:#FF7A1A;font:inherit;cursor:pointer;text-decoration:underline;padding:0}' +
-    '.ll-dot{width:8px;height:8px;border-radius:50%;background:#888}.ll-ok .ll-dot{background:#6FBF73}.ll-busy .ll-dot{background:#FF7A1A}.ll-off .ll-dot{background:#D9822B}.ll-err .ll-dot{background:#D95C4A}' +
-    '.ll-banner{position:fixed;left:50%;transform:translateX(-50%);top:10px;z-index:9999;background:#FF7A1A;color:#0A0A0A;border-radius:999px;padding:9px 18px;font:600 13px "IBM Plex Sans",system-ui,sans-serif;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}' +
-    '.ll-login{position:fixed;inset:0;z-index:10000;background:#0A0A0A;display:flex;align-items:center;justify-content:center;padding:20px;font-family:"IBM Plex Sans",system-ui,sans-serif}' +
-    '.ll-login form{width:100%;max-width:340px;background:#141414;border:1px solid #2E2E2E;border-radius:18px;padding:26px;color:#F2F2F2}' +
+    '.ll-pill{position:fixed;left:10px;bottom:10px;z-index:9999;display:flex;gap:8px;align-items:center;background:rgba(10,10,10,.92);color:#F2F2F2;border:1px solid #DADAD6;border-radius:999px;padding:6px 12px;font:500 12px "IBM Plex Sans",system-ui,sans-serif}' +
+    '.ll-pill button{background:none;border:none;color:#D9560B;font:inherit;cursor:pointer;text-decoration:underline;padding:0}' +
+    '.ll-dot{width:8px;height:8px;border-radius:50%;background:#888}.ll-ok .ll-dot{background:#6FBF73}.ll-busy .ll-dot{background:#D9560B}.ll-off .ll-dot{background:#D9822B}.ll-err .ll-dot{background:#D95C4A}' +
+    '.ll-banner{position:fixed;left:50%;transform:translateX(-50%);top:10px;z-index:9999;background:#D9560B;color:#FFFFFF;border-radius:999px;padding:9px 18px;font:600 13px "IBM Plex Sans",system-ui,sans-serif;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}' +
+    '.ll-login{position:fixed;inset:0;z-index:10000;background:#FFFFFF;display:flex;align-items:center;justify-content:center;padding:20px;font-family:"IBM Plex Sans",system-ui,sans-serif}' +
+    '.ll-login form{width:100%;max-width:340px;background:#FFFFFF;border:1px solid #DADAD6;border-radius:18px;padding:26px;color:#111111}' +
     '.ll-login h1{margin:0 0 4px;font:600 20px "Space Grotesk",system-ui,sans-serif}.ll-login p{margin:0 0 18px;color:#9A9A9A;font-size:13px}' +
-    '.ll-login input{width:100%;margin:0 0 10px;padding:11px 14px;border-radius:999px;border:1px solid #2E2E2E;background:#0A0A0A;color:#fff;font:inherit;font-size:15px}' +
-    '.ll-login button{width:100%;padding:12px;border:none;border-radius:999px;background:#FF7A1A;color:#0A0A0A;font:600 15px inherit;cursor:pointer}' +
-    '.ll-err-t{color:#F08C7C;font-size:13px;min-height:18px;margin-bottom:8px}' +
+    '.ll-login input{width:100%;margin:0 0 10px;padding:11px 14px;border-radius:999px;border:1px solid #DADAD6;background:#FFFFFF;color:#111;font:inherit;font-size:15px}' +
+    '.ll-login button{width:100%;padding:12px;border:none;border-radius:999px;background:#D9560B;color:#FFFFFF;font:600 15px inherit;cursor:pointer}' +
+    '.ll-err-t{color:#C0392B;font-size:13px;min-height:18px;margin-bottom:8px}' +
     '@media print{.ll-pill,.ll-banner,.ll-login{display:none!important}}';
   document.head.appendChild(css);
   var pill = document.createElement('div'); pill.className = 'll-pill ll-busy'; pill.style.display = 'none';
@@ -71,7 +71,7 @@
   function showLogin() {
     return new Promise(function (resolve) {
       var w = document.createElement('div'); w.className = 'll-login';
-      w.innerHTML = '<form><h1>Load Log</h1><p>Σύνδεση για συγχρονισμό μεταξύ συσκευών.</p>' +
+      w.innerHTML = '<form><h1>ReHub Clinical</h1><p>Σύνδεση για συγχρονισμό μεταξύ συσκευών.</p>' +
         '<input type="email" id="ll-e" placeholder="Email" autocomplete="username" required>' +
         '<input type="password" id="ll-p" placeholder="Κωδικός" autocomplete="current-password" required>' +
         '<div class="ll-err-t" id="ll-t"></div><button type="submit">Σύνδεση</button></form>';
@@ -211,11 +211,11 @@
 </script>
 
 <style>
-  html, body { margin: 0; padding: 0; background: #0A0A0A; }
+  html, body { margin: 0; padding: 0; background: #FFFFFF; }
   * { box-sizing: border-box; }
-  ::selection { background: #F26A10; color: #0A0A0A; }
+  ::selection { background: #D9560B; color: #FFFFFF; }
   button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-    outline: 2px solid #FF7A1A; outline-offset: 2px;
+    outline: 2px solid #D9560B; outline-offset: 2px;
   }
   .print-only { display: none; }
   @page { size: A4; margin: 14mm; }
@@ -233,9 +233,9 @@
     .ll-load-hist { position: sticky; top: 0; max-height: calc(100vh - 150px); overflow-y: auto; padding-right: 6px; }
     .ll-load-form > div:first-child { margin-bottom: 0 !important; }
     html, body { height: 100%; overflow: hidden; }
-    .app-root { height: 100vh; min-height: 0 !important; padding: 0 !important; overflow: hidden; background: #0A0A0A !important; }
+    .app-root { height: 100vh; min-height: 0 !important; padding: 0 !important; overflow: hidden; background: #FFFFFF !important; }
     .mac-wrap { display: grid !important; grid-template-columns: 296px minmax(0, 1fr); height: 100vh; max-width: none !important; margin: 0 !important; }
-    .mac-side { display: flex; flex-direction: column; overflow-y: auto; padding: 22px 16px 16px; background: #050505; border-right: 1px solid #232323; }
+    .mac-side { display: flex; flex-direction: column; overflow-y: auto; padding: 22px 16px 16px; background: #F3F3F1; border-right: 1px solid #DADAD6; }
     .mac-content { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
     .mac-title { font-size: 18px !important; line-height: 1.25; }
     .mac-sub { display: none; }
@@ -246,23 +246,23 @@
     .mac-pchip { line-height: 1.25; }
     .mac-plist { flex-direction: column !important; flex-wrap: nowrap !important; gap: 3px !important; }
     .mac-pitem { width: 100%; }
-    .mac-pchip { width: 100%; text-align: left; border: none !important; background: transparent !important; border-radius: 8px !important; padding: 9px 36px 9px 12px !important; color: #FFFFFF !important; }
-    .mac-pchip:hover { background: rgba(255,255,255,0.06) !important; }
-    .mac-pchip.on { background: #F26A10 !important; color: #0A0A0A !important; font-weight: 600; }
+    .mac-pchip { width: 100%; text-align: left; border: none !important; background: transparent !important; border-radius: 8px !important; padding: 9px 36px 9px 12px !important; color: #111111 !important; }
+    .mac-pchip:hover { background: rgba(0,0,0,0.06) !important; }
+    .mac-pchip.on { background: #D9560B !important; color: #FFFFFF !important; font-weight: 600; }
     .mac-pdel { top: 50% !important; right: 9px !important; transform: translateY(-50%); opacity: 0; }
     .mac-pitem:hover .mac-pdel { opacity: 1; }
-    .mac-pnew { width: 100%; justify-content: flex-start; margin-top: 4px; border-radius: 8px !important; color: #F26A10 !important; border-color: #2B2B2B !important; padding: 9px 12px !important; }
+    .mac-pnew { width: 100%; justify-content: flex-start; margin-top: 4px; border-radius: 8px !important; color: #D9560B !important; border-color: #DADAD6 !important; padding: 9px 12px !important; }
     .mac-pcard-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
     .mac-date { margin-top: 4px; }
     .mac-foot { margin-top: auto !important; padding-top: 14px !important; text-align: left !important; font-size: 10.5px !important; }
-    .mac-top { display: flex; align-items: center; gap: 20px; flex: none; padding: 14px 28px; background: #0E0E0E; border-bottom: 1px solid #232323; }
+    .mac-top { display: flex; align-items: center; gap: 20px; flex: none; padding: 14px 28px; background: #FFFFFF; border-bottom: 1px solid #DADAD6; }
     .mac-ptitle { display: block; min-width: 0; }
-    .mac-tabs { display: flex !important; gap: 4px !important; margin: 0 0 0 auto !important; padding: 4px; background: #050505; border: 1px solid #232323; border-radius: 11px; }
-    .mac-tabs button { grid-column: auto !important; padding: 9px 15px !important; font-size: 13px !important; border: none !important; border-radius: 8px !important; background: transparent !important; color: #A8A8A8 !important; white-space: nowrap; }
+    .mac-tabs { display: flex !important; gap: 4px !important; margin: 0 0 0 auto !important; padding: 4px; background: #F3F3F1; border: 1px solid #DADAD6; border-radius: 11px; }
+    .mac-tabs button { grid-column: auto !important; padding: 9px 15px !important; font-size: 13px !important; border: none !important; border-radius: 8px !important; background: transparent !important; color: #5E5E5E !important; white-space: nowrap; }
     .mac-tabs { flex-wrap: wrap !important; justify-content: flex-end; max-width: 100%; }
     .mac-tabs button { padding: 8px 12px !important; white-space: nowrap; }
-    .mac-tabs button:hover { color: #FFFFFF !important; }
-    .mac-tabs button.on { background: #F26A10 !important; color: #0A0A0A !important; }
+    .mac-tabs button:hover { color: #111111 !important; }
+    .mac-tabs button.on { background: #D9560B !important; color: #FFFFFF !important; }
     .mac-main { flex: 1; min-height: 0; overflow-y: auto; padding: 26px 32px 48px; order: 0; }
     .mac-content > div:not(.mac-top):not(.mac-main) { margin: 40px; }
     .mac-side { padding-bottom: 56px; }
@@ -295,10 +295,10 @@
 const { useState, useEffect, useCallback, useMemo, useRef } = React;
 
 const T = {
-  bg: "#0A0A0A", bgSoft: "#111111", panel: "#171717", panelLine: "#2B2B2B",
-  paper: "#FFFFFF", paperDim: "#A8A8A8",
-  terracotta: "#F26A10", terracottaDim: "#A64A0A",
-  gold: "#FF7A1A", sage: "#87977A", rust: "#A6412C",
+  bg: "#FFFFFF", bgSoft: "#F5F5F3", panel: "#FFFFFF", panelLine: "#DADAD6",
+  paper: "#111111", paperDim: "#5E5E5E",
+  terracotta: "#D9560B", terracottaDim: "#A64A0A",
+  gold: "#D9560B", sage: "#87977A", rust: "#A6412C",
 };
 
 const TISSUES = [
@@ -582,7 +582,7 @@ function StrengthRomPanel({ draft, ad, assessments, sessionDate, affected }) {
     return null;
   };
   const delta = (cur, prev) => { const c = pnum(cur), p = pnum(prev); if (c === null || p === null || p === 0) return null; const pc = Math.round(((c - p) / Math.abs(p)) * 1000) / 10; return pc; };
-  const chipStyle = (on) => ({ padding: "8px 18px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const chipStyle = (on) => ({ padding: "8px 18px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(217,86,11,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
   const numUnit = isStr ? f.unit : "°";
   return (
     <Panel title="Αξιολόγηση Δύναμης & ROM">
@@ -629,7 +629,7 @@ function StrengthRomPanel({ draft, ad, assessments, sessionDate, affected }) {
           const sym = symOf(r.L, r.R, affected);
           const prev = prevOf(r);
           const dL = prev ? delta(r.L, prev.row.L) : null, dR = prev ? delta(r.R, prev.row.R) : null;
-          const D = ({ v }) => v === null ? null : <span style={{ color: v > 0 ? T.gold : v < 0 ? "#F08C7C" : T.paperDim, fontSize: 11.5 }}> {v > 0 ? "▲" : v < 0 ? "▼" : "="} {Math.abs(v)}%</span>;
+          const D = ({ v }) => v === null ? null : <span style={{ color: v > 0 ? T.gold : v < 0 ? "#C0392B" : T.paperDim, fontSize: 11.5 }}> {v > 0 ? "▲" : v < 0 ? "▼" : "="} {Math.abs(v)}%</span>;
           return (
             <div key={r.id} className="ll-sr-row" style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 12, padding: "10px 12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
@@ -639,9 +639,9 @@ function StrengthRomPanel({ draft, ad, assessments, sessionDate, affected }) {
               <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 16px", marginTop: 6, fontSize: 13 }}>
                 <span><span style={{ color: T.paperDim }}>Αριστ.:</span> <strong style={{ color: T.gold }}>{r.L !== "" ? `${r.L} ${unit}` : "—"}</strong><D v={dL} /></span>
                 <span><span style={{ color: T.paperDim }}>Δεξ.:</span> <strong style={{ color: T.gold }}>{r.R !== "" ? `${r.R} ${unit}` : "—"}</strong><D v={dR} /></span>
-                {sym !== null && <span><span style={{ color: T.paperDim }}>Συμμετρία:</span> <strong style={{ color: sym < 90 ? "#F08C7C" : T.paper }}>{sym}%</strong></span>}
+                {sym !== null && <span><span style={{ color: T.paperDim }}>Συμμετρία:</span> <strong style={{ color: sym < 90 ? "#C0392B" : T.paper }}>{sym}%</strong></span>}
                 {r.rpe !== "—" && r.rpe !== undefined && <span><span style={{ color: T.paperDim }}>RPE:</span> {r.rpe}</span>}
-                {r.pain !== "—" && r.pain !== undefined && <span><span style={{ color: T.paperDim }}>Πόνος:</span> <span style={{ color: Number(r.pain) >= 4 ? "#F08C7C" : T.paper }}>{r.pain}</span></span>}
+                {r.pain !== "—" && r.pain !== undefined && <span><span style={{ color: T.paperDim }}>Πόνος:</span> <span style={{ color: Number(r.pain) >= 4 ? "#C0392B" : T.paper }}>{r.pain}</span></span>}
               </div>
               {(r.note || prev) && <div style={{ fontSize: 11.5, color: T.paperDim, marginTop: 4 }}>{r.note}{r.note && prev ? " · " : ""}{prev ? `προηγ. ${fmtDay(prev.d)}: Α ${prev.row.L || "—"} / Δ ${prev.row.R || "—"} ${unit}` : ""}</div>}
             </div>
@@ -655,7 +655,7 @@ function StrengthRomPanel({ draft, ad, assessments, sessionDate, affected }) {
         const tl = t(er.L, ir.L), tr = t(er.R, ir.R);
         if (tl === null || tr === null) return null;
         const d = Math.abs(tl - tr);
-        return <div className="ll-total-rot" style={{ marginTop: 10, fontSize: 12.5, padding: "8px 12px", borderRadius: 12, border: `1px solid ${d >= 10 ? "#F08C7C" : T.panelLine}`, background: T.bgSoft }}>Συνολική στροφική κίνηση ώμου (ΕΣ+ΕΞ): Α <strong style={{ color: T.gold }}>{tl}°</strong> · Δ <strong style={{ color: T.gold }}>{tr}°</strong> · διαφορά <strong style={{ color: d >= 10 ? "#F08C7C" : T.paper }}>{d}°</strong><div style={{ fontSize: 11, color: T.paperDim, marginTop: 4 }}>Ο όρος «RCRSP» (πόνος ώμου σχετιζόμενος με το στροφικό πέταλο) καλύπτει πρόσκρουση, τενοντοπάθεια και ρήξεις· τα τεστ δεν ταυτοποιούν δομή με βεβαιότητα, γι' αυτό χρησιμοποίησε διαδικασία τροποποίησης συμπτωμάτων (θωρακική, ωμοπλάτη, θέση) και δες αν ο πόνος αλλάζει· ο δομημένος προοδευτικός φόρτος έχει αποτελέσματα ισοδύναμα με χειρουργείο σε πολλές περιπτώσεις, και η εξήγηση προς τον ασθενή δεν πρέπει να ενοχοποιεί το ακρώμιο. Η λειτουργική αστάθεια ώμου (παθολογικό πρότυπο μυϊκής ενεργοποίησης, κυρίως οπίσθια) διακρίνεται σε θεσιακή/μη θεσιακή και ελεγχόμενη/μη ελεγχόμενη — αν η αστάθεια «δείχνεται» εύκολα, κάνε MRI πριν κλείσεις τη διάγνωση (δομική βλάβη μπορεί να μοιάζει λειτουργική)· συνήθως αποφεύγεται η χειρουργική. Στον ρίπτη συγκρίνεται η ΣΥΝΟΛΙΚΗ στροφή και των δύο ώμων· διαφορά ~10° είναι κλινικά σημαντική και ~20° σχεδόν σίγουρα.</div></div>;
+        return <div className="ll-total-rot" style={{ marginTop: 10, fontSize: 12.5, padding: "8px 12px", borderRadius: 12, border: `1px solid ${d >= 10 ? "#C0392B" : T.panelLine}`, background: T.bgSoft }}>Συνολική στροφική κίνηση ώμου (ΕΣ+ΕΞ): Α <strong style={{ color: T.gold }}>{tl}°</strong> · Δ <strong style={{ color: T.gold }}>{tr}°</strong> · διαφορά <strong style={{ color: d >= 10 ? "#C0392B" : T.paper }}>{d}°</strong><div style={{ fontSize: 11, color: T.paperDim, marginTop: 4 }}>Ο όρος «RCRSP» (πόνος ώμου σχετιζόμενος με το στροφικό πέταλο) καλύπτει πρόσκρουση, τενοντοπάθεια και ρήξεις· τα τεστ δεν ταυτοποιούν δομή με βεβαιότητα, γι' αυτό χρησιμοποίησε διαδικασία τροποποίησης συμπτωμάτων (θωρακική, ωμοπλάτη, θέση) και δες αν ο πόνος αλλάζει· ο δομημένος προοδευτικός φόρτος έχει αποτελέσματα ισοδύναμα με χειρουργείο σε πολλές περιπτώσεις, και η εξήγηση προς τον ασθενή δεν πρέπει να ενοχοποιεί το ακρώμιο. Η λειτουργική αστάθεια ώμου (παθολογικό πρότυπο μυϊκής ενεργοποίησης, κυρίως οπίσθια) διακρίνεται σε θεσιακή/μη θεσιακή και ελεγχόμενη/μη ελεγχόμενη — αν η αστάθεια «δείχνεται» εύκολα, κάνε MRI πριν κλείσεις τη διάγνωση (δομική βλάβη μπορεί να μοιάζει λειτουργική)· συνήθως αποφεύγεται η χειρουργική. Στον ρίπτη συγκρίνεται η ΣΥΝΟΛΙΚΗ στροφή και των δύο ώμων· διαφορά ~10° είναι κλινικά σημαντική και ~20° σχεδόν σίγουρα.</div></div>;
       })()}
       {affected && affected !== "Αμφοτερόπλευρα" && <div style={{ fontSize: 11, color: T.paperDim, marginTop: 10 }}>Συμμετρία = πάσχον ({affected.toLowerCase()}) ως % του υγιούς.</div>}
     </Panel>
@@ -720,7 +720,7 @@ function NeuroPanel({ draft, ad }) {
   const Sel = ({ k, side, opts }) => <select aria-label={k + side} value={val(k, side)} onChange={(e) => put(k, side, e.target.value)} style={mini}>{opts.map((o) => <option key={o} value={o}>{o}</option>)}</select>;
   const th = { textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.06em", color: T.paperDim, fontWeight: 600, padding: "4px 6px", whiteSpace: "nowrap" };
   const td = { padding: "5px 4px", borderTop: `1px solid ${T.panelLine}`, fontSize: 12, verticalAlign: "middle" };
-  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(217,86,11,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
   return (
     <Panel title="Νευρολογική εξέταση">
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
@@ -939,7 +939,7 @@ function SpecialTestsPanel({ draft, ad }) {
   const mini = { ...inputStyle, padding: "6px 4px", fontSize: 12, appearance: "none", textAlign: "center", minWidth: 0, width: 62 };
   const nq = (x) => String(x).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   const posAll = Object.entries(sp).filter(([k, v]) => v && (v.L === "(+)" || v.R === "(+)"));
-  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(217,86,11,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
   const count = (r) => Object.keys(sp).filter((k) => k.startsWith(r + "|") && (sp[k].L || sp[k].R)).length;
   return (
     <Panel title="Ειδικές ορθοπεδικές δοκιμασίες">
@@ -950,7 +950,7 @@ function SpecialTestsPanel({ draft, ad }) {
       {posAll.length > 0 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
           <span style={{ fontSize: 11, color: T.paperDim, alignSelf: "center" }}>Θετικά:</span>
-          {posAll.map(([k, v]) => <span key={k} style={{ background: "rgba(240,140,124,0.12)", border: "1px solid #F08C7C", color: "#F08C7C", borderRadius: 999, padding: "3px 10px", fontSize: 11.5 }}>{k.replace("|", " · ")} ({[v.L === "(+)" ? "Α" : "", v.R === "(+)" ? "Δ" : ""].filter(Boolean).join("/")})</span>)}
+          {posAll.map(([k, v]) => <span key={k} style={{ background: "rgba(192,57,43,0.12)", border: "1px solid #C0392B", color: "#C0392B", borderRadius: 999, padding: "3px 10px", fontSize: 11.5 }}>{k.replace("|", " · ")} ({[v.L === "(+)" ? "Α" : "", v.R === "(+)" ? "Δ" : ""].filter(Boolean).join("/")})</span>)}
         </div>
       )}
       {Object.entries(SPECIAL_TESTS[reg]).map(([grp, tests]) => {
@@ -967,9 +967,9 @@ function SpecialTestsPanel({ draft, ad }) {
                     <div style={{ fontSize: 10.5, color: T.paperDim }}>{h}</div>
                   </div>
                   <span style={{ fontSize: 10.5, color: T.paperDim }}>Α</span>
-                  <select aria-label={n + " Α"} value={val(n, "L")} onChange={(e) => put(n, "L", e.target.value)} style={{ ...mini, color: val(n, "L") === "(+)" ? "#F08C7C" : T.paper }}>{SPECIAL_RES.map((o) => <option key={o} value={o}>{o}</option>)}</select>
+                  <select aria-label={n + " Α"} value={val(n, "L")} onChange={(e) => put(n, "L", e.target.value)} style={{ ...mini, color: val(n, "L") === "(+)" ? "#C0392B" : T.paper }}>{SPECIAL_RES.map((o) => <option key={o} value={o}>{o}</option>)}</select>
                   <span style={{ fontSize: 10.5, color: T.paperDim }}>Δ</span>
-                  <select aria-label={n + " Δ"} value={val(n, "R")} onChange={(e) => put(n, "R", e.target.value)} style={{ ...mini, color: val(n, "R") === "(+)" ? "#F08C7C" : T.paper }}>{SPECIAL_RES.map((o) => <option key={o} value={o}>{o}</option>)}</select>
+                  <select aria-label={n + " Δ"} value={val(n, "R")} onChange={(e) => put(n, "R", e.target.value)} style={{ ...mini, color: val(n, "R") === "(+)" ? "#C0392B" : T.paper }}>{SPECIAL_RES.map((o) => <option key={o} value={o}>{o}</option>)}</select>
                 </div>
               ))}
             </div>
@@ -1061,7 +1061,7 @@ function SpinePanel({ draft, ad }) {
   const mini = { ...inputStyle, padding: "6px 6px", fontSize: 12, appearance: "none", minWidth: 0 };
   const th = { textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.06em", color: T.paperDim, fontWeight: 600, padding: "4px 6px", whiteSpace: "nowrap" };
   const td = { padding: "5px 4px", borderTop: `1px solid ${T.panelLine}`, fontSize: 12.5 };
-  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(217,86,11,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
   const sub = (t) => <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, margin: "16px 0 8px" }}>{t}</div>;
   const filled = (r) => Object.keys(arom).filter((k) => k.startsWith(r + "|") && Object.values(arom[k]).some(Boolean)).length;
   const sel = (aria, f, opts, onCh, v) => <select aria-label={aria} value={v} onChange={(e) => onCh(e.target.value)} style={mini}>{opts.map((o) => <option key={o} value={o}>{o}</option>)}</select>;
@@ -1310,7 +1310,7 @@ function ChipGroup({ options, value, onChange }) {
 function SocLetter({ letter, title, children }) {
   return (
     <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-      <div style={{ flex: "none", width: 34, height: 34, borderRadius: 9, background: "rgba(242,106,16,0.18)", border: `1px solid ${T.terracotta}`, color: T.terracotta, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 17 }}>{letter}</div>
+      <div style={{ flex: "none", width: 34, height: 34, borderRadius: 9, background: "rgba(217,86,11,0.18)", border: `1px solid ${T.terracotta}`, color: T.terracotta, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 17 }}>{letter}</div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 12, color: T.gold, fontWeight: 600, marginBottom: 6 }}>{title}</div>
         {children}
@@ -1328,7 +1328,7 @@ function TissuePanel({ tissue, loadType, tp, onChange, form }) {
   if (!fields.length) return null;
   const set = (k, v) => onChange({ ...tp, [k]: v });
   return (
-    <div className="ll-tissue" style={{ background: "rgba(255,122,26,0.06)", border: `1px solid ${T.terracottaDim}`, borderRadius: 10, padding: 14, marginBottom: 14 }}>
+    <div className="ll-tissue" style={{ background: "rgba(217,86,11,0.06)", border: `1px solid ${T.terracottaDim}`, borderRadius: 10, padding: 14, marginBottom: 14 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.gold, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
         <Icon name="activity" size={13} /> {sscOf(tissue.id, loadType) ? "Αποθήκευση / απελευθέρωση ενέργειας (SSC)" : tissue.id === "muscle" ? "Παραγωγή δύναμης" : "Παράμετροι ιστού"} — {tissue.label}
       </div>
@@ -1390,7 +1390,7 @@ function TissuePanel({ tissue, loadType, tp, onChange, form }) {
         return items.length ? (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
             {items.map(([l, v]) => (
-              <div key={l} style={{ background: "rgba(255,122,26,0.14)", border: `1px solid ${T.terracottaDim}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5 }}>
+              <div key={l} style={{ background: "rgba(217,86,11,0.14)", border: `1px solid ${T.terracottaDim}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5 }}>
                 <span style={{ color: T.paperDim }}>{l}: </span><strong style={{ color: T.gold }}>{v}</strong><span style={{ color: T.paperDim, fontSize: 10.5 }}> (αυτόματα)</span>
               </div>
             ))}
@@ -1420,7 +1420,7 @@ function ExtraMetrics({ items, onChange, suggestions }) {
           const on = items.some((it) => it.name === sg.name);
           return (
             <button key={sg.name} type="button" onClick={() => addPreset(sg)} style={{
-              background: on ? "rgba(255,122,26,0.18)" : "transparent", border: `1px solid ${on ? T.gold : T.panelLine}`,
+              background: on ? "rgba(217,86,11,0.18)" : "transparent", border: `1px solid ${on ? T.gold : T.panelLine}`,
               color: on ? T.gold : T.paperDim, borderRadius: 999, padding: "4px 10px", fontSize: 11.5, cursor: "pointer",
             }}>+ {sg.name}</button>
           );
@@ -1441,8 +1441,8 @@ function ExtraMetrics({ items, onChange, suggestions }) {
   );
 }
 function Chip({ children, tone }) {
-  const st = tone === "main" ? { background: "rgba(255,122,26,0.18)", color: T.gold, border: `1px solid ${T.terracottaDim}`, fontWeight: 700 }
-    : tone === "warn" ? { background: "rgba(166,65,44,0.2)", color: "#F08C7C", border: "1px solid rgba(166,65,44,0.5)" }
+  const st = tone === "main" ? { background: "rgba(217,86,11,0.18)", color: T.gold, border: `1px solid ${T.terracottaDim}`, fontWeight: 700 }
+    : tone === "warn" ? { background: "rgba(166,65,44,0.2)", color: "#C0392B", border: "1px solid rgba(166,65,44,0.5)" }
     : { background: "transparent", color: T.paperDim, border: `1px solid ${T.panelLine}` };
   return <span style={{ ...st, borderRadius: 999, padding: "3px 10px", fontSize: 11.5, whiteSpace: "nowrap" }}>{children}</span>;
 }
@@ -1518,7 +1518,7 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
     return Object.values(m).sort((a, b) => String(a.date).localeCompare(String(b.date)));
   };
   const pct = (cur, prev) => (cur !== null && prev !== null && prev > 0 ? Math.round(((cur - prev) / prev) * 1000) / 10 : null);
-  const Delta = ({ v }) => (v === null ? <span style={{ color: T.paperDim }}>—</span> : <span style={{ color: v > 0 ? T.gold : v < 0 ? "#F08C7C" : T.paperDim, fontWeight: 600 }}>{v > 0 ? "▲" : v < 0 ? "▼" : "="} {Math.abs(v)}%</span>);
+  const Delta = ({ v }) => (v === null ? <span style={{ color: T.paperDim }}>—</span> : <span style={{ color: v > 0 ? T.gold : v < 0 ? "#C0392B" : T.paperDim, fontWeight: 600 }}>{v > 0 ? "▲" : v < 0 ? "▼" : "="} {Math.abs(v)}%</span>);
   const th = { textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.06em", color: T.paperDim, fontWeight: 600, padding: "6px 8px", whiteSpace: "nowrap", borderBottom: `1px solid ${T.panelLine}` };
   const td = { padding: "8px 8px", fontSize: 12.5, whiteSpace: "nowrap", borderBottom: `1px solid ${T.panelLine}` };
   const names = Object.keys(byEx);
@@ -1544,7 +1544,7 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
               const rpeAvg = r.rpe.length ? Math.round((r.rpe.reduce((a, b) => a + b, 0) / r.rpe.length) * 10) / 10 : "—";
               const hurt = r.pk > 0 || r.p24 > 0;
               return (
-                <tr key={r.date} style={{ background: i === rows.length - 1 ? "rgba(255,122,26,0.07)" : "transparent" }}>
+                <tr key={r.date} style={{ background: i === rows.length - 1 ? "rgba(217,86,11,0.07)" : "transparent" }}>
                   <td style={{ ...td, fontWeight: 600 }}>{fmtDay(r.date)}</td>
                   <td style={td}>{r.week || "—"}</td>
                   <td style={{ ...td, color: T.gold, fontWeight: 700 }}>{r.load !== null ? `${r.load} ${r.unit}` : "—"}</td>
@@ -1555,7 +1555,7 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
                   {cardio && <td style={td}>{r.speed ? `${r.speed} km/h` : "—"}</td>}
                   {hasHr && <td style={td}>{r.hr ? `${r.hr} bpm` : "—"}</td>}
                   <td style={td}>{rpeAvg}</td>
-                  <td style={{ ...td, color: hurt ? "#F08C7C" : T.paper }}>{r.pk} / {r.p24}</td>
+                  <td style={{ ...td, color: hurt ? "#C0392B" : T.paper }}>{r.pk} / {r.p24}</td>
                   {hasRsi && <td style={td}>{r.contacts ? `${r.contacts}` : "—"}{r.rsi ? ` · RSI ${r.rsi}` : ""}</td>}
                 </tr>
               );
@@ -1584,7 +1584,7 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
                   <td style={td}><Delta v={rows.length > 1 ? pct(l.load, f.load) : null} /></td>
                   {!cardio && <td style={td}>{l.vol ? `${l.vol} kg` : "—"}</td>}
                   <td style={td}>{rpeAvg}</td>
-                  <td style={{ ...td, color: l.pk > 0 || l.p24 > 0 ? "#F08C7C" : T.paper }}>{l.pk} / {l.p24}</td>
+                  <td style={{ ...td, color: l.pk > 0 || l.p24 > 0 ? "#C0392B" : T.paper }}>{l.pk} / {l.p24}</td>
                 </tr>
               );
             })}
@@ -2021,13 +2021,13 @@ function RtpModule({ patientId, patientName, assessments, sessionDate }) {
           {RTP_PHASES.map((p, i) => {
             const s = stats(p.id); const on = phase === p.id;
             return (
-              <button key={p.id} type="button" className="ll-rtp-phase" onClick={() => setPhase(p.id)} style={{ textAlign: "left", cursor: "pointer", background: on ? "rgba(255,122,26,0.14)" : T.bgSoft, border: `1px solid ${on ? T.gold : T.panelLine}`, borderRadius: 16, padding: 14, color: T.paper }}>
+              <button key={p.id} type="button" className="ll-rtp-phase" onClick={() => setPhase(p.id)} style={{ textAlign: "left", cursor: "pointer", background: on ? "rgba(217,86,11,0.14)" : T.bgSoft, border: `1px solid ${on ? T.gold : T.panelLine}`, borderRadius: 16, padding: 14, color: T.paper }}>
                 <div style={{ fontSize: 11, color: T.paperDim, marginBottom: 2 }}>ΦΑΣΗ {i + 1}</div>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: on ? T.gold : T.paper }}>{p.label}</div>
                 <div style={{ fontSize: 11, color: T.paperDim, margin: "3px 0 10px" }}>{p.sub}</div>
-                <div style={{ height: 6, borderRadius: 999, background: T.panelLine, overflow: "hidden" }}><div style={{ width: `${s.pct}%`, height: "100%", background: s.ready ? "#7BC47F" : T.terracotta }} /></div>
+                <div style={{ height: 6, borderRadius: 999, background: T.panelLine, overflow: "hidden" }}><div style={{ width: `${s.pct}%`, height: "100%", background: s.ready ? "#2E8B4E" : T.terracotta }} /></div>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, marginTop: 6, color: T.paperDim }}>
-                  <span>{s.met}/{s.total} κριτήρια</span><span style={{ color: s.ready ? "#7BC47F" : T.paperDim }}>{s.ready ? "✓ έτοιμος" : `υποχρ. ${s.reqMet}/${s.req}`}</span>
+                  <span>{s.met}/{s.total} κριτήρια</span><span style={{ color: s.ready ? "#2E8B4E" : T.paperDim }}>{s.ready ? "✓ έτοιμος" : `υποχρ. ${s.reqMet}/${s.req}`}</span>
                 </div>
               </button>
             );
@@ -2062,7 +2062,7 @@ function RtpModule({ patientId, patientName, assessments, sessionDate }) {
       {latestSym && (
         <Panel title="Τελευταία συμμετρία δύναμης (από Ιατρική Εκτίμηση)">
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {latestSym.rows.map(({ r, v }) => <span key={r.id} style={{ background: T.bgSoft, border: `1px solid ${v < 90 ? "#F08C7C" : T.panelLine}`, borderRadius: 999, padding: "6px 12px", fontSize: 12.5 }}>{r.joint} · {r.move}: <strong style={{ color: v < 90 ? "#F08C7C" : T.gold }}>{v}%</strong></span>)}
+            {latestSym.rows.map(({ r, v }) => <span key={r.id} style={{ background: T.bgSoft, border: `1px solid ${v < 90 ? "#C0392B" : T.panelLine}`, borderRadius: 999, padding: "6px 12px", fontSize: 12.5 }}>{r.joint} · {r.move}: <strong style={{ color: v < 90 ? "#C0392B" : T.gold }}>{v}%</strong></span>)}
             <span style={{ fontSize: 11.5, color: T.paperDim, alignSelf: "center" }}>{fmtDay(latestSym.d)} · χαμηλότερες τιμές</span>
           </div>
         </Panel>
@@ -2084,7 +2084,7 @@ function RtpModule({ patientId, patientName, assessments, sessionDate }) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "10px 0" }}>
-                {RTP_STATUS.map(([k, l]) => <button key={k} type="button" onClick={() => setStatus(c, k)} style={chipS((c.status || "na") === k, k === "yes" ? "#7BC47F" : k === "no" ? "#F08C7C" : T.paperDim)}>{l}</button>)}
+                {RTP_STATUS.map(([k, l]) => <button key={k} type="button" onClick={() => setStatus(c, k)} style={chipS((c.status || "na") === k, k === "yes" ? "#2E8B4E" : k === "no" ? "#C0392B" : T.paperDim)}>{l}</button>)}
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8 }}>
                 <TextField label="Στόχος" value={c.target} onChange={(v) => upd(c.id, { target: v })} />
@@ -2112,7 +2112,7 @@ function RtpModule({ patientId, patientName, assessments, sessionDate }) {
             <button key={l} type="button" onClick={() => save({ ...data, decision: { ...data.decision, level: data.decision.level === l ? "" : l, date: data.decision.date || sessionDate } })} style={chipS(data.decision.level === l, T.gold)}>{l}</button>
           ))}
         </div>
-        {RTP_PHASES.filter((p) => stats(p.id).ready).length > 0 && <div style={{ fontSize: 12, color: "#7BC47F", marginBottom: 10 }}>Όλα τα υποχρεωτικά κριτήρια πληρούνται για: {RTP_PHASES.filter((p) => stats(p.id).ready).map((p) => p.label).join(", ")}.</div>}
+        {RTP_PHASES.filter((p) => stats(p.id).ready).length > 0 && <div style={{ fontSize: 12, color: "#2E8B4E", marginBottom: 10 }}>Όλα τα υποχρεωτικά κριτήρια πληρούνται για: {RTP_PHASES.filter((p) => stats(p.id).ready).map((p) => p.label).join(", ")}.</div>}
         <div style={{ display: "grid", gridTemplateColumns: "180px 1fr", gap: 10 }}>
           <Field label="Ημερομηνία"><input type="date" value={data.decision.date || ""} onChange={(e) => save({ ...data, decision: { ...data.decision, date: e.target.value } })} style={inputStyle} /></Field>
           <TextField label="Σχόλιο / αιτιολόγηση / επόμενα βήματα" value={data.decision.note} onChange={(v) => save({ ...data, decision: { ...data.decision, note: v } })} />
@@ -2315,29 +2315,29 @@ function BodyMapModule({ patient, onGo, onPick }) {
   const pick = (k, sd) => { setSel(k); if (sd) setSide(sd); if (onPick) onPick(k, sd || side); };
   const fill = (k, sd) => {
     const on = sel === k && (!sd || side === sd) ; const hv = hover === k + (sd || "");
-    return on ? "rgba(242,106,16,0.55)" : hv ? "rgba(242,106,16,0.28)" : "rgba(255,255,255,0.04)";
+    return on ? "rgba(217,86,11,0.55)" : hv ? "rgba(217,86,11,0.28)" : "rgba(0,0,0,0.04)";
   };
   const Z = ({ k, sd, children, title }) => (
     <g style={{ cursor: "pointer" }} onClick={() => pick(k, sd)} onMouseEnter={() => setHover(k + (sd || ""))} onMouseLeave={() => setHover("")} role="button" aria-label={(title || BODY_REGIONS[k].title) + (sd ? ` ${sd === "L" ? "Αριστερά" : "Δεξιά"}` : "")} data-region={k + (sd || "")}>
-      {React.Children.map(children, (c) => React.cloneElement(c, { fill: fill(k, sd), stroke: sel === k && (!sd || side === sd) ? T.gold : "#5A5A5A", strokeWidth: sel === k && (!sd || side === sd) ? 2 : 1.2 }))}
+      {React.Children.map(children, (c) => React.cloneElement(c, { fill: fill(k, sd), stroke: sel === k && (!sd || side === sd) ? T.gold : "#9A9A9A", strokeWidth: sel === k && (!sd || side === sd) ? 2 : 1.2 }))}
     </g>
   );
   // Δ-πλευρά ασθενούς στην εμπρόσθια όψη βρίσκεται αριστερά στην οθόνη
   const W = 300, Hh = 560;
   const front = (
     <svg viewBox={`0 0 ${W} ${Hh}`} style={{ width: "100%", maxWidth: 300, height: "auto" }} aria-label="Εμπρόσθια όψη">
-      <circle cx="150" cy="40" r="26" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" />
+      <circle cx="150" cy="40" r="26" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" />
       <Z k="cervical"><rect x="136" y="64" width="28" height="24" rx="10" /></Z>
       <Z k="shoulder" sd="R"><circle cx="100" cy="106" r="19" /></Z>
       <Z k="shoulder" sd="L"><circle cx="200" cy="106" r="19" /></Z>
       <Z k="thoracic"><rect x="116" y="96" width="68" height="68" rx="22" /></Z>
       <Z k="lumbar" title="Οσφυϊκή / κοιλιακοί"><rect x="120" y="168" width="60" height="46" rx="16" /></Z>
-      <rect x="64" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(8 77 155)" />
-      <rect x="210" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-8 223 155)" />
+      <rect x="64" y="124" width="26" height="62" rx="13" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(8 77 155)" />
+      <rect x="210" y="124" width="26" height="62" rx="13" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-8 223 155)" />
       <Z k="elbow" sd="R"><circle cx="66" cy="196" r="14" /></Z>
       <Z k="elbow" sd="L"><circle cx="234" cy="196" r="14" /></Z>
-      <rect x="46" y="206" width="22" height="62" rx="11" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(5 57 237)" />
-      <rect x="232" y="206" width="22" height="62" rx="11" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-5 243 237)" />
+      <rect x="46" y="206" width="22" height="62" rx="11" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(5 57 237)" />
+      <rect x="232" y="206" width="22" height="62" rx="11" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-5 243 237)" />
       <Z k="wrist" sd="R"><rect x="40" y="272" width="26" height="30" rx="12" /></Z>
       <Z k="wrist" sd="L"><rect x="234" y="272" width="26" height="30" rx="12" /></Z>
       <Z k="hip" sd="R" title="Ισχίο (πλάγια)"><rect x="106" y="218" width="28" height="44" rx="13" /></Z>
@@ -2359,15 +2359,15 @@ function BodyMapModule({ patient, onGo, onPick }) {
   );
   const rear = (
     <svg viewBox={`0 0 ${W} ${Hh}`} style={{ width: "100%", maxWidth: 300, height: "auto" }} aria-label="Οπίσθια όψη">
-      <circle cx="150" cy="40" r="26" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" />
+      <circle cx="150" cy="40" r="26" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" />
       <Z k="cervical"><rect x="136" y="64" width="28" height="24" rx="10" /></Z>
       <Z k="shoulder" sd="L"><circle cx="100" cy="106" r="19" /></Z>
       <Z k="shoulder" sd="R"><circle cx="200" cy="106" r="19" /></Z>
       <Z k="thoracic"><rect x="116" y="96" width="68" height="66" rx="22" /></Z>
       <Z k="lumbar"><rect x="120" y="166" width="60" height="42" rx="16" /></Z>
       <Z k="si" title="Λεκάνη / ΙΛ"><rect x="116" y="210" width="68" height="42" rx="18" /></Z>
-      <rect x="64" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(8 77 155)" />
-      <rect x="210" y="124" width="26" height="62" rx="13" fill="rgba(255,255,255,0.03)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-8 223 155)" />
+      <rect x="64" y="124" width="26" height="62" rx="13" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(8 77 155)" />
+      <rect x="210" y="124" width="26" height="62" rx="13" fill="rgba(0,0,0,0.035)" stroke="#5A5A5A" strokeWidth="1.2" transform="rotate(-8 223 155)" />
       <Z k="elbow" sd="L"><circle cx="66" cy="196" r="14" /></Z>
       <Z k="elbow" sd="R"><circle cx="234" cy="196" r="14" /></Z>
       <Z k="ham" sd="L"><rect x="108" y="258" width="38" height="100" rx="18" /></Z>
@@ -2384,7 +2384,7 @@ function BodyMapModule({ patient, onGo, onPick }) {
     </svg>
   );
   const btn = (primary) => ({ background: primary ? T.terracotta : "transparent", color: primary ? T.bg : T.gold, border: `1px solid ${primary ? T.terracotta : T.gold}`, borderRadius: 999, padding: "9px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" });
-  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(255,122,26,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "rgba(217,86,11,0.14)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
   return (
     <div className="ll-body" style={{ display: "grid", gridTemplateColumns: "minmax(280px, 380px) minmax(0, 1fr)", gap: 18, alignItems: "start" }}>
       <Panel title="Χάρτης σώματος">
@@ -2407,9 +2407,9 @@ function BodyMapModule({ patient, onGo, onPick }) {
           <div style={{ fontSize: 12.5, color: T.paperDim, marginBottom: 12 }}><strong style={{ color: T.paper }}>Δομές:</strong> {r.structs}</div>
           <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, marginBottom: 6 }}>Συχνές παθήσεις</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
-            {r.common.map(([n, t]) => <button key={n} onClick={() => setSelCond(selCond === n ? null : n)} style={{ background: selCond === n ? T.gold : T.bgSoft, color: selCond === n ? "#111" : "inherit", border: `1px solid ${selCond === n ? T.gold : T.panelLine}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5, cursor: "pointer", fontFamily: "inherit" }}>{n} <span style={{ opacity: 0.65, fontSize: 11 }}>· {t}</span></button>)}
+            {r.common.map(([n, t]) => <button key={n} onClick={() => setSelCond(selCond === n ? null : n)} style={{ background: selCond === n ? T.gold : T.bgSoft, color: selCond === n ? "#fff" : "inherit", border: `1px solid ${selCond === n ? T.gold : T.panelLine}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5, cursor: "pointer", fontFamily: "inherit" }}>{n} <span style={{ opacity: 0.65, fontSize: 11 }}>· {t}</span></button>)}
           </div>
-          <div style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: "1px solid #A6412C", background: "rgba(166,65,44,0.12)" }}><strong style={{ color: "#F08C7C" }}>Red flags:</strong> {r.red}</div>
+          <div style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: "1px solid #A6412C", background: "rgba(166,65,44,0.12)" }}><strong style={{ color: "#C0392B" }}>Red flags:</strong> {r.red}</div>
           {r.tip && <div className="ll-bm-tip" style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: `1px solid ${T.panelLine}`, background: T.bgSoft, lineHeight: 1.5 }}><strong style={{ color: T.gold }}>Σημείωση:</strong> {r.tip}</div>}
           {selCond && COND_INFO[selCond] && <div className="ll-bm-cond" style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: `1px solid ${T.panelLine}`, background: T.bgSoft, lineHeight: 1.5 }}><span style={{ color: T.gold, fontWeight: 700 }}>{selCond}: </span>{COND_INFO[selCond]}</div>}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -2615,7 +2615,7 @@ function TissueLoadLog() {
   const [dayOnly, setDayOnly] = useState(false);
   const [tissueId, setTissueId] = useState("tendon");
   const [measureTab, setMeasureTab] = useState("jump"); // jump | isometric
-  const [mode, setMode] = useState("clinician");
+  const mode = "clinician";
   const [showNewPatient, setShowNewPatient] = useState(false);
   const [editingPatient, setEditingPatient] = useState(false);
   const [patientDraft, setPatientDraft] = useState(emptyPatientDraft());
@@ -2940,8 +2940,89 @@ function TissueLoadLog() {
     setView(g.view);
   };
   const firstVisit = Object.keys(assessments).length === 0;
+  const patientFileView = (
+    <>
+{activePatient && patient && !editingPatient && (
+          <div style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "12px 14px", marginBottom: 14, fontSize: 12.5, color: T.paperDim }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.gold, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13 }}>
+                <Icon name="folder" size={13} /> Φάκελος Ασθενή
+              </div>
+              {!isPatientMode && <button onClick={openEditPatient} style={{ background: "none", border: "none", color: T.gold, cursor: "pointer", padding: 4 }} aria-label="Επεξεργασία φακέλου"><Icon name="pencil" size={14} /></button>}
+            </div>
+            <div className="mac-pcard-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div>
+                <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 4 }}>Προσωπικά</div>
+                {patientHasPersonal ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    {patient.age && <div><strong style={{ color: T.paper }}>Ηλικία:</strong> {patient.age}</div>}
+                    {patient.occupation && <div><strong style={{ color: T.paper }}>Επάγγελμα:</strong> {patient.occupation}</div>}
+                    {patient.sport && <div><strong style={{ color: T.paper }}>Άθλημα:</strong> {patient.sport}</div>}
+                    {patient.dominantLimb && <div><strong style={{ color: T.paper }}>Κυρίαρχο άκρο:</strong> {patient.dominantLimb}</div>}
+                    {patient.phone && <div><strong style={{ color: T.paper }}>Τηλ:</strong> {patient.phone}</div>}
+                    {patient.email && <div><strong style={{ color: T.paper }}>Email:</strong> {patient.email}</div>}
+                  </div>
+                ) : <div style={{ opacity: 0.5 }}>—</div>}
+              </div>
+              <div>
+                <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 4 }}>Ιατρικά</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  {patient.pathology ? <div><strong style={{ color: T.paper }}>Παθολογία:</strong> {patient.pathology}</div> : <div style={{ opacity: 0.5 }}>Καμία παθολογία</div>}
+                  {patient.affectedSide && <div><strong style={{ color: T.paper }}>Πάσχον:</strong> {patient.affectedSide}</div>}
+                  {patient.injuryDate && <div><strong style={{ color: T.paper }}>Τραυματισμός:</strong> {patient.injuryDate}</div>}
+                  <div><strong style={{ color: T.paper }}>Έναρξη:</strong> {patient.startDate || "—"} {todayWeek ? `· Εβδ.${todayWeek}` : ""}</div>
+                  {patient.referringDoctor && <div><strong style={{ color: T.paper }}>Παραπομπή:</strong> {patient.referringDoctor}</div>}
+                  {patient.imaging && <div><strong style={{ color: T.paper }}>Απεικόνιση:</strong> {patient.imaging}</div>}
+                  {patient.allergies && <div><strong style={{ color: T.paper }}>Αλλεργίες:</strong> {patient.allergies}</div>}
+                  {patient.medications && <div><strong style={{ color: T.paper }}>Φάρμακα:</strong> {patient.medications}</div>}
+                  {patient.comorbidities && <div><strong style={{ color: T.paper }}>Συνοδά:</strong> {patient.comorbidities}</div>}
+                  {patient.medicalHistory && <div><strong style={{ color: T.paper }}>Ιστορικό:</strong> {patient.medicalHistory}</div>}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activePatient && editingPatient && (
+          <div className="mac-sheet" style={{ background: T.panel, border: `1px solid ${T.gold}`, borderRadius: 10, padding: 16, marginBottom: 14 }}>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, marginBottom: 12, color: T.gold }}>Προσωπικά στοιχεία</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+              <TextField label="Όνομα" value={patientDraft.name} onChange={(v) => setPatientDraft({ ...patientDraft, name: v })} />
+              <NumberField label="Ηλικία" value={patientDraft.age} onChange={(v) => setPatientDraft({ ...patientDraft, age: v })} />
+              <TextField label="Τηλέφωνο" value={patientDraft.phone} onChange={(v) => setPatientDraft({ ...patientDraft, phone: v })} />
+              <TextField label="Email" value={patientDraft.email} onChange={(v) => setPatientDraft({ ...patientDraft, email: v })} />
+              <TextField label="Επάγγελμα" value={patientDraft.occupation} onChange={(v) => setPatientDraft({ ...patientDraft, occupation: v })} />
+              <TextField label="Άθλημα / δραστηριότητα" value={patientDraft.sport} onChange={(v) => setPatientDraft({ ...patientDraft, sport: v })} />
+              <SelectField label="Κυρίαρχο άκρο" value={patientDraft.dominantLimb} onChange={(v) => setPatientDraft({ ...patientDraft, dominantLimb: v })} options={SIDE_OPTIONS} />
+            </div>
+
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, margin: "16px 0 12px", color: T.gold }}>Ιατρικά στοιχεία</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+              <TextField label="Παθολογία / διάγνωση" value={patientDraft.pathology} onChange={(v) => setPatientDraft({ ...patientDraft, pathology: v })} />
+              <SelectField label="Πάσχον άκρο/πλευρά" value={patientDraft.affectedSide} onChange={(v) => setPatientDraft({ ...patientDraft, affectedSide: v })} options={SIDE_OPTIONS} />
+              <Field label="Ημερομηνία τραυματισμού"><input type="date" value={patientDraft.injuryDate} onChange={(e) => setPatientDraft({ ...patientDraft, injuryDate: e.target.value })} style={inputStyle} /></Field>
+              <Field label="Ημερομηνία έναρξης θεραπείας"><input type="date" value={patientDraft.startDate} onChange={(e) => setPatientDraft({ ...patientDraft, startDate: e.target.value })} style={inputStyle} /></Field>
+              <TextField label="Παραπέμπων ιατρός" value={patientDraft.referringDoctor} onChange={(v) => setPatientDraft({ ...patientDraft, referringDoctor: v })} />
+              <TextField label="Ευρήματα απεικόνισης" value={patientDraft.imaging} onChange={(v) => setPatientDraft({ ...patientDraft, imaging: v })} placeholder="π.χ. MRI: μερική ρήξη..." />
+              <TextField label="Φάρμακα" value={patientDraft.medications} onChange={(v) => setPatientDraft({ ...patientDraft, medications: v })} />
+              <TextField label="Συνοδά νοσήματα" value={patientDraft.comorbidities} onChange={(v) => setPatientDraft({ ...patientDraft, comorbidities: v })} />
+              <TextField label="Αλλεργίες" value={patientDraft.allergies} onChange={(v) => setPatientDraft({ ...patientDraft, allergies: v })} />
+            </div>
+            <Field label="Ιστορικό / προηγούμενοι τραυματισμοί">
+              <textarea value={patientDraft.medicalHistory} onChange={(e) => setPatientDraft({ ...patientDraft, medicalHistory: e.target.value })} rows={2} style={{ ...inputStyle, marginBottom: 14, resize: "vertical" }} />
+            </Field>
+
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={saveEditPatient} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 13.5, fontWeight: 600, cursor: "pointer" }}>Αποθήκευση φακέλου</button>
+              <button onClick={() => setEditingPatient(false)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 8, padding: "9px 16px", fontSize: 13.5, cursor: "pointer" }}>Άκυρο</button>
+            </div>
+          </div>
+        )}
+    </>
+  );
   const assessmentView = (
     <>
+      {patientFileView}
       <details className="ll-assess-map" open={firstVisit} style={{ border: `1px solid ${T.panelLine}`, borderRadius: 14, background: T.panel, padding: "12px 16px", marginBottom: 14 }}>
         <summary style={{ cursor: "pointer", color: T.gold, fontWeight: 700, fontSize: 14 }}>Χάρτης Σώματος — θέση προβλήματος{firstVisit ? " (πρώτη επίσκεψη)" : ""}</summary>
         <div style={{ fontSize: 12, color: T.paperDim, margin: "8px 0 10px", lineHeight: 1.5 }}>Πάτησε την περιοχή· συμπληρώνει αυτόματα τη «Θέση» και την πλευρά στο SOCRATES παρακάτω.</div>
@@ -3127,21 +3208,11 @@ function TissueLoadLog() {
     <div className="app-root" style={{ minHeight: "100vh", background: `radial-gradient(1200px 600px at 15% -10%, ${T.bgSoft}, ${T.bg} 60%)`, color: T.paper, fontFamily: "'IBM Plex Sans', sans-serif", padding: "28px 16px 60px" }}>
       <div className="mac-wrap" style={{ maxWidth: 720, margin: "0 auto" }}>
         <div className="mac-side">
-        <img src={LOGO_WHITE} alt="Sports ReHub" style={{ height: 34, display: "block", marginBottom: 12 }} />
+        <img src={LOGO_BLACK} alt="Sports ReHub" style={{ height: 34, display: "block", marginBottom: 12 }} />
         <h1 className="mac-title" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 26, letterSpacing: "-0.01em", margin: 0 }}>
-          Καταγραφή <span style={{ color: T.terracotta }}>Φορτίου</span> ανά Ιστό
+          ReHub <span style={{ color: T.terracotta }}>Clinical</span>
         </h1>
-        <p className="mac-sub" style={{ color: T.paperDim, fontSize: 13, marginTop: 4, marginBottom: 22 }}>{CLINIC.doctor} · ιατρική εκτίμηση, φόρτιση, φάκελος ασθενή & μετρήσεις</p>
-
-        <div style={{ display: "flex", background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: 4, marginBottom: 18, gap: 4 }}>
-          {[{ id: "clinician", label: "Θεραπευτής", icon: "stethoscope" }, { id: "patient", label: "Ασθενής", icon: "user" }].map(({ id, label, icon }) => (
-            <button key={id} onClick={() => setMode(id)} style={{
-              flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-              padding: "10px 8px", borderRadius: 7, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600,
-              background: mode === id ? T.terracotta : "transparent", color: mode === id ? T.bg : T.paperDim,
-            }}><Icon name={icon} size={15} /> {label}</button>
-          ))}
-        </div>
+        <p className="mac-sub" style={{ color: T.paperDim, fontSize: 13, marginTop: 4, marginBottom: 22 }}>{CLINIC.doctor} · Φάκελος εκτίμησης & παρακολούθησης φορτίου</p>
 
         <div style={{ marginBottom: 10 }}>
           <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 8 }}>Ασθενείς ({patients.length})</div>
@@ -3156,7 +3227,7 @@ function TissueLoadLog() {
                 <button className={"mac-pchip" + (activePatient === p.id ? " on" : "")} onClick={() => { setActivePatient(p.id); setPatientQuery(""); }} style={{
                   padding: "8px 14px", borderRadius: 999, cursor: "pointer",
                   border: `1px solid ${activePatient === p.id ? T.gold : T.panelLine}`,
-                  background: activePatient === p.id ? "rgba(255,122,26,0.14)" : T.panel,
+                  background: activePatient === p.id ? "rgba(217,86,11,0.14)" : T.panel,
                   color: activePatient === p.id ? T.gold : T.paper, fontSize: 13.5, fontWeight: 500,
                 }}>{p.name}{p.pathology ? <span className="mac-psub">{p.pathology}</span> : null}</button>
                 {!isPatientMode && (
@@ -3193,83 +3264,6 @@ function TissueLoadLog() {
           )}
         </div>
 
-        {activePatient && patient && !editingPatient && (
-          <div style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "12px 14px", marginBottom: 22, fontSize: 12.5, color: T.paperDim }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.gold, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13 }}>
-                <Icon name="folder" size={13} /> Φάκελος Ασθενή
-              </div>
-              {!isPatientMode && <button onClick={openEditPatient} style={{ background: "none", border: "none", color: T.gold, cursor: "pointer", padding: 4 }} aria-label="Επεξεργασία φακέλου"><Icon name="pencil" size={14} /></button>}
-            </div>
-            <div className="mac-pcard-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              <div>
-                <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 4 }}>Προσωπικά</div>
-                {patientHasPersonal ? (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    {patient.age && <div><strong style={{ color: T.paper }}>Ηλικία:</strong> {patient.age}</div>}
-                    {patient.occupation && <div><strong style={{ color: T.paper }}>Επάγγελμα:</strong> {patient.occupation}</div>}
-                    {patient.sport && <div><strong style={{ color: T.paper }}>Άθλημα:</strong> {patient.sport}</div>}
-                    {patient.dominantLimb && <div><strong style={{ color: T.paper }}>Κυρίαρχο άκρο:</strong> {patient.dominantLimb}</div>}
-                    {patient.phone && <div><strong style={{ color: T.paper }}>Τηλ:</strong> {patient.phone}</div>}
-                    {patient.email && <div><strong style={{ color: T.paper }}>Email:</strong> {patient.email}</div>}
-                  </div>
-                ) : <div style={{ opacity: 0.5 }}>—</div>}
-              </div>
-              <div>
-                <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 4 }}>Ιατρικά</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  {patient.pathology ? <div><strong style={{ color: T.paper }}>Παθολογία:</strong> {patient.pathology}</div> : <div style={{ opacity: 0.5 }}>Καμία παθολογία</div>}
-                  {patient.affectedSide && <div><strong style={{ color: T.paper }}>Πάσχον:</strong> {patient.affectedSide}</div>}
-                  {patient.injuryDate && <div><strong style={{ color: T.paper }}>Τραυματισμός:</strong> {patient.injuryDate}</div>}
-                  <div><strong style={{ color: T.paper }}>Έναρξη:</strong> {patient.startDate || "—"} {todayWeek ? `· Εβδ.${todayWeek}` : ""}</div>
-                  {patient.referringDoctor && <div><strong style={{ color: T.paper }}>Παραπομπή:</strong> {patient.referringDoctor}</div>}
-                  {patient.imaging && <div><strong style={{ color: T.paper }}>Απεικόνιση:</strong> {patient.imaging}</div>}
-                  {patient.allergies && <div><strong style={{ color: T.paper }}>Αλλεργίες:</strong> {patient.allergies}</div>}
-                  {patient.medications && <div><strong style={{ color: T.paper }}>Φάρμακα:</strong> {patient.medications}</div>}
-                  {patient.comorbidities && <div><strong style={{ color: T.paper }}>Συνοδά:</strong> {patient.comorbidities}</div>}
-                  {patient.medicalHistory && <div><strong style={{ color: T.paper }}>Ιστορικό:</strong> {patient.medicalHistory}</div>}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activePatient && editingPatient && (
-          <div className="mac-sheet" style={{ background: T.panel, border: `1px solid ${T.gold}`, borderRadius: 10, padding: 16, marginBottom: 22 }}>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, marginBottom: 12, color: T.gold }}>Προσωπικά στοιχεία</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
-              <TextField label="Όνομα" value={patientDraft.name} onChange={(v) => setPatientDraft({ ...patientDraft, name: v })} />
-              <NumberField label="Ηλικία" value={patientDraft.age} onChange={(v) => setPatientDraft({ ...patientDraft, age: v })} />
-              <TextField label="Τηλέφωνο" value={patientDraft.phone} onChange={(v) => setPatientDraft({ ...patientDraft, phone: v })} />
-              <TextField label="Email" value={patientDraft.email} onChange={(v) => setPatientDraft({ ...patientDraft, email: v })} />
-              <TextField label="Επάγγελμα" value={patientDraft.occupation} onChange={(v) => setPatientDraft({ ...patientDraft, occupation: v })} />
-              <TextField label="Άθλημα / δραστηριότητα" value={patientDraft.sport} onChange={(v) => setPatientDraft({ ...patientDraft, sport: v })} />
-              <SelectField label="Κυρίαρχο άκρο" value={patientDraft.dominantLimb} onChange={(v) => setPatientDraft({ ...patientDraft, dominantLimb: v })} options={SIDE_OPTIONS} />
-            </div>
-
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14, margin: "16px 0 12px", color: T.gold }}>Ιατρικά στοιχεία</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
-              <TextField label="Παθολογία / διάγνωση" value={patientDraft.pathology} onChange={(v) => setPatientDraft({ ...patientDraft, pathology: v })} />
-              <SelectField label="Πάσχον άκρο/πλευρά" value={patientDraft.affectedSide} onChange={(v) => setPatientDraft({ ...patientDraft, affectedSide: v })} options={SIDE_OPTIONS} />
-              <Field label="Ημερομηνία τραυματισμού"><input type="date" value={patientDraft.injuryDate} onChange={(e) => setPatientDraft({ ...patientDraft, injuryDate: e.target.value })} style={inputStyle} /></Field>
-              <Field label="Ημερομηνία έναρξης θεραπείας"><input type="date" value={patientDraft.startDate} onChange={(e) => setPatientDraft({ ...patientDraft, startDate: e.target.value })} style={inputStyle} /></Field>
-              <TextField label="Παραπέμπων ιατρός" value={patientDraft.referringDoctor} onChange={(v) => setPatientDraft({ ...patientDraft, referringDoctor: v })} />
-              <TextField label="Ευρήματα απεικόνισης" value={patientDraft.imaging} onChange={(v) => setPatientDraft({ ...patientDraft, imaging: v })} placeholder="π.χ. MRI: μερική ρήξη..." />
-              <TextField label="Φάρμακα" value={patientDraft.medications} onChange={(v) => setPatientDraft({ ...patientDraft, medications: v })} />
-              <TextField label="Συνοδά νοσήματα" value={patientDraft.comorbidities} onChange={(v) => setPatientDraft({ ...patientDraft, comorbidities: v })} />
-              <TextField label="Αλλεργίες" value={patientDraft.allergies} onChange={(v) => setPatientDraft({ ...patientDraft, allergies: v })} />
-            </div>
-            <Field label="Ιστορικό / προηγούμενοι τραυματισμοί">
-              <textarea value={patientDraft.medicalHistory} onChange={(e) => setPatientDraft({ ...patientDraft, medicalHistory: e.target.value })} rows={2} style={{ ...inputStyle, marginBottom: 14, resize: "vertical" }} />
-            </Field>
-
-            <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={saveEditPatient} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 13.5, fontWeight: 600, cursor: "pointer" }}>Αποθήκευση φακέλου</button>
-              <button onClick={() => setEditingPatient(false)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 8, padding: "9px 16px", fontSize: 13.5, cursor: "pointer" }}>Άκυρο</button>
-            </div>
-          </div>
-        )}
-
         {activePatient && (
             <div className="mac-date" style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 12, padding: 12, marginBottom: 18 }}>
               <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, marginBottom: 8 }}>Ημερομηνία συνεδρίας</div>
@@ -3293,7 +3287,7 @@ function TissueLoadLog() {
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, maxHeight: 128, overflowY: "auto" }}>
                     {datesWithRecords.map(([d, n]) => (
                       <button key={d} onClick={() => { setSessionDate(d); setDayOnly(true); }} style={{
-                        background: d === sessionDate ? "rgba(255,122,26,0.18)" : T.bgSoft,
+                        background: d === sessionDate ? "rgba(217,86,11,0.18)" : T.bgSoft,
                         border: `1px solid ${d === sessionDate ? T.gold : T.panelLine}`,
                         color: d === sessionDate ? T.gold : T.paper, borderRadius: 999, padding: "6px 11px", cursor: "pointer", fontSize: 12,
                       }}>{fmtDay(d)} · {n}</button>
@@ -3335,7 +3329,7 @@ function TissueLoadLog() {
                   padding: v.main ? "15px 10px" : "12px 10px", borderRadius: 10, cursor: "pointer", fontSize: v.main ? 15 : 13.5, fontWeight: 700,
                   fontFamily: "'Space Grotesk', sans-serif",
                   border: `1px solid ${view === v.id ? T.gold : T.panelLine}`,
-                  background: view === v.id ? "rgba(255,122,26,0.14)" : T.panel,
+                  background: view === v.id ? "rgba(217,86,11,0.14)" : T.panel,
                   color: view === v.id ? T.gold : T.paperDim,
                 }}><Icon name={v.icon} size={v.main ? 17 : 15} /> {v.label}</button>
               ))}
@@ -3375,7 +3369,7 @@ function TissueLoadLog() {
                 <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 18, marginBottom: 22 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
                     <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 15 }}>Νέα καταχώρηση — {patientName}</div>
-                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: T.gold, background: "rgba(255,122,26,0.12)", padding: "4px 8px", borderRadius: 6 }}>
+                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: T.gold, background: "rgba(217,86,11,0.12)", padding: "4px 8px", borderRadius: 6 }}>
                       {selWeek ? `Εβδ. ${selWeek} · ` : ""}Επίσκεψη #{visitNo}
                     </div>
                   </div>
