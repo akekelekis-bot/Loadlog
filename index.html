@@ -61,6 +61,30 @@
     pill.querySelector('.ll-txt').textContent = text;
     pill.querySelector('.ll-out').style.display = user ? '' : 'none';
   }
+  pill.querySelector('.ll-txt').style.cursor = 'pointer';
+  pill.querySelector('.ll-txt').title = 'Πάτησε για ένωση δεδομένων με τις άλλες συσκευές';
+  pill.querySelector('.ll-txt').onclick = async function () {
+    if (!sb || !user) { alert('Πρώτα συνδέσου για συγχρονισμό.'); return; }
+    if (!confirm('Ένωση δεδομένων: θα προστεθούν σε αυτή τη συσκευή οι ασθενείς και οι εγγραφές που λείπουν από την άλλη συσκευή και αντίστροφα. Δεν διαγράφεται τίποτα. Συνέχεια;')) return;
+    try {
+      setStatus('busy', 'Ένωση δεδομένων…');
+      var r = await sb.from('loadlog_data').select('key,value');
+      if (r.error) throw r.error;
+      var cloud = {}; (r.data || []).forEach(function (row) { cloud[row.key] = row.value; });
+      var keys = {}; Object.keys(cloud).forEach(function (k) { keys[k] = 1; }); localKeys().forEach(function (k) { keys[k] = 1; });
+      var n = 0;
+      for (var k in keys) {
+        var has = localStorage.getItem(k) != null, l = has ? lsGet(k, null) : null, c = cloud[k];
+        var m = (has && c !== undefined) ? mergeFirst(l, c, k) : (has ? l : c);
+        if (m === undefined || m === null) continue;
+        if (!eq(m, l) || !eq(m, c)) n++;
+        lsSet(k, m); await pushNow(k, m);
+      }
+      setStatus('ok', 'Συγχρονισμένο');
+      alert('Ολοκληρώθηκε. Ενημερώθηκαν ' + n + ' στοιχεία. Η σελίδα θα ξαναφορτώσει.');
+      location.reload();
+    } catch (e) { console.error(e); setStatus('err', 'Σφάλμα συγχρονισμού'); alert('Η ένωση δεν ολοκληρώθηκε. Δοκίμασε ξανά.'); }
+  };
   pill.querySelector('.ll-out').onclick = async function () {
     if (outbox.length && !confirm('Υπάρχουν αλλαγές που δεν έχουν συγχρονιστεί. Αποσύνδεση ούτως ή άλλως;')) return;
     try { await sb.auth.signOut(); } catch (e) {}
