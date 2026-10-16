@@ -279,6 +279,71 @@
     .mac-sheet input:not([type=checkbox]), .mac-sheet select { border-radius: 999px !important; padding-left: 18px !important; }
     .mac-sheet textarea { border-radius: 20px !important; }
     .mac-sheet { position: fixed !important; top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(700px, 92vw); max-height: 88vh; overflow-y: auto; z-index: 50; margin: 0 !important; box-shadow: 0 0 0 100vmax rgba(0,0,0,0.62), 0 30px 80px rgba(0,0,0,0.7); }
+    /* ---- polish ---- */
+    .mac-main > div:first-child { border-left: 4px solid #D9560B !important; }
+    .mac-side > h1 span { color: #D9560B; }
+    .mac-top { background: linear-gradient(180deg, #FFF6F0 0%, #FFFFFF 100%); }
+    .mac-tabs button:nth-child(2).on, .mac-tabs button:nth-child(2):hover { color: #0E8A7D !important; border-bottom-color: #0E8A7D !important; }
+    .mac-tabs button:nth-child(3).on, .mac-tabs button:nth-child(3):hover { color: #2F6FDE !important; border-bottom-color: #2F6FDE !important; }
+    .mac-tabs button:nth-child(4).on, .mac-tabs button:nth-child(4):hover { color: #7C3AED !important; border-bottom-color: #7C3AED !important; }
+    .mac-tabs button:nth-child(5).on, .mac-tabs button:nth-child(5):hover { color: #B4235A !important; border-bottom-color: #B4235A !important; }
+    .mac-tabs button:nth-child(6).on, .mac-tabs button:nth-child(6):hover { color: #15803D !important; border-bottom-color: #15803D !important; }
+    .mac-main { background: #F7F7F5; padding: 28px 40px 56px; }
+    .mac-main [style*="border: 1px solid"][style*="background: rgb(255, 255, 255)"], .mac-main details { box-shadow: 0 1px 2px rgba(17,17,17,.04), 0 10px 28px rgba(17,17,17,.05); border-color: #E6E6E2 !important; }
+    .mac-main > div, .mac-main details { max-width: 1180px; margin-left: auto; margin-right: auto; }
+    .mac-top { padding: 18px 40px 0; align-items: flex-end; flex-wrap: wrap; row-gap: 6px; }
+    .mac-title { font-family: "Space Grotesk", system-ui, sans-serif; font-size: 22px !important; font-weight: 700; letter-spacing: -0.01em; }
+    .mac-tabs { order: 3; flex: 1 0 100%; margin: 8px 0 0 !important; padding: 0 !important; background: transparent !important; border: none !important; border-radius: 0 !important; justify-content: flex-start !important; gap: 2px !important; }
+    .mac-tabs button { border-radius: 0 !important; padding: 10px 10px !important; font-size: 13px !important; font-weight: 500; background: transparent !important; color: #5E5E5E !important; border-bottom: 2px solid transparent !important; margin-bottom: -1px; }
+    .mac-tabs button:hover { color: #111111 !important; background: rgba(0,0,0,.03) !important; }
+    .mac-tabs button.on { background: transparent !important; color: #D9560B !important; font-weight: 600; border-bottom: 2px solid #D9560B !important; }
+    .mac-top { padding-bottom: 0; }
+    .mac-main h2, .mac-main h3 { font-family: "Space Grotesk", system-ui, sans-serif; letter-spacing: -0.005em; }
+    .mac-main input:not([type=range]):not([type=checkbox]):not([type=radio]), .mac-main select { border-radius: 12px !important; }
+    .mac-main button, .mac-sheet button { border-radius: 12px !important; transition: background .15s, border-color .15s, box-shadow .15s; }
+    .mac-main button:focus-visible, .mac-side button:focus-visible, .mac-tabs button:focus-visible { outline: 2px solid #D9560B; outline-offset: 2px; }
+    .mac-pchip, .mac-pnew { border-radius: 10px !important; }
+    .mac-side { background: #FBFBF9; }
+    .mac-main button[style*="background: var(--vac"][style*="border: none"], .mac-sheet button[style*="background: var(--vac"][style*="border: none"] { min-height: 34px; padding: 7px 18px !important; font-size: 13px !important; font-weight: 600 !important; border-radius: 10px !important; line-height: 1.2; box-shadow: 0 1px 4px rgba(17,17,17,.12); width: 190px !important; min-height: 38px; flex: 0 0 auto !important; align-self: flex-end; margin-left: auto !important; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+    /* ---- soft tabs, page accent follows view ---- */
+    .mac-tabs { gap: 4px !important; margin: 10px 0 14px !important; }
+    .mac-tabs button { border-radius: 10px !important; padding: 9px 8px !important; font-size: 12px !important; font-weight: 500; background: #FFFFFF !important; color: #5E5E5E !important; border: 1.5px solid #E4E4E0 !important; margin-bottom: 0 !important; box-shadow: none; }
+    .mac-tabs button:hover { background: #F5F5F3 !important; }
+    .mac-tabs button:nth-child(1) { border-color: #C2662D88 !important; }
+    .mac-tabs button:nth-child(2) { border-color: #3F8F8688 !important; }
+    .mac-tabs button:nth-child(3) { border-color: #4F77C488 !important; }
+    .mac-tabs button:nth-child(4) { border-color: #8466C988 !important; }
+    .mac-tabs button:nth-child(5) { border-color: #B8577A88 !important; }
+    .mac-tabs button:nth-child(6) { border-color: #4E8F6388 !important; }
+    .mac-tabs button:nth-child(8) { border-color: #7A7A7588 !important; }
+    .mac-tabs button:nth-child(1) svg { color: #C2662D; }
+    .mac-tabs button:nth-child(1).on { background: #C2662D1F !important; color: #C2662D !important; border-color: #C2662D66 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #C2662D; }
+    [data-view="assessment"] { --vac: #C2662D; }
+    .mac-tabs button:nth-child(2) svg { color: #3F8F86; }
+    .mac-tabs button:nth-child(2).on { background: #3F8F861F !important; color: #3F8F86 !important; border-color: #3F8F8666 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #3F8F86; }
+    [data-view="load"] { --vac: #3F8F86; }
+    .mac-tabs button:nth-child(3) svg { color: #4F77C4; }
+    .mac-tabs button:nth-child(3).on { background: #4F77C41F !important; color: #4F77C4 !important; border-color: #4F77C466 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #4F77C4; }
+    [data-view="rtp"] { --vac: #4F77C4; }
+    .mac-tabs button:nth-child(4) svg { color: #8466C9; }
+    .mac-tabs button:nth-child(4).on { background: #8466C91F !important; color: #8466C9 !important; border-color: #8466C966 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #8466C9; }
+    [data-view="daily"] { --vac: #8466C9; }
+    .mac-tabs button:nth-child(5) svg { color: #B8577A; }
+    .mac-tabs button:nth-child(5).on { background: #B8577A1F !important; color: #B8577A !important; border-color: #B8577A66 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #B8577A; }
+    [data-view="measurements"] { --vac: #B8577A; }
+    .mac-tabs button:nth-child(6) svg { color: #4E8F63; }
+    .mac-tabs button:nth-child(6).on { background: #4E8F631F !important; color: #4E8F63 !important; border-color: #4E8F6366 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #4E8F63; }
+    [data-view="loadmgmt"] { --vac: #4E8F63; }
+    .mac-tabs button:nth-child(7) svg { color: #B7791F; }
+    .mac-tabs button:nth-child(8) svg { color: #7A7A75; }
+    .mac-tabs button:nth-child(8).on { background: #7A7A751F !important; color: #7A7A75 !important; border-color: #7A7A7566 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #7A7A75; }
+    [data-view="sources"] { --vac: #7A7A75; }
+    [data-view="rx"] { --vac: #B7791F; }
+    .mac-tabs button:nth-child(7) { border-color: #B7791F88 !important; }
+    .mac-tabs button:nth-child(7).on { background: #B7791F1F !important; color: #B7791F !important; border-color: #B7791F66 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #B7791F; }
+    .mac-top { background: #FFFFFF; border-bottom: 1px solid #E4E4E0; }
+    .mac-top::after { content: ""; flex: 1 0 100%; order: 4; height: 3px; margin: 0 -40px; background: var(--vac, #D9560B); opacity: .55; }
+    .mac-main > div:first-child { border-left-color: var(--vac, #D9560B) !important; }
   }
   @media print {
     html, body { background: #fff !important; }
@@ -297,8 +362,8 @@ const { useState, useEffect, useCallback, useMemo, useRef } = React;
 const T = {
   bg: "#FFFFFF", bgSoft: "#F5F5F3", panel: "#FFFFFF", panelLine: "#DADAD6",
   paper: "#111111", paperDim: "#5E5E5E",
-  terracotta: "#D9560B", terracottaDim: "#A64A0A",
-  gold: "#D9560B", sage: "#87977A", rust: "#A6412C",
+  terracotta: "var(--vac, #D9560B)", terracottaDim: "#A64A0A",
+  gold: "var(--vac, #D9560B)", sage: "#87977A", rust: "#A6412C",
 };
 
 const TISSUES = [
@@ -2221,6 +2286,7 @@ const BODY_TENDON = { ...BODY_TENDON_FULL,
 };
 
 const BODY_SIDED = ["shoulder", "elbow", "wrist", "hip", "groin", "quad", "ham", "knee", "shin", "ankle", "foot", "si"];
+const TISSUE_COL = (t) => { t = (t || "").toLowerCase(); if (t.includes("τένοντ")) return "#0E8A7D"; if (t.includes("σύνδεσμ")) return "#2F6FDE"; if (t.includes("μυ")) return "#C2410C"; if (t.includes("χόνδρ") || t.includes("άρθρ")) return "#7C3AED"; if (t.includes("οστ")) return "#8A6D1F"; if (t.includes("νεύρ")) return "#B4235A"; return "#5E5E5E"; };
 const COND_INFO = {
 "Μηχανικός αυχενικός πόνος": "Πόνος αυχένα που αυξάνεται με κίνηση/στάση, χωρίς νευρολογικά σημεία. Αντιμετώπιση: παραμονή σε δραστηριότητα, κινητικότητα, ενδυνάμωση εν τω βάθει καμπτήρων, εκπαίδευση· έλεγχος red flags.",
 "Αυχενική ριζοπάθεια": "Πόνος προς το χέρι με δερματομερικά/μυοτομικά ευρήματα. Cluster: Spurling A, distraction, ULNT1, περιστροφή <60° προς τον πάσχοντα. Συνήθως βελτιώνεται συντηρητικά· προοδευτικό έλλειμμα ή σημεία μυελοπάθειας → παραπομπή.",
@@ -2407,7 +2473,7 @@ function BodyMapModule({ patient, onGo, onPick }) {
           <div style={{ fontSize: 12.5, color: T.paperDim, marginBottom: 12 }}><strong style={{ color: T.paper }}>Δομές:</strong> {r.structs}</div>
           <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, marginBottom: 6 }}>Συχνές παθήσεις</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
-            {r.common.map(([n, t]) => <button key={n} onClick={() => setSelCond(selCond === n ? null : n)} style={{ background: selCond === n ? T.gold : T.bgSoft, color: selCond === n ? "#fff" : "inherit", border: `1px solid ${selCond === n ? T.gold : T.panelLine}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5, cursor: "pointer", fontFamily: "inherit" }}>{n} <span style={{ opacity: 0.65, fontSize: 11 }}>· {t}</span></button>)}
+            {r.common.map(([n, t]) => <button key={n} onClick={() => setSelCond(selCond === n ? null : n)} style={{ background: selCond === n ? TISSUE_COL(t) : TISSUE_COL(t) + "14", color: selCond === n ? "#fff" : "inherit", border: `1px solid ${selCond === n ? TISSUE_COL(t) : TISSUE_COL(t) + "55"}`, borderLeft: `4px solid ${TISSUE_COL(t)}`, borderRadius: 999, padding: "5px 12px", fontSize: 12.5, cursor: "pointer", fontFamily: "inherit" }}>{n} <span style={{ color: selCond === n ? "#fff" : TISSUE_COL(t), fontWeight: 600, fontSize: 11 }}>· {t}</span></button>)}
           </div>
           <div style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: "1px solid #A6412C", background: "rgba(166,65,44,0.12)" }}><strong style={{ color: "#C0392B" }}>Red flags:</strong> {r.red}</div>
           {r.tip && <div className="ll-bm-tip" style={{ fontSize: 12.5, marginBottom: 12, padding: "8px 12px", borderRadius: 12, border: `1px solid ${T.panelLine}`, background: T.bgSoft, lineHeight: 1.5 }}><strong style={{ color: T.gold }}>Σημείωση:</strong> {r.tip}</div>}
@@ -2594,6 +2660,104 @@ const localYmd = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1
 const shiftYmd = (ymd, n) => { const [y,m,d] = ymd.split("-").map(Number); return localYmd(new Date(y, m-1, d+n)); };
 const fmtDay = (ymd) => { const [y,m,d] = ymd.split("-").map(Number); const dt = new Date(y, m-1, d); return `${["Κυρ","Δευ","Τρί","Τετ","Πέμ","Παρ","Σάβ"][dt.getDay()]} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`; };
 
+const RX_STAGES = ["1 · Ισομετρική φόρτιση (έλεγχος πόνου)", "2 · Βαριά αργή αντίσταση", "3 · Ισοτονική / έκκεντρη προοδευτική", "4 · Ταχύτητα & αποθήκευση ενέργειας (SSC)", "5 · Ειδική για το άθλημα"];
+const RX_TYPES = ["Ισομετρική", "Ομόκεντρη", "Έκκεντρη", "Ισοτονική", "Πλειομετρική", "Ισορροπία / ιδιοδεκτικότητα", "Αερόβια", "Άλλο"];
+const RX_SWELL = ["Όχι", "Ήπιο", "Σημαντικό"];
+const RX_DEC = ["Πρόοδος", "Διατήρηση", "Υποχώρηση"];
+const rxEmptyItem = () => ({ id: `${Date.now()}${Math.floor(Math.random() * 1000)}`, name: "", type: RX_TYPES[0], sets: "", reps: "", intensity: "", tempo: "", rest: "", freq: "", note: "" });
+function RxModule({ patientId, patient, exercises, sessionDate }) {
+  const dxList = [patient && patient.pathology ? patient.pathology : "Κύρια διάγνωση", ...((patient && patient.issues) || []).map((i) => i.name)];
+  const [plans, setPlans] = useState([]);
+  const [dx, setDx] = useState(dxList[0]);
+  const [stage, setStage] = useState(RX_STAGES[0]);
+  const [items, setItems] = useState([rxEmptyItem()]);
+  const [progression, setProgression] = useState("");
+  const [note, setNote] = useState("");
+  const [msg, setMsg] = useState("");
+  useEffect(() => { setPlans(patientId ? store.get(`trl_rx_${patientId}`, []) : []); setItems([rxEmptyItem()]); }, [patientId]);
+  const persist = (next) => { setPlans(next); if (patientId) store.set(`trl_rx_${patientId}`, next); };
+  const setItem = (id, patch) => setItems(items.map((x) => x.id === id ? { ...x, ...patch } : x));
+  const save = () => {
+    const clean = items.filter((x) => x.name.trim());
+    if (!clean.length) { setMsg("Πρόσθεσε τουλάχιστον μία άσκηση."); return; }
+    persist([{ id: `${Date.now()}`, date: sessionDate, dx, stage, items: clean, progression, note, pain24: "", swelling: "", decision: "" }, ...plans]);
+    setMsg("Η συνταγή αποθηκεύτηκε."); setTimeout(() => setMsg(""), 2500);
+  };
+  const load = (p) => { setDx(p.dx); setStage(p.stage); setItems(p.items.map((x) => ({ ...x, id: rxEmptyItem().id + x.id }))); setProgression(p.progression || ""); setNote(p.note || ""); window.scrollTo && document.querySelector(".mac-main") && document.querySelector(".mac-main").scrollTo({ top: 0, behavior: "smooth" }); };
+  const upd = (id, patch) => persist(plans.map((p) => p.id === id ? { ...p, ...patch } : p));
+  const esc = (t) => String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const printPlan = (p) => {
+    const w = window.open("", "_blank"); if (!w) return;
+    const rows = p.items.map((x) => `<tr><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td>${esc(x.sets)} × ${esc(x.reps)}</td><td>${esc(x.intensity)}</td><td>${esc(x.tempo)}</td><td>${esc(x.rest)}</td><td>${esc(x.freq)}</td><td>${esc(x.note)}</td></tr>`).join("");
+    w.document.write(`<html><head><meta charset="utf-8"><title>Συνταγή Άσκησης</title><style>body{font-family:Arial,sans-serif;color:#111;padding:28px;font-size:13px}h1{font-size:20px;margin:0 0 4px}table{border-collapse:collapse;width:100%;margin-top:14px}th,td{border:1px solid #bbb;padding:6px 8px;text-align:left;vertical-align:top}th{background:#f1f1ef}.f{margin-top:24px;font-size:11px;color:#555}</style></head><body><h1>Συνταγή Άσκησης</h1><div><b>${esc(patient && patient.name)}</b> · ${esc(p.dx)} · ${esc(p.date)}</div><div>Επίπεδο: ${esc(p.stage)}</div><table><tr><th>Άσκηση</th><th>Τύπος</th><th>Σετ × Επαν.</th><th>Ένταση</th><th>Tempo</th><th>Διάλειμμα</th><th>Συχνότητα</th><th>Σημειώσεις</th></tr>${rows}</table>${p.progression ? `<p><b>Κριτήρια προόδου:</b> ${esc(p.progression)}</p>` : ""}${p.note ? `<p><b>Οδηγίες:</b> ${esc(p.note)}</p>` : ""}<div class="f">Afxentios Kekelekis PhD · Sports ReHub · sportsrehub.com</div><script>window.onload=function(){window.print()}<\/script></body></html>`);
+    w.document.close();
+  };
+  const card = { background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 18, marginBottom: 18 };
+  const lib = (exercises || []).map((e) => e.name);
+  return (
+    <>
+      <div style={card}>
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16, color: T.gold, marginBottom: 12 }}>Συνταγογράφηση άσκησης{patient ? ` — ${patient.name}` : ""}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+          <SelectField label="Διάγνωση" value={dx} onChange={setDx} options={dxList} />
+          <SelectField label="Επίπεδο capacity" value={stage} onChange={setStage} options={RX_STAGES} />
+        </div>
+        <datalist id="rx-lib">{lib.map((n) => <option key={n} value={n} />)}</datalist>
+        {items.map((it, idx) => (
+          <div key={it.id} style={{ border: `1px solid ${T.panelLine}`, borderRadius: 12, padding: 12, marginBottom: 10, background: T.bgSoft }}>
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1.2fr", gap: 8, marginBottom: 8 }}>
+              <Field label={`Άσκηση ${idx + 1}`}><input list="rx-lib" value={it.name} onChange={(e) => setItem(it.id, { name: e.target.value })} placeholder="π.χ. Spanish squat" style={inputStyle} /></Field>
+              <SelectField label="Τύπος" value={it.type} onChange={(v) => setItem(it.id, { type: v })} options={RX_TYPES} />
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 }}>
+              <TextField label="Σετ" value={it.sets} onChange={(v) => setItem(it.id, { sets: v })} placeholder="4" />
+              <TextField label="Επαν./Διάρκεια" value={it.reps} onChange={(v) => setItem(it.id, { reps: v })} placeholder="5 / 30″" />
+              <TextField label="Ένταση" value={it.intensity} onChange={(v) => setItem(it.id, { intensity: v })} placeholder="70% ή RPE 7" />
+              <TextField label="Tempo" value={it.tempo} onChange={(v) => setItem(it.id, { tempo: v })} placeholder="3-0-3" />
+              <TextField label="Διάλειμμα" value={it.rest} onChange={(v) => setItem(it.id, { rest: v })} placeholder="2′" />
+              <TextField label="Φορές/εβδ." value={it.freq} onChange={(v) => setItem(it.id, { freq: v })} placeholder="3" />
+            </div>
+            <div style={{ display: "flex", gap: 8, marginTop: 8, alignItems: "end" }}>
+              <div style={{ flex: 1 }}><TextField label="Σημειώσεις" value={it.note} onChange={(v) => setItem(it.id, { note: v })} placeholder="π.χ. πόνος ≤ 3/10" /></div>
+              {items.length > 1 && <button type="button" onClick={() => setItems(items.filter((x) => x.id !== it.id))} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 8, padding: "8px 12px", fontSize: 12.5, cursor: "pointer" }}>Αφαίρεση</button>}
+            </div>
+          </div>
+        ))}
+        <button type="button" onClick={() => setItems([...items, rxEmptyItem()])} style={{ background: "none", border: `1px dashed ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "7px 14px", fontSize: 12.5, cursor: "pointer", marginBottom: 12 }}>+ Πρόσθεσε άσκηση</button>
+        <TextField label="Κριτήρια προόδου" value={progression} onChange={setProgression} placeholder="π.χ. πόνος ≤ 3/10 και καμία αντίδραση στις 24 ώρες → +5% φορτίου" />
+        <div style={{ height: 8 }} />
+        <TextField label="Οδηγίες προς τον ασθενή" value={note} onChange={setNote} placeholder="π.χ. αποφυγή αθλητικής δραστηριότητας 48 ώρες" />
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 14, justifyContent: "flex-end" }}>
+          {msg && <span style={{ fontSize: 12.5, color: T.paperDim }}>{msg}</span>}
+          <button onClick={save} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 13.5, fontWeight: 600, cursor: "pointer" }}>Αποθήκευση συνταγής</button>
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, marginBottom: 10 }}>Ιστορικό συνταγών & ανοχή</div>
+        {!plans.length && <div style={{ fontSize: 13, color: T.paperDim }}>Δεν υπάρχουν αποθηκευμένες συνταγές.</div>}
+        {plans.map((p) => (
+          <div key={p.id} style={{ borderTop: `1px solid ${T.panelLine}`, padding: "12px 0" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+              <div><b>{p.date}</b> · {p.dx} · <span style={{ color: T.paperDim }}>{p.stage}</span></div>
+              <div style={{ display: "flex", gap: 6 }}>
+                <button onClick={() => load(p)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}>Αντιγραφή</button>
+                <button onClick={() => printPlan(p)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}>Εκτύπωση</button>
+                <button onClick={() => persist(plans.filter((x) => x.id !== p.id))} aria-label="Διαγραφή" style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 16 }}>×</button>
+              </div>
+            </div>
+            <div style={{ fontSize: 12.5, margin: "6px 0", color: T.paperDim }}>{p.items.map((x) => `${x.name} (${x.type}) ${x.sets}×${x.reps}${x.intensity ? " @ " + x.intensity : ""}`).join(" · ")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1.4fr", gap: 8, alignItems: "end" }}>
+              <SelectField label="Πόνος 24 ωρών (0–10)" value={p.pain24} onChange={(v) => upd(p.id, { pain24: v })} options={["", ...Array.from({ length: 11 }, (_, i) => String(i))]} />
+              <SelectField label="Πρήξιμο" value={p.swelling} onChange={(v) => upd(p.id, { swelling: v })} options={["", ...RX_SWELL]} />
+              <Field label="Απόφαση"><div style={{ display: "flex", gap: 6 }}>{RX_DEC.map((d) => <button key={d} onClick={() => upd(p.id, { decision: p.decision === d ? "" : d })} style={{ flex: 1, background: p.decision === d ? T.gold : "none", color: p.decision === d ? T.bg : T.paperDim, border: `1px solid ${p.decision === d ? T.gold : T.panelLine}`, borderRadius: 8, padding: "8px 4px", fontSize: 12.5, cursor: "pointer" }}>{d}</button>)}</div></Field>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
 function TissueLoadLog() {
   const [patients, setPatients] = useState(() => store.get("trl_patients", []));
   const [activePatient, setActivePatient] = useState(() => {
@@ -2701,6 +2865,17 @@ function TissueLoadLog() {
     setPatientDraft({ ...emptyPatientDraft() });
     setShowNewPatient(true);
   };
+  const [addingIssue, setAddingIssue] = useState(false);
+  const [issueDraft, setIssueDraft] = useState({ name: "", side: SIDE_OPTIONS[0], date: "" });
+  const setIssues = (list) => {
+    const next = patients.map((p) => p.id === activePatient ? { ...p, issues: list } : p);
+    setPatients(next); store.set("trl_patients", next);
+  };
+  const addIssue = () => {
+    const nm = issueDraft.name.trim(); if (!nm || !patient) return;
+    setIssues([...(patient.issues || []), { id: `${Date.now()}`, name: nm, side: issueDraft.side, date: issueDraft.date, resolved: false }]);
+    setIssueDraft({ name: "", side: SIDE_OPTIONS[0], date: "" }); setAddingIssue(false);
+  };
   const saveNewPatient = () => {
     const name = patientDraft.name.trim();
     if (!name) return;
@@ -2733,6 +2908,7 @@ function TissueLoadLog() {
     store.remove(`trl_assess_${id}`);
     store.remove(`trl_sessions_${id}`);
     store.remove(`trl_rtp_${id}`);
+    store.remove(`trl_rx_${id}`);
   };
 
   const addCustomType = () => {
@@ -2979,6 +3155,31 @@ function TissueLoadLog() {
                   {patient.medicalHistory && <div><strong style={{ color: T.paper }}>Ιστορικό:</strong> {patient.medicalHistory}</div>}
                 </div>
               </div>
+            </div>
+            <div style={{ marginTop: 12, paddingTop: 10, borderTop: `1px solid ${T.panelLine}` }}>
+              <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 6 }}>Επιπλέον διαγνώσεις</div>
+              {(patient.issues || []).map((it) => (
+                <div key={it.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", opacity: it.resolved ? 0.55 : 1, flexWrap: "wrap" }}>
+                  <span style={{ color: T.paper, fontWeight: 600, textDecoration: it.resolved ? "line-through" : "none" }}>{it.name}</span>
+                  <span>{it.side}{it.date ? ` · ${it.date}` : ""}</span>
+                  <button onClick={() => setIssues(patient.issues.map((x) => x.id === it.id ? { ...x, resolved: !x.resolved } : x))} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: "#15803D", borderRadius: 999, padding: "2px 10px", fontSize: 11.5, cursor: "pointer" }}>{it.resolved ? "Ενεργό" : "Ιάθηκε"}</button>
+                  <button aria-label="Διαγραφή διάγνωσης" onClick={() => setIssues(patient.issues.filter((x) => x.id !== it.id))} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 15, padding: "0 4px" }}>×</button>
+                </div>
+              ))}
+              {!(patient.issues || []).length && !addingIssue && <div style={{ opacity: 0.5, marginBottom: 4 }}>Κανένα — μόνο η κύρια διάγνωση.</div>}
+              {addingIssue ? (
+                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 8, marginTop: 6, alignItems: "end" }}>
+                  <TextField label="Διάγνωση" value={issueDraft.name} onChange={(v) => setIssueDraft({ ...issueDraft, name: v })} placeholder="π.χ. Οσφυαλγία" />
+                  <SelectField label="Πλευρά" value={issueDraft.side} onChange={(v) => setIssueDraft({ ...issueDraft, side: v })} options={SIDE_OPTIONS} />
+                  <Field label="Ημ. τραυματισμού"><input type="date" value={issueDraft.date} onChange={(e) => setIssueDraft({ ...issueDraft, date: e.target.value })} style={inputStyle} /></Field>
+                  <div style={{ gridColumn: "1 / -1", display: "flex", gap: 8 }}>
+                    <button onClick={addIssue} style={{ background: T.gold, color: T.bg, border: "none", borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Προσθήκη</button>
+                    <button onClick={() => setAddingIssue(false)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 8, padding: "7px 14px", fontSize: 13, cursor: "pointer" }}>Άκυρο</button>
+                  </div>
+                </div>
+              ) : (
+                <button onClick={() => setAddingIssue(true)} style={{ background: "none", border: `1px dashed ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "6px 12px", fontSize: 12.5, cursor: "pointer", marginTop: 4 }}>+ Πρόσθεσε διάγνωση</button>
+              )}
             </div>
           </div>
         )}
@@ -3312,7 +3513,7 @@ function TissueLoadLog() {
           </div>
         ) : (
           <>
-            <div className="mac-top">
+            <div className="mac-top" data-view={view}>
               <div className="mac-ptitle">
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 17 }}>{patient ? patient.name : ""}</div>
                 <div style={{ fontSize: 12, color: T.paperDim }}>{fmtDay(sessionDate)}{patient && patient.startDate ? ` · Εβδ.${weekNumber(patient.startDate, sessionDate)}` : ""}</div>
@@ -3325,6 +3526,7 @@ function TissueLoadLog() {
                 { id: "daily", label: "Ημερήσια Συνεδρία", icon: "folder", clin: true },
                 { id: "measurements", label: "Μετρήσεις (VALD)", icon: "gauge" },
                 { id: "loadmgmt", label: "Διαχείριση Φορτίου", icon: "heart", clin: true },
+                { id: "rx", label: "Συνταγή", icon: "pencil", clin: true },
                 { id: "sources", label: "Πηγές", icon: "book", clin: true },
               ].filter((v) => !v.clin || !isPatientMode).map((v) => (
                 <button key={v.id} className={view === v.id ? "on" : ""} onClick={() => setView(v.id)} style={{
@@ -3340,12 +3542,13 @@ function TissueLoadLog() {
             </div>
             </div>
 
-            <div className="mac-main">
+            <div className="mac-main" data-view={view}>
             {view === "assessment" && !isPatientMode && assessmentView}
             {view === "rtp" && !isPatientMode && <RtpModule patientId={activePatient} patientName={patient && patient.name} assessments={assessments} sessionDate={sessionDate} />}
             {view === "daily" && !isPatientMode && dailyView}
             {view === "sources" && !isPatientMode && <SourcesModule />}
             {view === "loadmgmt" && !isPatientMode && loadMgmtView}
+            {view === "rx" && !isPatientMode && <RxModule patientId={activePatient} patient={patient} exercises={exercises} sessionDate={sessionDate} />}
 
             {view === "load" && (
               <>
