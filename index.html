@@ -2953,13 +2953,13 @@ function TissueLoadLog() {
             <div className="mac-pcard-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
               <div>
                 <div style={{ fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.05em", color: T.paperDim, opacity: 0.7, marginBottom: 4 }}>Προσωπικά</div>
-                {patientHasPersonal ? (
+                {true ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {patient.age && <div><strong style={{ color: T.paper }}>Ηλικία:</strong> {patient.age}</div>}
                     {patient.occupation && <div><strong style={{ color: T.paper }}>Επάγγελμα:</strong> {patient.occupation}</div>}
                     {patient.sport && <div><strong style={{ color: T.paper }}>Άθλημα:</strong> {patient.sport}</div>}
                     {patient.dominantLimb && <div><strong style={{ color: T.paper }}>Κυρίαρχο άκρο:</strong> {patient.dominantLimb}</div>}
-                    {patient.phone && <div><strong style={{ color: T.paper }}>Τηλ:</strong> {patient.phone}</div>}
+                    <div><strong style={{ color: T.paper }}>Τηλ:</strong> {patient.phone ? <a href={"tel:" + String(patient.phone).replace(/\s+/g, "")} style={{ color: T.gold, textDecoration: "none" }}>{patient.phone}</a> : <span style={{ opacity: 0.55, cursor: "pointer" }} onClick={openEditPatient}>— πρόσθεσε</span>}</div>
                     {patient.email && <div><strong style={{ color: T.paper }}>Email:</strong> {patient.email}</div>}
                   </div>
                 ) : <div style={{ opacity: 0.5 }}>—</div>}
@@ -3253,6 +3253,10 @@ function TissueLoadLog() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                 <TextField label="Όνομα ασθενή" value={patientDraft.name} onChange={(v) => setPatientDraft({ ...patientDraft, name: v })} />
                 <Field label="Ημερομηνία έναρξης"><input type="date" value={patientDraft.startDate} onChange={(e) => setPatientDraft({ ...patientDraft, startDate: e.target.value })} style={inputStyle} /></Field>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+                <TextField label="Τηλέφωνο" value={patientDraft.phone} onChange={(v) => setPatientDraft({ ...patientDraft, phone: v })} placeholder="+3069XXXXXXXX" />
+                <TextField label="Email" value={patientDraft.email} onChange={(v) => setPatientDraft({ ...patientDraft, email: v })} />
               </div>
               <TextField label="Παθολογία / διάγνωση" value={patientDraft.pathology} onChange={(v) => setPatientDraft({ ...patientDraft, pathology: v })} placeholder="π.χ. τενοντοπάθεια Αχίλλειου" />
               <p style={{ fontSize: 11, color: T.paperDim, marginTop: 8, marginBottom: 10 }}>Τα υπόλοιπα στοιχεία (προσωπικά/ιατρικά) συμπληρώνονται στον πλήρη φάκελο μετά την προσθήκη.</p>
