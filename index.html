@@ -403,6 +403,9 @@ const TISSUES = [
   { id: "ligament", label: "Σύνδεσμος", grain: "cross",
     loadTypes: ["Πολυεπίπεδο στρες", "Ιδιοδεκτικό / διαταραχή ισορροπίας", "Φόρτιση ακραίου εύρους", "Λειτουργική σταθεροποίηση"],
     note: "Μηχανοϋποδοχείς & αρθρική σταθερότητα" },
+  { id: "nerve", label: "Νεύρο", grain: "fiber",
+    loadTypes: ["Νευρική κινητοποίηση – ολίσθηση (sliders)", "Νευρική κινητοποίηση – τάση (tensioners)", "Νευρική φόρτιση – ισομετρική / θέση", "Νευροδυναμική φόρτιση με κίνηση"],
+    note: "Νευρικός ιστός — ανοχή σε τάση & ολίσθηση, ανταπόκριση συμπτωμάτων (παραισθησία, πόνος)" },
   { id: "cardio", label: "Καρδιαγγειακό", grain: "pulse",
     loadTypes: ["Αερόβια – χαμηλής έντασης (Ζώνη 1-2)", "Αερόβια – μέτριας έντασης (Ζώνη 3)", "Αναερόβια – Διαλειμματική υψηλής έντασης (HIIT)", "Αναερόβια – Αναερόβιο κατώφλι"],
     note: "Καρδιαγγειακό / μεταβολικό σύστημα — αερόβιος vs αναερόβιος μηχανισμός",
@@ -471,6 +474,15 @@ const TISSUE_FIELDS = {
     { k: "bouts", l: "Σετ φόρτισης (bouts) σήμερα", t: "number", ph: "2" },
     { k: "gap", l: "Διάλειμμα μεταξύ bouts", u: "ώρες", t: "number", ph: "8" },
     { k: "site", l: "Στοχευόμενη περιοχή οστού", t: "text", ph: "π.χ. κνήμη, μηριαίο" },
+  ],
+  nerve: [
+    { k: "nerveName", l: "Στοχευόμενο νεύρο / περιοχή", t: "text", ph: "π.χ. ισχιακό, μέσο, ωλένιο" },
+    { k: "position", l: "Θέση / τεστ (π.χ. SLR, ULNT1, slump)", t: "text", ph: "π.χ. slump, ULNT1" },
+    { k: "amplitude", l: "Εύρος κίνησης", t: "select", o: ["Μικρό (χωρίς συμπτώματα)", "Μέτριο", "Μέγιστο ανεκτό"] },
+    { k: "holdSec", l: "Διάρκεια ανά επανάληψη", u: "sec", t: "number", ph: "10" },
+    { k: "paresthesia", l: "Παραισθησία / μούδιασμα κατά τη φόρτιση", t: "select", o: ["Καμία", "Ήπια — υποχωρεί αμέσως", "Έντονη — επιμένει"] },
+    { k: "symptom", l: "Ανταπόκριση συμπτωμάτων (0–10)", t: "number", ph: "2" },
+    { k: "stance", l: "Βάση / στάση", t: "select", o: ["Καθιστός", "Ύπτια", "Όρθια", "Πρηνής", "Πλάγια"] },
   ],
   ligament: [
     { k: "plane", l: "Επίπεδο κίνησης", t: "select", o: ["Οβελιαίο", "Μετωπιαίο", "Εγκάρσιο", "Πολυεπίπεδο"] },
@@ -572,6 +584,7 @@ const GMAP = {
   tendon: { mvic: "int", plyoInt: "int", rate: "int", holdSec: "dur", tut: "dur", restSet: "rest", legs: "type", dir: "type", pattern: "type", surface: "type" },
   muscle: { intent: "int", barVel: "int", rir: "int", eccSec: "dur", restSet: "rest", length: "type", side: "type", group: "type" },
   bone: { dropH: "int", grf: "int", contacts: "dur", bouts: "dur", gap: "rest", dir: "type", surface: "type" },
+  nerve: { amplitude: "int", symptom: "int", holdSec: "dur", paresthesia: "int", nerveName: "type", position: "type", stance: "type" },
   ligament: { perturb: "int", angle: "int", holdSec: "dur", plane: "type", stance: "type", surface: "type", vision: "type" },
 };
 const TP_GROUPS = [["freq", "Συχνότητα"], ["int", "Ένταση"], ["dur", "Διάρκεια"], ["type", "Τύπος σύσπασης / άσκησης"], ["rest", "Διάρκεια ξεκούρασης"], ["prog", "Πρόοδος (progression)"], ["oth", "Εκτέλεση / παρακολούθηση"]];
@@ -579,6 +592,7 @@ const REST_HINTS = {
   tendon: "Αντιδραστικός / υπερυδατωμένος τένοντας μετά από έντονη SSC → περίπου 48 ώρες πριν από παρόμοια δόση. Υγιής τένοντας ανέχεται καθημερινή φόρτιση αν η SSC και το strain είναι μικρά· < 24 ώρες ανάπαυσης μπορεί να οδηγήσει σε απώλεια κολλαγόνου.",
   muscle: "Έως ≥72 ώρες μετά από γρήγορες έκκεντρες συσπάσεις (βλάβη/πόνος). Μέγιστες ισομετρικές συσπάσεις: χαμηλή κόπωση και ταχεία ανάκαμψη. Μετά από sprint, η δύναμη οπισθίων μηριαίων επανέρχεται σε 48–72 ώρες.",
   bone: "Η μηχανοευαισθησία του οστού χάνεται μετά από ~20 κύκλους φόρτισης και αποκαθίσταται ~90% σε 8 ώρες· επιπλέον δόση (≤60 κύκλοι, π.χ. πλειομετρία) μετά από 4–8 ώρες.",
+  nerve: "Μετά από νευροδυναμική φόρτιση: αν τα συμπτώματα επιμένουν >30 λεπτά ή επιδεινώνονται, μείωσε εύρος/τάση στην επόμενη δόση· συνήθως 24–48 ώρες.",
   cardio: "Χαμηλή ένταση (κυρίως αερόβια) μπορεί να επαναληφθεί σε ≤24 ώρες· υψηλή (κυρίως αναερόβια) χρειάζεται ≥72 ώρες.",
 };
 Object.keys(TISSUE_FIELDS).forEach((t) => {
@@ -598,9 +612,14 @@ const sscOf = (tissueId, lt) => tissueId === "tendon" && plyoLT(lt);
 const calcOf = (tissueId, form) => {
   const sets = parseFloat(form.sets), reps = parseFloat(form.reps), kg = form.resistanceUnit === "kg" ? parseFloat(form.resistance) : NaN;
   const tp = form.tp || {}; const c = {};
-  if (tissueId === "muscle" && sets > 0 && reps > 0 && kg > 0) c.volume = Math.round(sets * reps * kg);
+  const sl = (form.setList || []).filter((x) => parseFloat(x.reps) > 0);
+  if (tissueId === "muscle" && sl.length) {
+    const vol = sl.reduce((a, x) => { const k = parseFloat(x.load) > 0 ? parseFloat(x.load) : (kg > 0 ? kg : 0); return a + parseFloat(x.reps) * k; }, 0);
+    if (vol > 0) c.volume = Math.round(vol);
+  } else if (tissueId === "muscle" && sets > 0 && reps > 0 && kg > 0) c.volume = Math.round(sets * reps * kg);
   if (sscOf(tissueId, form.loadType)) {
-    if (sets > 0 && reps > 0) c.totalContacts = Math.round(sets * reps);
+    if (sl.length) c.totalContacts = Math.round(sl.reduce((a, x) => a + parseFloat(x.reps), 0));
+    else if (sets > 0 && reps > 0) c.totalContacts = Math.round(sets * reps);
     const h = parseFloat(tp.jumpH), g = parseFloat(tp.gct);
     if (h > 0 && g > 0) c.rsi = Math.round((h / 100) / (g / 1000) * 100) / 100;
   }
@@ -1535,7 +1554,7 @@ function Chip({ children, tone }) {
     : { background: "transparent", color: T.paperDim, border: `1px solid ${T.panelLine}` };
   return <span style={{ ...st, borderRadius: 999, padding: "3px 10px", fontSize: 11.5, whiteSpace: "nowrap" }}>{children}</span>;
 }
-function EntryCard({ e, onDelete, onSaveParams, suggestions }) {
+function EntryCard({ e, onDelete, onEdit, onSaveParams, suggestions }) {
   const bits = [];
   if (e.tempo) bits.push(e.tempo);
   if (e.speed) bits.push(`${e.speed} km/h`);
@@ -1551,13 +1570,14 @@ function EntryCard({ e, onDelete, onSaveParams, suggestions }) {
   if (e.oneRM) bits.push(`1RM ${e.oneRM} kg${e.resistance && e.resistanceUnit === "kg" ? ` (${Math.round((parseFloat(e.resistance) / parseFloat(e.oneRM)) * 100)}%)` : ""}`);
   if (e.frequency) bits.push(`${e.frequency}×/εβδ`);
   const hurt = Number(e.painDuring) > 0 || Number(e.pain24h) > 0;
-  const tl = (TISSUES.find((t) => t.id === e.tissue) || {}).label;
+  const tl = (e.tissues && e.tissues.length ? e.tissues : [e.tissue]).map((id) => (TISSUES.find((t) => t.id === id) || {}).label).filter(Boolean).join(" + ");
   return (
     <div className="ll-entry" style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "12px 14px", fontSize: 13 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 8 }}>
         <span style={{ fontWeight: 700, fontSize: 14 }}>{e.activity}</span>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 10.5, color: T.paperDim }}>{e.week ? `Εβδ.${e.week}` : ""}{e.recordedBy ? ` · ${e.recordedBy}` : ""}</span>
+          {onEdit && <button onClick={onEdit} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "2px 10px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Διόρθωση</button>}
           <button onClick={onDelete} aria-label="Διαγραφή" style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={13} /></button>
         </div>
       </div>
@@ -2782,6 +2802,12 @@ function RxModule({ patientId, patient, exercises, sessionDate }) {
   );
 }
 
+const tissueFromText = (t) => { t = (t || "").toLowerCase(); if (/τένοντ|τενοντ/.test(t)) return "tendon"; if (/σύνδεσμ|συνδεσμ|διάστρεμμ/.test(t)) return "ligament"; if (/οστ|κάταγμ|κατάγμ/.test(t)) return "bone"; if (/νεύρ|νευρ|ριζοπάθ|ισχιαλγ|σύνδρομο καρπιαίου|παραισθ/.test(t)) return "nerve"; if (/μυ|θλάσ/.test(t)) return "muscle"; return null; };
+const condTissueId = (name) => {
+  const n = (name || "").trim().toLowerCase(); if (!n) return null;
+  for (const r of Object.values(BODY_REGIONS)) for (const [cn, t] of (r.common || [])) if (cn.toLowerCase() === n) return tissueFromText(t) || r.tissue || null;
+  return tissueFromText(n);
+};
 function TissueLoadLog() {
   const [patients, setPatients] = useState(() => store.get("trl_patients", []));
   const [activePatient, setActivePatient] = useState(() => {
@@ -2802,6 +2828,10 @@ function TissueLoadLog() {
   const [sessionDate, setSessionDate] = useState(() => localYmd());
   const [dayOnly, setDayOnly] = useState(false);
   const [tissueId, setTissueId] = useState("tendon");
+  const [dxSel, setDxSel] = useState("");
+  const [showTissuePick, setShowTissuePick] = useState(false);
+  const [tissuesSel, setTissuesSel] = useState(["tendon"]);
+  useEffect(() => { if (tissuesSel[0] && tissuesSel[0] !== tissueId) setTissueId(tissuesSel[0]); }, [tissuesSel]);
   const [measureTab, setMeasureTab] = useState("jump"); // jump | isometric
   const mode = "clinician";
   const [showNewPatient, setShowNewPatient] = useState(false);
@@ -2826,7 +2856,7 @@ function TissueLoadLog() {
     store.set("trl_exercises", SEED_EXERCISES);
     return SEED_EXERCISES;
   });
-  const exercisesHere = exercises.filter((e) => !e.tissue || e.tissue === tissueId);
+  const exercisesHere = exercises.filter((e) => !e.tissue || tissuesSel.includes(e.tissue) || e.tissue === tissueId);
   const [showLibrary, setShowLibrary] = useState(false);
   const [exDraft, setExDraft] = useState({ name: "", category: EXERCISE_CATEGORIES[0], defaultLoadType: "", notes: "" });
 
@@ -2837,7 +2867,7 @@ function TissueLoadLog() {
   const emptyForm = {
     activity: "", loadType: allLoadTypes[0], intensity: 5,
     resistance: "", resistanceUnit: "kg",
-    sets: "", reps: "", tempo: "",
+    sets: "", reps: "", tempo: "", setList: [],
     duration: "", heartRateAvg: "", heartRatePercent: "",
     speed: "", pace: "", incline: "", resistanceLevel: "",
     rom: "", romType: "Ενεργητικό", strengthGrade: "", strengthForce: "", power: "", oneRM: "",
@@ -2877,6 +2907,9 @@ function TissueLoadLog() {
 
   const flashToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2200); };
   const patient = patients.find((p) => p.id === activePatient);
+  const dxList = patient ? [patient.pathology, ...((patient.issues || []).map((i) => i.name))].filter((x) => x && String(x).trim()) : [];
+  useEffect(() => { setDxSel(dxList[0] || ""); }, [activePatient, (patient && patient.pathology) || "", ((patient && patient.issues) || []).length]);
+  useEffect(() => { const t = condTissueId(dxSel); if (t && TISSUES.some((x) => x.id === t)) { setTissueId(t); setTissuesSel([t]); } }, [dxSel]);
 
   const todayWeek = patient ? weekNumber(patient.startDate, localYmd()) : null;
   const selWeek = patient && patient.startDate ? weekNumber(patient.startDate, sessionDate) : null;
@@ -2971,12 +3004,40 @@ function TissueLoadLog() {
     });
   };
 
+  const [setDraft, setSetDraft] = useState({ reps: "", load: "" });
+  const [editingId, setEditingId] = useState(null);
+  const syncSets = (list) => ({ setList: list, sets: list.length ? String(list.length) : "", reps: list.map((x) => x.reps).join("+") });
+  const addSetItem = () => {
+    if (!(parseFloat(setDraft.reps) > 0)) { flashToast("Γράψε επαναλήψεις για το σετ"); return; }
+    const list = [...(form.setList || []), { reps: String(setDraft.reps), load: setDraft.load }];
+    setForm({ ...form, ...syncSets(list) }); setSetDraft({ reps: "", load: setDraft.load });
+  };
+  const removeSetItem = (i) => { const list = (form.setList || []).filter((_, j) => j !== i); setForm({ ...form, ...syncSets(list) }); };
+  const quickAddExercise = () => {
+    const name = form.activity.trim(); if (!name) return;
+    if (exercises.some((x) => x.name.toLowerCase() === name.toLowerCase() && (!x.tissue || x.tissue === tissueId))) { flashToast("Υπάρχει ήδη στη βάση ασκήσεων"); return; }
+    const ex = { id: `${Date.now()}`, name, category: EXERCISE_CATEGORIES[0], tissue: tissueId, defaultLoadType: form.loadType, notes: "" };
+    const next = [...exercises, ex]; setExercises(next); store.set("trl_exercises", next); flashToast("Προστέθηκε στη βάση ασκήσεων");
+  };
+  const startEdit = (e) => {
+    const { id, date, tissue: t, tissues: _ts, week, recordedBy, v2, calc, cardioMode: cm, ...rest } = e;
+    setEditingId(id); if (e.dx) setDxSel(e.dx);
+    setTissuesSel(e.tissues && e.tissues.length ? e.tissues : (t ? [t] : [tissueId]));
+    if (t && t !== tissueId) setTissueId(t);
+    if (cm) setCardioMode(cm);
+    setTimeout(() => {
+      setForm({ ...emptyForm, ...rest, setList: rest.setList || [], extra: rest.extra || [], tp: rest.tp || {} });
+      try { const m = document.querySelector(".mac-main"); if (m) m.scrollTo({ top: 0, behavior: "smooth" }); } catch (_) {}
+    }, t && t !== tissueId ? 80 : 0);
+  };
+  const cancelEdit = () => { setEditingId(null); setForm({ ...emptyForm, loadType: allLoadTypes[0] }); };
+
   const saveEntry = useCallback(() => {
     if (!activePatient) return;
     if (!form.activity.trim()) { flashToast("Πρόσθεσε όνομα άσκησης/δραστηριότητας"); return; }
     setSaving(true);
     const entry = {
-      id: `${Date.now()}`, date: sessionDate, tissue: tissueId,
+      id: `${Date.now()}`, date: sessionDate, tissue: tissueId, tissues: tissuesSel.length ? tissuesSel : [tissueId], dx: dxSel || undefined,
       cardioMode: isCardio ? cardioMode : undefined,
       recordedBy: mode === "clinician" ? "Θεραπευτής" : "Ασθενής", v2: true,
       week: patient ? weekNumber(patient.startDate, sessionDate) : null,
@@ -2985,13 +3046,16 @@ function TissueLoadLog() {
       calc: calcOf(tissueId, form),
       tp: Object.fromEntries(tpFieldsFor(tissueId, form.loadType).filter((f) => form.tp && form.tp[f.k] !== undefined && form.tp[f.k] !== "").map((f) => [f.k, form.tp[f.k]])),
     };
-    const next = [entry, ...entries];
+    let next;
+    if (editingId) {
+      next = entries.map((x) => x.id === editingId ? { ...x, ...entry, id: x.id, date: x.date, week: x.week, recordedBy: x.recordedBy } : x);
+    } else next = [entry, ...entries];
     setEntries(next);
     const ok = store.set(`trl_entries_${activePatient}`, next);
-    flashToast(ok ? "Καταχωρήθηκε" : "Η αποθήκευση απέτυχε");
-    setSaving(false);
+    flashToast(ok ? (editingId ? "Οι αλλαγές αποθηκεύτηκαν" : "Καταχωρήθηκε") : "Η αποθήκευση απέτυχε");
+    setSaving(false); setEditingId(null);
     setForm({ ...emptyForm, loadType: allLoadTypes[0] });
-  }, [activePatient, entries, form, tissueId, mode, tissue, customTypes, cardioMode, patient, sessionDate]);
+  }, [activePatient, entries, form, tissueId, mode, tissue, customTypes, cardioMode, patient, sessionDate, editingId]);
 
   const updateEntryExtra = (id, extra) => {
     const next = entries.map((e) => (e.id === id ? { ...e, extra } : e));
@@ -3094,7 +3158,7 @@ function TissueLoadLog() {
 
   const patientName = patient?.name;
   const onDay = (x) => !dayOnly || x.date === sessionDate;
-  const tissueAll = entries.filter((e) => e.tissue === tissueId).slice().reverse();
+  const tissueAll = entries.filter((e) => e.tissue === tissueId || (e.tissues || []).includes(tissueId)).slice().reverse();
   const tissueEntries = tissueAll.filter(onDay);
   const histNames = [...new Set(tissueAll.map((e) => e.activity))];
   const histOn = histEx && histNames.includes(histEx) ? histEx : "";
@@ -3381,7 +3445,8 @@ function TissueLoadLog() {
             {dayAvgRpe != null && <div style={{ fontSize: 12.5, color: T.gold, marginBottom: 8 }}>Μέσο RPE ασκήσεων: {dayAvgRpe.toFixed(1)}</div>}
             {dayEntries.map((e) => (
               <div key={e.id} style={{ fontSize: 13, padding: "6px 0", borderBottom: `1px solid ${T.panelLine}` }}>
-                <b>{e.activity}</b> <span style={{ color: T.paperDim }}>· {TISSUES.find((t) => t.id === e.tissue)?.label} · RPE {rpeOf(e)}{(e.sets || e.reps) ? ` · ${e.sets || "–"}×${e.reps || "–"}` : ""}{e.tempo ? ` · ${e.tempo}` : ""}</span>
+                <b>{e.activity}</b> <span style={{ color: T.paperDim }}>· {(e.tissues && e.tissues.length ? e.tissues : [e.tissue]).map((id) => (TISSUES.find((t) => t.id === id) || {}).label).filter(Boolean).join(" + ")} · RPE {rpeOf(e)}{(e.sets || e.reps) ? ` · ${e.sets || "–"}×${e.reps || "–"}` : ""}{e.tempo ? ` · ${e.tempo}` : ""}</span>
+                <button onClick={() => startEdit(e)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "1px 10px", fontSize: 11.5, fontWeight: 600, cursor: "pointer", marginLeft: 8 }}>Διόρθωση</button>
               </div>
             ))}
           </>
@@ -3576,23 +3641,33 @@ function TissueLoadLog() {
 
             {view === "load" && (
               <>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6, marginBottom: 18 }}>
-                  {TISSUES.map((t) => {
-                    const active = t.id === tissueId;
-                    return (
-                      <button key={t.id} onClick={() => setTissueId(t.id)} style={{
-                        display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
-                        padding: "10px 3px", borderRadius: 10, cursor: "pointer",
-                        border: `1px solid ${active ? T.terracotta : T.panelLine}`,
-                        background: active ? T.terracotta : T.panel, color: active ? T.bg : T.paper,
-                      }}>
-                        <Grain type={t.grain} active={active} />
-                        <span style={{ fontSize: 10.5, fontWeight: 600, textAlign: "center", lineHeight: 1.15 }}>{t.label}</span>
-                      </button>
-                    );
-                  })}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginBottom: 10 }}>
+                  {dxList.length > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ fontSize: 12, color: T.paperDim }}>Διάγνωση</span>
+                      <select value={dxSel} onChange={(e) => setDxSel(e.target.value)} style={{ ...inputStyle, width: "auto", padding: "7px 28px 7px 10px", fontSize: 13 }}>
+                        {dxList.map((d) => <option key={d} value={d}>{d}</option>)}
+                      </select>
+                    </div>
+                  )}
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5 }}>
+                    <span style={{ color: T.paperDim }}>Ιστός:</span>
+                    <b style={{ color: T.gold }}>{tissuesSel.map((id) => (TISSUES.find((x) => x.id === id) || {}).label).filter(Boolean).join(" + ")}</b>
+                    {dxList.length > 0 && tissuesSel.length === 1 && condTissueId(dxSel) === tissueId && <span style={{ color: T.paperDim, fontSize: 11.5 }}>(αυτόματα από τη διάγνωση)</span>}
+                    <button type="button" onClick={() => setShowTissuePick((v) => !v)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 999, padding: "3px 12px", fontSize: 12, cursor: "pointer" }}>{showTissuePick ? "κλείσιμο" : "αλλαγή"}</button>
+                  </div>
                 </div>
-                <p style={{ color: T.paperDim, fontSize: 12, marginTop: -10, marginBottom: 18, fontStyle: "italic" }}>{tissue.note}</p>
+                {showTissuePick && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+                    {TISSUES.map((t) => {
+                      const on = tissuesSel.includes(t.id);
+                      return (
+                      <button key={t.id} type="button" onClick={() => setTissuesSel((cur) => { const has = cur.includes(t.id); if (has) return cur.length > 1 ? cur.filter((x) => x !== t.id) : cur; return [...cur, t.id]; })} style={{ border: `1px solid ${on ? T.terracotta : T.panelLine}`, background: on ? T.terracotta : T.panel, color: on ? T.bg : T.paper, borderRadius: 999, padding: "6px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>{on ? "✓ " : ""}{t.label}</button>
+                      );
+                    })}
+                  </div>
+                )}
+                <p style={{ color: T.paperDim, fontSize: 12, marginTop: 0, marginBottom: 14, fontStyle: "italic" }}>{tissue.note}</p>
 
                 <div className="ll-load-grid">
                 <div className="ll-load-form">
@@ -3609,9 +3684,12 @@ function TissueLoadLog() {
                     <>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                         <label style={{ fontSize: 12, color: T.paperDim }}>Άσκηση / δραστηριότητα</label>
+                        <div style={{ display: "flex", gap: 12 }}>
+                        {form.activity.trim() && !exercisesHere.some((x) => x.name.toLowerCase() === form.activity.trim().toLowerCase()) && <button onClick={quickAddExercise} style={{ background: "none", border: "none", color: T.gold, fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}>+ Νέα άσκηση στη βάση</button>}
                         <button onClick={() => setShowLibrary((s) => !s)} style={{ background: "none", border: "none", color: T.gold, fontSize: 11.5, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
                           <Icon name="book" size={12} /> βάση ασκήσεων
                         </button>
+                        </div>
                       </div>
                       <input list="exercise-options" value={form.activity} onChange={(e) => pickExercise(e.target.value)}
                         placeholder="π.χ. Καθίσματα (Squat) — ή γράψε δική σου"
@@ -3703,6 +3781,26 @@ function TissueLoadLog() {
                         {!sscOf(tissueId, form.loadType) && <SelectField label="Ρυθμός" value={form.tempo || "—"} onChange={(v) => setForm({ ...form, tempo: v === "—" ? "" : v })} options={["—", "Slow", "Slow Heavy", "Fast", "Quick", "Explosive"]} />}
                       </div>
 
+                      <div style={{ border: `1px dashed ${T.panelLine}`, borderRadius: 10, padding: 10, marginBottom: 14 }}>
+                        <div style={{ fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Σετ ένα-ένα <span style={{ opacity: 0.7 }}>(π.χ. 8, μετά 10, μετά 15 επαναλήψεις)</span></div>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                          <input type="number" inputMode="numeric" value={setDraft.reps} onChange={(e) => setSetDraft({ ...setDraft, reps: e.target.value })} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addSetItem(); } }} placeholder="Επαν." style={{ ...inputStyle, width: 90 }} />
+                          <input type="number" inputMode="decimal" value={setDraft.load} onChange={(e) => setSetDraft({ ...setDraft, load: e.target.value })} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addSetItem(); } }} placeholder={form.resistance ? `φορτίο (${form.resistance})` : "φορτίο"} style={{ ...inputStyle, width: 130 }} />
+                          <button type="button" onClick={addSetItem} style={{ background: T.terracotta, color: T.bg, border: "none", borderRadius: 8, padding: "9px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>+ Σετ</button>
+                        </div>
+                        {(form.setList || []).length > 0 && (
+                          <div style={{ marginTop: 8 }}>
+                            {form.setList.map((x, i) => (
+                              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 999, padding: "4px 6px 4px 12px", fontSize: 12.5, margin: "0 6px 6px 0" }}>
+                                <b>Σετ {i + 1}</b> {x.reps} επ.{x.load ? ` · ${x.load}` : ""}
+                                <button type="button" aria-label="Αφαίρεση σετ" onClick={() => removeSetItem(i)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 14, padding: "0 4px" }}>×</button>
+                              </span>
+                            ))}
+                            <div style={{ fontSize: 12, color: T.paperDim }}>{form.setList.length} σετ · {form.setList.reduce((a, x) => a + (parseFloat(x.reps) || 0), 0)} επαναλήψεις{calcOf(tissueId, form).volume ? ` · όγκος ${calcOf(tissueId, form).volume} kg` : ""}</div>
+                          </div>
+                        )}
+                      </div>
+
                       <TissuePanel tissue={tissue} loadType={form.loadType} tp={form.tp || {}} form={form} onChange={(v) => setForm({ ...form, tp: v })} />
 
                       {!isPatientMode && (
@@ -3780,11 +3878,14 @@ function TissueLoadLog() {
                   <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Σημειώσεις</label>
                   <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={2} style={{ ...inputStyle, marginBottom: 16, resize: "vertical" }} />
 
+                  <div className="ll-save-bar" style={{ position: "sticky", bottom: 0, zIndex: 6, background: T.panel, padding: "10px 0 4px", display: "flex", gap: 8, justifyContent: "flex-end", borderTop: `1px solid ${T.panelLine}` }}>
+                  {editingId && <button onClick={cancelEdit} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.paperDim, borderRadius: 9, padding: "10px 16px", fontSize: 13.5, cursor: "pointer" }}>Άκυρο</button>}
                   <button onClick={saveEntry} disabled={saving} style={{
-                    width: "100%", background: T.terracotta, color: T.bg, border: "none", borderRadius: 9,
-                    padding: "12px", fontSize: 14.5, fontWeight: 700, cursor: saving ? "default" : "pointer",
+                    background: T.terracotta, color: T.bg, border: "none", borderRadius: 9,
+                    padding: "11px 22px", fontSize: 14, fontWeight: 700, cursor: saving ? "default" : "pointer",
                     opacity: saving ? 0.7 : 1, fontFamily: "'Space Grotesk', sans-serif",
-                  }}>{saving ? "Αποθήκευση…" : "Καταχώρηση φορτίου"}</button>
+                  }}>{saving ? "Αποθήκευση…" : (editingId ? "Αποθήκευση αλλαγών" : "Καταχώρηση φορτίου")}</button>
+                  </div>
                 </div>
                 </div>
                 <div className="ll-load-hist">
@@ -3833,7 +3934,7 @@ function TissueLoadLog() {
                         <div key={g.date}>
                           <div style={{ fontSize: 12, fontWeight: 600, color: T.gold, margin: "0 2px 8px", fontFamily: "'Space Grotesk', sans-serif" }}>{fmtDay(g.date)} <span style={{ color: T.paperDim, fontWeight: 400 }}>· {g.items.length} {g.items.length === 1 ? "άσκηση" : "ασκήσεις"}</span></div>
                           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                            {g.items.map((e) => <EntryCard key={e.id} e={e} onDelete={() => deleteEntry(e.id)} onSaveParams={(x) => updateEntryExtra(e.id, x)} suggestions={paramSuggestions} />)}
+                            {g.items.map((e) => <EntryCard key={e.id} e={e} onEdit={() => startEdit(e)} onDelete={() => deleteEntry(e.id)} onSaveParams={(x) => updateEntryExtra(e.id, x)} suggestions={paramSuggestions} />)}
                           </div>
                         </div>
                       ));
