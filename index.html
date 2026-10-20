@@ -253,8 +253,8 @@
   .mac-main { order: 2; }
   .mac-foot { order: 3; }
   @media screen and (min-width: 1280px) {
-    .ll-load-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 26px; align-items: start; }
-    .ll-load-hist { position: sticky; top: 0; max-height: calc(100vh - 150px); overflow-y: auto; padding-right: 6px; }
+    .ll-load-grid { display: block; max-width: 920px; }
+    .ll-load-hist { margin-top: 8px; }
     .ll-load-form > div:first-child { margin-bottom: 0 !important; }
     html, body { height: 100%; overflow: hidden; }
     .app-root { height: 100vh; min-height: 0 !important; padding: 0 !important; overflow: hidden; background: #FFFFFF !important; }
@@ -1651,13 +1651,14 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
   const sessionsOf = (list) => {
     const m = {};
     list.forEach((e) => {
-      const d = (m[e.date] = m[e.date] || { date: e.date, week: e.week, load: null, unit: "", vol: null, sr: "", rpe: [], pk: 0, p24: 0, rsi: null, contacts: 0, hr: null, speed: "" });
+      const d = (m[e.date] = m[e.date] || { date: e.date, week: e.week, load: null, unit: "", vol: null, sr: "", rpe: [], pk: 0, p24: 0, rsi: null, contacts: 0, hr: null, speed: "", ents: [] });
+      d.ents.push(e);
       const l = loadOf(e);
       if (l !== null && (d.load === null || l > d.load)) { d.load = l; d.unit = cardio ? "′" : (e.resistanceUnit || ""); }
       const txt = e.setList && e.setList.length ? setLine(e.setList) + (e.resistanceUnit && e.setList.some((x) => x.load) ? " " + e.resistanceUnit : "") : ((e.sets || e.reps) ? `${e.sets || "–"} × ${e.reps || "–"}${e.resistance ? " @" + e.resistance + (e.resistanceUnit || "") : ""}` : "");
       if (txt) d.sr = d.sr ? d.sr + " | " + txt : txt;
       const v = volOf(e); if (v) d.vol = (d.vol || 0) + v;
-      d.rpe.push(rpeOf(e));
+      { const rv = Number(rpeOf(e)); if (isFinite(rv) && rpeOf(e) !== undefined && rpeOf(e) !== null && rpeOf(e) !== "") d.rpe.push(rv); }
       d.pk = Math.max(d.pk, Number(e.painDuring) || 0); d.p24 = Math.max(d.p24, Number(e.pain24h) || 0);
       if (e.calc && e.calc.rsi) d.rsi = e.calc.rsi;
       if (e.calc && e.calc.totalContacts) d.contacts += e.calc.totalContacts;
@@ -1678,38 +1679,42 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
   if (showName) {
     const rows = sessionsOf(byEx[showName]);
     const hasRsi = rows.some((r) => r.rsi || r.contacts), hasHr = rows.some((r) => r.hr);
+    const setsOf = (e) => {
+      if (e.setRows && e.setRows.length) return e.setRows.map((rw, i) => ({ n: i + 1, txt: e.setMode === "U" ? [["Αριστ.", rw.L], ["Δεξ.", rw.R]] : [["", rw.B]] }));
+      if (e.setList && e.setList.length) return [{ n: 1, txt: [["", null, setLine(e.setList)]] }];
+      return (e.sets || e.reps) ? [{ n: 1, txt: [["", null, `${e.sets || "–"} × ${e.reps || "–"}${parseFloat(e.resistance) > 0 ? " @" + e.resistance : ""}`]] }] : [];
+    };
     body = (
-      <div style={{ overflowX: "auto" }}>
-        <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead><tr>
-            <th style={th}>Ημερομηνία</th><th style={th}>{loadLabel}</th><th style={th}>Αλλαγή</th>
-            {!cardio && <th style={th}>Σετ (επαν. @ βάρος)</th>}{!cardio && <th style={th}>Όγκος</th>}{!cardio && <th style={th}>Δ όγκου</th>}
-            {cardio && <th style={th}>Ταχύτητα</th>}{hasHr && <th style={th}>Μέση ΚΣ</th>}
-            <th style={th}>RPE</th><th style={th}>Πόνος</th>{hasRsi && <th style={th}>Επαφές / RSI</th>}
-          </tr></thead>
-          <tbody>
-            {rows.map((r, i) => {
-              const prev = i > 0 ? rows[i - 1] : null;
-              const rpeAvg = r.rpe.length ? Math.round((r.rpe.reduce((a, b) => a + b, 0) / r.rpe.length) * 10) / 10 : "—";
-              const hurt = r.pk > 0 || r.p24 > 0;
-              return (
-                <tr key={r.date} style={{ background: i === rows.length - 1 ? "rgba(217,86,11,0.07)" : "transparent" }}>
-                  <td style={{ ...td, fontWeight: 600 }}>{fmtDay(r.date)}{r.week ? <div style={{ color: T.paperDim, fontWeight: 400, fontSize: 12 }}>εβδ. {r.week}</div> : null}</td>
-                                    <td style={{ ...td, color: T.gold, fontWeight: 700 }}>{r.load !== null ? `${r.load} ${r.unit}` : "—"}</td>
-                  <td style={td}><Delta v={prev ? pct(r.load, prev.load) : null} /></td>
-                  {!cardio && <td style={{ ...td, fontWeight: 600 }}>{r.sr || "—"}</td>}
-                  {!cardio && <td style={td}>{r.vol ? `${r.vol} kg` : "—"}</td>}{!cardio && <td style={td}><Delta v={prev ? pct(r.vol, prev.vol) : null} /></td>}
-                  
-                  {cardio && <td style={td}>{r.speed ? `${r.speed} km/h` : "—"}</td>}
-                  {hasHr && <td style={td}>{r.hr ? `${r.hr} bpm` : "—"}</td>}
-                  <td style={td}>{rpeAvg}</td>
-                  <td style={{ ...td, color: hurt ? "#C0392B" : T.paper }}>{r.pk} / {r.p24}</td>
-                  {hasRsi && <td style={td}>{r.contacts ? `${r.contacts}` : "—"}{r.rsi ? ` · RSI ${r.rsi}` : ""}</td>}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table></div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {[...rows].reverse().map((r, idx, arr) => {
+          const prev = arr[idx + 1] || null;
+          const rpeAvg = r.rpe.length ? Math.round((r.rpe.reduce((a, b) => a + b, 0) / r.rpe.length) * 10) / 10 : null;
+          const hurt = r.pk > 0 || r.p24 > 0;
+          const dl = prev ? pct(r.load, prev.load) : null;
+          return (
+            <div key={r.date} style={{ border: `1px solid ${idx === 0 ? T.gold : T.panelLine}`, borderRadius: 14, padding: "12px 14px", background: idx === 0 ? "rgba(217,86,11,0.05)" : "transparent" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+                <div style={{ fontWeight: 700, fontSize: 15 }}>{fmtDay(r.date)}{r.week ? <span style={{ color: T.paperDim, fontWeight: 400, fontSize: 12.5 }}> · εβδ. {r.week}</span> : null}</div>
+                {!cardio && r.load !== null && <div style={{ fontSize: 14 }}>Μέγιστο <b style={{ color: T.gold, fontSize: 17 }}>{r.load} {r.unit}</b> {dl !== null && <Delta v={dl} />}</div>}
+                {cardio && <div style={{ fontSize: 14 }}>{r.load !== null ? <b style={{ color: T.gold }}>{r.load} {r.unit}</b> : null}{r.speed ? ` · ${r.speed} km/h` : ""}{r.hr ? ` · ${r.hr} bpm` : ""}</div>}
+              </div>
+              {!cardio && r.ents.map((e, k) => setsOf(e).map((st) => (
+                <div key={k + "-" + st.n} style={{ display: "flex", gap: 10, alignItems: "baseline", padding: "6px 0", borderTop: `1px solid ${T.panelLine}`, fontSize: 14 }}>
+                  <span style={{ color: T.paperDim, width: 44, flex: "none" }}>Σετ {st.n}</span>
+                  <span style={{ display: "flex", gap: 18, flexWrap: "wrap", fontWeight: 600 }}>
+                    {st.txt.map(([lab, c, raw], j) => <span key={j}>{lab && <span style={{ color: T.gold, fontWeight: 700 }}>{lab} </span>}{raw || cellTxt(c)}</span>)}
+                  </span>
+                </div>
+              )))}
+              <div style={{ display: "flex", gap: 14, marginTop: 8, fontSize: 13, color: T.paperDim, flexWrap: "wrap" }}>
+                {r.vol ? <span>Όγκος <b style={{ color: T.paper }}>{r.vol} kg</b></span> : null}
+                {rpeAvg !== null && <span>RPE <b style={{ color: T.paper }}>{rpeAvg}</b></span>}
+                <span>Πόνος κατά/24ω <b style={{ color: hurt ? "#C0392B" : T.paper }}>{r.pk} / {r.p24}</b></span>
+                {r.contacts ? <span>Επαφές <b style={{ color: T.paper }}>{r.contacts}</b>{r.rsi ? ` · RSI ${r.rsi}` : ""}</span> : null}
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   } else {
