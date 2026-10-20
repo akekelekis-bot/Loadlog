@@ -353,6 +353,7 @@
     .mac-tabs button:nth-child(4) svg { color: #8466C9; }
     .mac-tabs button:nth-child(4).on { background: #8466C91F !important; color: #8466C9 !important; border-color: #8466C966 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #8466C9; }
     [data-view="daily"] { --vac: #8466C9; }
+    [data-view="day"] { --vac: #D9560B; }
     .mac-tabs button:nth-child(5) svg { color: #B8577A; }
     .mac-tabs button:nth-child(5).on { background: #B8577A1F !important; color: #B8577A !important; border-color: #B8577A66 !important; font-weight: 600; box-shadow: inset 0 -2px 0 #B8577A; }
     [data-view="measurements"] { --vac: #B8577A; }
@@ -377,6 +378,14 @@
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 .ll-dxrow{border-left:none !important;padding-left:0 !important}
+
+/* ---- simple tabs ---- */
+body .mac-tabs.mac-tabs { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto; gap: 0 !important; margin: 10px 0 14px !important; padding: 0 !important; background: transparent !important; border: none !important; border-bottom: 1px solid #E0E0DC !important; border-radius: 0 !important; justify-content: flex-start !important; width: 100%; max-width: 100%; scrollbar-width: none; }
+body .mac-tabs.mac-tabs::-webkit-scrollbar { display: none; }
+body .mac-tabs.mac-tabs button:nth-child(n) { flex: none; background: transparent !important; border: none !important; border-bottom: 3px solid transparent !important; border-radius: 0 !important; box-shadow: none !important; color: #6B6B66 !important; font-size: 14px !important; font-weight: 500; padding: 12px 11px !important; margin: 0 0 -1px 0; white-space: nowrap; display: inline-flex; align-items: center; }
+body .mac-tabs.mac-tabs button:nth-child(n) svg { display: none !important; }
+body .mac-tabs.mac-tabs button:nth-child(n):hover { color: #111 !important; background: rgba(0,0,0,.03) !important; }
+body .mac-tabs.mac-tabs button:nth-child(n).on { color: #111 !important; font-weight: 700; border-bottom-color: var(--vac, #D9560B) !important; background: transparent !important; }
 </style>
 </head>
 <body>
@@ -1278,7 +1287,7 @@ const emptyAssess = () => ({
   neuro: {}, special: {},
   spine: { posture: [], posNote: "", arom: {}, rep: { tested: "", resp: "—", pref: "—" }, segs: [], meas: {}, note: "" },
 });
-const emptySession = () => ({ duration: "", sessionRPE: 3, mood: 5, energy: 5, sleep: 5, stress: 5, motivation: 5, notes: "", conclusions: "" });
+const emptySession = () => ({ duration: "", sessionRPE: 3, mood: 5, energy: 5, sleep: 5, stress: 5, motivation: 5, notes: "", conclusions: "", rom: [], painGeneral: 0 });
 const weekStartYmd = (ymd) => { const [y,m,d] = ymd.split("-").map(Number); const dt = new Date(y, m-1, d); const dow = (dt.getDay() + 6) % 7; return localYmd(new Date(y, m-1, d - dow)); };
 const rpeOf = (e) => (e.v2 ? e.intensity : e.sessionRPE);
 const JUMP_TYPES = ["CMJ (Countermovement Jump)", "SJ (Squat Jump)", "Drop / Stop Jump", "Μονοποδικό CMJ", "Επαναλαμβανόμενα άλματα", "Άλλο"];
@@ -1579,32 +1588,52 @@ function EntryCard({ e, onDelete, onEdit, onSaveParams, suggestions }) {
   if (e.frequency) bits.push(`${e.frequency}×/εβδ`);
   const hurt = Number(e.painDuring) > 0 || Number(e.pain24h) > 0;
   const tl = (e.tissues && e.tissues.length ? e.tissues : [e.tissue]).map((id) => (TISSUES.find((t) => t.id === id) || {}).label).filter(Boolean).join(" + ");
+  const unit = e.resistanceUnit || "kg";
+  const cellFull = (c) => { c = c || {}; const p = []; if (c.reps) p.push(`${c.reps} επ.`); if (parseFloat(c.dur) > 0) p.push(`${c.dur}″`); if (parseFloat(c.rest) > 0) p.push(`ξεκ. ${c.rest}″`); if (parseFloat(c.load) > 0) p.push(`${c.load} ${unit}`); return p.length ? p.join(" · ") : "—"; };
+  let rows = e.setRows && e.setRows.length ? e.setRows.map((rw) => (e.setMode === "U" ? { L: rw.L, R: rw.R } : { B: rw.B })) : null;
+  if (!rows && e.setList && e.setList.length) rows = e.setList.map((x) => (x.side === "L" ? { L: x } : x.side === "R" ? { R: x } : { B: x }));
+  const uni = rows && rows.some((rw) => rw.L || rw.R);
+  const stat = (label, val, warn) => <div style={{ textAlign: "center", minWidth: 64 }}><div style={{ fontSize: 11.5, color: T.paperDim }}>{label}</div><div style={{ fontSize: 16, fontWeight: 700, color: warn ? "#C0392B" : T.paper }}>{val}</div></div>;
   return (
-    <div className="ll-entry" style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "12px 14px", fontSize: 13 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 8 }}>
-        <span style={{ fontWeight: 700, fontSize: 14 }}>{e.activity}</span>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 10.5, color: T.paperDim }}>{e.week ? `Εβδ.${e.week}` : ""}{e.recordedBy ? ` · ${e.recordedBy}` : ""}</span>
-          {onEdit && <button onClick={onEdit} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "2px 10px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Διόρθωση</button>}
-          <button onClick={onDelete} aria-label="Διαγραφή" style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={13} /></button>
+    <div className="ll-entry" style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 16, padding: "16px 18px", fontSize: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 4 }}>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.25 }}>{e.activity}</div>
+          <div style={{ fontSize: 13, color: T.paperDim, marginTop: 3 }}>{[e.loadType, e.week ? `εβδ. ${e.week}` : "", e.recordedBy].filter(Boolean).join(" · ")}</div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flex: "none" }}>
+          {onEdit && <button onClick={onEdit} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 999, padding: "5px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Διόρθωση</button>}
+          <button onClick={onDelete} aria-label="Διαγραφή" style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 4 }}><Icon name="trash" size={15} /></button>
         </div>
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 6 }}>
-        {e.resistance && <Chip tone="main">{e.resistance} {e.resistanceUnit}</Chip>}
-        {(e.sets || e.reps) && <Chip tone="main">{e.setList && e.setList.some((x) => x.side && x.side !== "B") ? `${e.setList.length} σετ` : `${e.sets || "–"} × ${e.reps || "–"}`}</Chip>}
-        {e.loadType && <Chip>{e.loadType}</Chip>}
-        <Chip>RPE {rpeOf(e)}</Chip>
-        <Chip tone={hurt ? "warn" : undefined}>πόνος {e.painDuring}/{e.pain24h}</Chip>
+      {rows ? (
+        <div style={{ margin: "10px 0 8px", display: "grid", gridTemplateColumns: uni ? "52px 1fr 1fr" : "52px 1fr", gap: "4px 10px", alignItems: "center" }}>
+          {uni && <><span /><span style={{ fontSize: 11.5, fontWeight: 700, color: "#2F6FDE", borderBottom: "2px solid #2F6FDE", paddingBottom: 2 }}>ΑΡΙΣΤΕΡΑ</span><span style={{ fontSize: 11.5, fontWeight: 700, color: "#0E8A7D", borderBottom: "2px solid #0E8A7D", paddingBottom: 2 }}>ΔΕΞΙΑ</span></>}
+          {rows.map((rw, k) => (
+            <React.Fragment key={k}>
+              <span style={{ fontSize: 13, color: T.paperDim, fontWeight: 600 }}>Σετ {k + 1}</span>
+              {uni ? (<><span style={{ fontSize: 15, fontWeight: 600 }}>{rw.L ? cellFull(rw.L) : "—"}</span><span style={{ fontSize: 15, fontWeight: 600 }}>{rw.R ? cellFull(rw.R) : "—"}</span></>) : <span style={{ fontSize: 15, fontWeight: 600 }}>{cellFull(rw.B)}</span>}
+            </React.Fragment>
+          ))}
+        </div>
+      ) : ((e.sets || e.reps || e.resistance) && (
+        <div style={{ margin: "10px 0 8px", fontSize: 16, fontWeight: 700 }}>
+          {e.sets || "–"} σετ × {e.reps || "–"} επ.{parseFloat(e.resistance) > 0 ? <span style={{ color: T.gold }}> · {e.resistance} {unit}</span> : null}
+        </div>
+      ))}
+      <div style={{ display: "flex", gap: 18, padding: "8px 0", borderTop: `1px solid ${T.panelLine}`, marginTop: 6 }}>
+        {stat("RPE", rpeOf(e))}
+        {stat("Πόνος κατά", e.painDuring ?? "—", Number(e.painDuring) > 0)}
+        {stat("Πόνος 24ω", e.pain24h ?? "—", Number(e.pain24h) > 0)}
+        {calcText(e) && <div style={{ fontSize: 13, color: T.gold, fontWeight: 600, alignSelf: "center" }}>{calcText(e)}</div>}
       </div>
       {(bits.length > 0 || extraText(e)) && (
-        <div style={{ color: T.paperDim, fontSize: 12 }}>
+        <div style={{ color: T.paperDim, fontSize: 13, marginTop: 4 }}>
           {bits.join(" · ")}{bits.length > 0 && extraText(e) ? " · " : ""}{extraText(e) ? <strong style={{ color: T.gold }}>{extraText(e)}</strong> : null}
         </div>
       )}
-      {e.setList && e.setList.length > 0 && <div style={{ marginTop: 5, fontSize: 12.5, color: T.paper }}><span style={{ color: T.gold, fontWeight: 600 }}>Σετ:</span> {setLine(e.setList)}</div>}
-      {calcText(e) && <div style={{ marginTop: 5, fontSize: 12, color: T.gold, fontWeight: 600 }}>{calcText(e)}</div>}
-      {tpText(e) && <div style={{ marginTop: 5, fontSize: 12, color: T.paper, opacity: 0.9 }}><span style={{ color: T.gold, fontWeight: 600 }}>{tl}:</span> {tpText(e)}</div>}
-      {e.notes && <div style={{ marginTop: 6, color: T.paper, opacity: 0.85 }}>{e.notes}</div>}
+      {tpText(e) && <div style={{ marginTop: 6, fontSize: 13, color: T.paper }}><span style={{ color: T.gold, fontWeight: 600 }}>{tl}:</span> {tpText(e)}</div>}
+      {e.notes && <div style={{ marginTop: 8, fontSize: 13.5, color: T.paper, opacity: 0.9 }}>{e.notes}</div>}
       <EntryParams item={e} onSave={onSaveParams} suggestions={suggestions} />
     </div>
   );
@@ -1624,7 +1653,9 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
     list.forEach((e) => {
       const d = (m[e.date] = m[e.date] || { date: e.date, week: e.week, load: null, unit: "", vol: null, sr: "", rpe: [], pk: 0, p24: 0, rsi: null, contacts: 0, hr: null, speed: "" });
       const l = loadOf(e);
-      if (l !== null && (d.load === null || l > d.load)) { d.load = l; d.unit = cardio ? "′" : (e.resistanceUnit || ""); d.sr = (e.sets || e.reps) ? `${e.sets || "–"} × ${e.reps || "–"}` : ""; }
+      if (l !== null && (d.load === null || l > d.load)) { d.load = l; d.unit = cardio ? "′" : (e.resistanceUnit || ""); }
+      const txt = e.setList && e.setList.length ? setLine(e.setList) + (e.resistanceUnit && e.setList.some((x) => x.load) ? " " + e.resistanceUnit : "") : ((e.sets || e.reps) ? `${e.sets || "–"} × ${e.reps || "–"}${e.resistance ? " @" + e.resistance + (e.resistanceUnit || "") : ""}` : "");
+      if (txt) d.sr = d.sr ? d.sr + " | " + txt : txt;
       const v = volOf(e); if (v) d.vol = (d.vol || 0) + v;
       d.rpe.push(rpeOf(e));
       d.pk = Math.max(d.pk, Number(e.painDuring) || 0); d.p24 = Math.max(d.p24, Number(e.pain24h) || 0);
@@ -1637,8 +1668,8 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
   };
   const pct = (cur, prev) => (cur !== null && prev !== null && prev > 0 ? Math.round(((cur - prev) / prev) * 1000) / 10 : null);
   const Delta = ({ v }) => (v === null ? <span style={{ color: T.paperDim }}>—</span> : <span style={{ color: v > 0 ? T.gold : v < 0 ? "#C0392B" : T.paperDim, fontWeight: 600 }}>{v > 0 ? "▲" : v < 0 ? "▼" : "="} {Math.abs(v)}%</span>);
-  const th = { textAlign: "left", fontSize: 12, color: T.paperDim, fontWeight: 700, padding: "8px 4px", verticalAlign: "bottom", lineHeight: 1.25, borderBottom: `1px solid ${T.panelLine}` };
-  const td = { padding: "10px 4px", fontSize: 13.5, lineHeight: 1.3, borderBottom: `1px solid ${T.panelLine}` };
+  const th = { textAlign: "left", fontSize: 12, color: T.paperDim, fontWeight: 700, padding: "8px 3px", verticalAlign: "bottom", lineHeight: 1.25, borderBottom: `1px solid ${T.panelLine}` };
+  const td = { padding: "9px 3px", fontSize: 13, lineHeight: 1.3, borderBottom: `1px solid ${T.panelLine}` };
   const names = Object.keys(byEx);
   if (!names.length) return null;
   const showName = selected && byEx[selected] ? selected : (names.length === 1 ? names[0] : "");
@@ -1652,9 +1683,9 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
         <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead><tr>
             <th style={th}>Ημερομηνία</th><th style={th}>{loadLabel}</th><th style={th}>Αλλαγή</th>
-            {!cardio && <th style={th}>Σετ × Επαν.</th>}{!cardio && <th style={th}>Όγκος</th>}{!cardio && <th style={th}>Αλλαγή όγκου</th>}
+            {!cardio && <th style={th}>Σετ (επαν. @ βάρος)</th>}{!cardio && <th style={th}>Όγκος</th>}{!cardio && <th style={th}>Δ όγκου</th>}
             {cardio && <th style={th}>Ταχύτητα</th>}{hasHr && <th style={th}>Μέση ΚΣ</th>}
-            <th style={th}>Κόπωση RPE</th><th style={th}>Πόνος κατά/24ω</th>{hasRsi && <th style={th}>Επαφές / RSI</th>}
+            <th style={th}>RPE</th><th style={th}>Πόνος</th>{hasRsi && <th style={th}>Επαφές / RSI</th>}
           </tr></thead>
           <tbody>
             {rows.map((r, i) => {
@@ -1666,7 +1697,7 @@ function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
                   <td style={{ ...td, fontWeight: 600 }}>{fmtDay(r.date)}{r.week ? <div style={{ color: T.paperDim, fontWeight: 400, fontSize: 12 }}>εβδ. {r.week}</div> : null}</td>
                                     <td style={{ ...td, color: T.gold, fontWeight: 700 }}>{r.load !== null ? `${r.load} ${r.unit}` : "—"}</td>
                   <td style={td}><Delta v={prev ? pct(r.load, prev.load) : null} /></td>
-                  {!cardio && <td style={td}>{r.sr || "—"}</td>}
+                  {!cardio && <td style={{ ...td, fontWeight: 600 }}>{r.sr || "—"}</td>}
                   {!cardio && <td style={td}>{r.vol ? `${r.vol} kg` : "—"}</td>}{!cardio && <td style={td}><Delta v={prev ? pct(r.vol, prev.vol) : null} /></td>}
                   
                   {cardio && <td style={td}>{r.speed ? `${r.speed} km/h` : "—"}</td>}
@@ -2656,7 +2687,8 @@ function TrendChart({ data, series, domain, xKey }) {
   const y = (v) => padT + innerH - (innerH * (v - dMin)) / (dMax - dMin || 1);
   const ticks = 5;
   const tickVals = Array.from({ length: ticks }, (_, i) => dMin + ((dMax - dMin) * i) / (ticks - 1));
-  const path = (key) => data.map((d, i) => `${i === 0 ? "M" : "L"} ${x(i)} ${y(d[key])}`).join(" ");
+  const okv = (v) => typeof v === "number" && !isNaN(v);
+  const path = (key) => { let st = true; return data.map((d, i) => { if (!okv(d[key])) { st = true; return ""; } const c = `${st ? "M" : "L"} ${x(i)} ${y(d[key])}`; st = false; return c; }).join(" "); };
   return (
     <div>
       <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 200, display: "block" }}>
@@ -2666,7 +2698,7 @@ function TrendChart({ data, series, domain, xKey }) {
         {series.map((s) => (
           <g key={s.key}>
             <path d={path(s.key)} fill="none" stroke={s.color} strokeWidth="2" />
-            {data.map((d, i) => <circle key={i} cx={x(i)} cy={y(d[s.key])} r="3" fill={s.color} />)}
+            {data.map((d, i) => okv(d[s.key]) ? <circle key={i} cx={x(i)} cy={y(d[s.key])} r="3.5" fill={s.color} /> : null)}
           </g>
         ))}
       </svg>
@@ -2720,15 +2752,15 @@ const RX_TYPES = ["Ισομετρική", "Ομόκεντρη", "Έκκεντρ�
 const RX_SWELL = ["Όχι", "Ήπιο", "Σημαντικό"];
 const RX_DEC = ["Πρόοδος", "Διατήρηση", "Υποχώρηση"];
 const rxEmptyItem = () => ({ id: `${Date.now()}${Math.floor(Math.random() * 1000)}`, name: "", type: RX_TYPES[0], sets: "", reps: "", mode: "B", rows: [], intensity: "", tempo: "", rest: "", freq: "", note: "" });
-const cellTxt = (c) => { c = c || {}; return `${c.reps || "–"}${c.dur ? "×" + c.dur + "″" : ""}${c.load ? " @" + c.load : ""}`; };
+const cellTxt = (c) => { c = c || {}; return `${c.reps || "–"}${c.dur ? "×" + c.dur + "″" : ""}${parseFloat(c.rest) > 0 ? " (ξεκ. " + c.rest + "″)" : ""}${parseFloat(c.load) > 0 ? " @" + c.load : ""}`; };
 const rxRowsText = (rows, mode) => (rows || []).map((rw, i) => mode === "U" ? `#${i + 1} Αριστ. ${cellTxt(rw.L)} / Δεξ. ${cellTxt(rw.R)}` : `#${i + 1} ${cellTxt(rw.B)}`).join("  ·  ");
 const rxSetsText = (x) => (x.rows && x.rows.length ? rxRowsText(x.rows, x.mode) : `${x.sets || "–"}×${x.reps || "–"}`);
 function MiniSetTable({ rows, mode, unit, iso, onChange }) {
   const m = mode || "B", rs = rows || [];
-  const blank = (prev) => { const cp = (c) => ({ reps: c ? c.reps : "", dur: c ? c.dur : "", load: c ? c.load : "" }); return m === "U" ? { L: cp(prev && prev.L), R: cp(prev && prev.R) } : { B: cp(prev && prev.B) }; };
-  const nc = iso ? 3 : 2;
+  const blank = (prev) => { const cp = (c) => ({ reps: c ? c.reps : "", dur: c ? c.dur : "", rest: c ? c.rest : "", load: c ? c.load : "" }); return m === "U" ? { L: cp(prev && prev.L), R: cp(prev && prev.R) } : { B: cp(prev && prev.B) }; };
+  const nc = iso ? 4 : 3;
   const upd = (i, sd, k, v) => onChange(rs.map((rw, j) => (j === i ? { ...rw, [sd]: { ...(rw[sd] || {}), [k]: v } } : rw)), m);
-  const inp = { ...inputStyle, padding: "9px 6px", textAlign: "center", fontSize: 15, minWidth: 0, width: "100%" };
+  const inp = { ...inputStyle, padding: iso ? "9px 2px" : "9px 4px", textAlign: "center", fontSize: iso ? 14 : 15, minWidth: 0, width: "100%" };
   const cell = (i, rw, sd, k, ph) => <input key={sd + k} type="number" inputMode="decimal" value={(rw[sd] || {})[k] || ""} placeholder={ph} onChange={(e) => upd(i, sd, k, e.target.value)} style={inp} />;
   const setM = (nm) => { if (nm === m) return; onChange(rs.map((rw) => (nm === "U" ? { L: { ...(rw.B || {}) }, R: { ...(rw.B || {}) } } : { B: { ...(rw.L || rw.R || {}) } })), nm); };
   return (
@@ -2748,12 +2780,12 @@ function MiniSetTable({ rows, mode, unit, iso, onChange }) {
           </>) : (<div style={{ gridColumn: `span ${nc}` }} />)}
           <span />
           <span />
-          {(m === "U" ? [...(iso ? ["Επαν.", "Δευτ/πτα", "Φορτίο"] : ["Επαν.", "Φορτίο"]), ...(iso ? ["Επαν.", "Δευτ/πτα", "Φορτίο"] : ["Επαν.", "Φορτίο"])] : (iso ? ["Επαναλήψεις", "Δευτερόλεπτα", "Φορτίο"] : ["Επαναλήψεις", "Φορτίο"])).map((h, k) => <span key={k} style={{ fontSize: 11.5, color: T.paperDim, textAlign: "center" }}>{h}</span>)}
+          {(m === "U" ? [...(iso ? ["Επαν.", "Δευτ.", "Φορτίο", "Ξεκ.(δλ)"] : ["Επαν.", "Φορτίο", "Ξεκ.(δλ)"]), ...(iso ? ["Επαν.", "Δευτ.", "Φορτίο", "Ξεκ.(δλ)"] : ["Επαν.", "Φορτίο", "Ξεκ.(δλ)"])] : (iso ? ["Επαναλήψεις", "Διάρκεια (δλ)", "Φορτίο", "Ξεκούραση (δλ)"] : ["Επαναλήψεις", "Φορτίο", "Ξεκούραση (δλ)"])).map((h, k) => <span key={k} style={{ fontSize: 11.5, color: T.paperDim, textAlign: "center" }}>{h}</span>)}
           <span />
           {rs.map((rw, i) => (
             <React.Fragment key={i}>
               <b style={{ fontSize: 13 }}>#{i + 1}</b>
-              {m === "U" ? (<>{cell(i, rw, "L", "reps", "5")}{iso && cell(i, rw, "L", "dur", "30")}{cell(i, rw, "L", "load", unit)}{cell(i, rw, "R", "reps", "5")}{iso && cell(i, rw, "R", "dur", "30")}{cell(i, rw, "R", "load", unit)}</>) : (<>{cell(i, rw, "B", "reps", "5")}{iso && cell(i, rw, "B", "dur", "30")}{cell(i, rw, "B", "load", unit)}</>)}
+              {m === "U" ? (<>{cell(i, rw, "L", "reps", iso ? "1" : "8")}{iso && cell(i, rw, "L", "dur", "30")}{cell(i, rw, "L", "load", unit)}{cell(i, rw, "L", "rest", "60")}{cell(i, rw, "R", "reps", iso ? "1" : "8")}{iso && cell(i, rw, "R", "dur", "30")}{cell(i, rw, "R", "load", unit)}{cell(i, rw, "R", "rest", "60")}</>) : (<>{cell(i, rw, "B", "reps", iso ? "1" : "8")}{iso && cell(i, rw, "B", "dur", "30")}{cell(i, rw, "B", "load", unit)}{cell(i, rw, "B", "rest", "60")}</>)}
               <span style={{ display: "flex", gap: 2 }}>
                 {m === "U" && <button type="button" title="Αντιγραφή Αριστερά → Δεξιά" onClick={() => onChange(rs.map((x, j) => (j === i ? { ...x, R: { ...x.L } } : x)), m)} style={{ background: "none", border: "none", color: T.gold, cursor: "pointer", fontSize: 14, padding: 0 }}>⇢</button>}
                 <button type="button" aria-label="Αφαίρεση σετ" onClick={() => onChange(rs.filter((_, j) => j !== i), m)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 18, padding: 0 }}>×</button>
@@ -2764,6 +2796,249 @@ function MiniSetTable({ rows, mode, unit, iso, onChange }) {
       )}
       <button type="button" onClick={() => onChange([...rs, blank(rs[rs.length - 1])], m)} style={{ marginTop: 8, width: "100%", background: "transparent", color: T.gold, border: `1.5px dashed ${T.gold}`, borderRadius: 10, padding: "9px 12px", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>+ Προσθήκη σετ{rs.length ? " (αντιγράφει το προηγούμενο)" : ""}</button>
     </div>
+  );
+}
+const CLIN_MOVES = ["Κάμψη γόνατος", "Έκταση γόνατος", "Κάμψη ισχίου", "Έσω στροφή ισχίου", "Έξω στροφή ισχίου", "Απαγωγή ισχίου", "Ραχιαία κάμψη ποδοκνημικής", "Πελματιαία κάμψη ποδοκνημικής", "Κάμψη ώμου", "Απαγωγή ώμου", "Έξω στροφή ώμου", "Έσω στροφή ώμου", "Κάμψη αγκώνα", "Έκταση αγκώνα", "Κάμψη αυχένα", "Στροφή αυχένα", "Κάμψη οσφύος", "Έκταση οσφύος"];
+const CLIN_MUSCLES = ["Τετρακέφαλος", "Οπίσθιοι μηριαίοι", "Απαγωγείς ισχίου", "Προσαγωγοί ισχίου", "Γλουτιαίοι", "Γαστροκνήμιος / υπο-κνημιαίος", "Περιστροφείς ώμου", "Δικέφαλος βραχίονα", "Τρικέφαλος βραχίονα", "Λαβή (grip)"];
+const CLIN_PARAMS = ["Τεχνική / θεραπεία", "Ένταση", "Διάρκεια (λεπτά)", "Συχνότητα", "Συσκευή / ρυθμίσεις", "Θέση ασθενή", "Άσκηση", "Σετ × επαναλήψεις", "Φορτίο", "Ξεκούραση"];
+const clinNum = (x) => { const v = parseFloat(x); return isFinite(v) && v > 0 ? v : null; };
+function ClinicalModule({ patientId, sessionDate, week }) {
+  const [sheets, setSheets] = useState([]);
+  const [active, setActive] = useState(null);
+  const [romSel, setRomSel] = useState("");
+  const [strSel, setStrSel] = useState("");
+  const [legacy, setLegacy] = useState({});
+  useEffect(() => { setSheets(patientId ? store.get(`trl_clin_${patientId}`, []) : []); setLegacy(patientId ? store.get(`trl_sessions_${patientId}`, {}) : {}); setActive(null); }, [patientId]);
+  const persist = (next) => { setSheets(next); if (patientId) store.set(`trl_clin_${patientId}`, next); };
+  const day = sheets.filter((x) => x.date === sessionDate).sort((a, b) => (a.created || 0) - (b.created || 0));
+  const cur = day.find((x) => x.id === active) || day[0] || null;
+  const addSheet = () => {
+    const sh = { id: `c${Date.now()}`, date: sessionDate, week, kind: "Κλινική εικόνα", title: "", rom: [], str: [], pain: null, params: [], notes: "", created: Date.now() };
+    persist([...sheets, sh]); setActive(sh.id);
+  };
+  const upd = (patch) => persist(sheets.map((x) => (x.id === cur.id ? { ...x, ...patch } : x)));
+  const delSheet = () => { if (!window.confirm("Διαγραφή αυτού του φύλλου;")) return; persist(sheets.filter((x) => x.id !== cur.id)); setActive(null); };
+  const inp = { ...inputStyle, padding: "8px 8px", fontSize: 14, width: "100%", minWidth: 0 };
+  const sideSel = (v, f) => <select value={v} onChange={(e) => f(e.target.value)} style={inp}><option value="L">Αριστερά</option><option value="R">Δεξιά</option><option value="-">—</option></select>;
+  const rowsEditor = (key, cols, blank, header) => (
+    <div style={{ marginBottom: 12 }}>
+      {(cur[key] || []).length > 0 && (
+        <div style={{ display: "grid", gridTemplateColumns: cols.map((c) => c.w).join(" ") + " 28px", gap: 6, alignItems: "center", marginBottom: 6 }}>
+          {[...cols.map((c) => c.h), ""].map((h, i) => <span key={i} style={{ fontSize: 11.5, color: T.paperDim }}>{h}</span>)}
+          {(cur[key] || []).map((rw, i) => (
+            <React.Fragment key={i}>
+              {cols.map((c) => <div key={c.k}>{c.render(rw[c.k], (v) => upd({ [key]: cur[key].map((x, j) => (j === i ? { ...x, [c.k]: v } : x)) }))}</div>)}
+              <button type="button" aria-label="Αφαίρεση" onClick={() => upd({ [key]: cur[key].filter((_, j) => j !== i) })} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 18, padding: 0 }}>×</button>
+            </React.Fragment>
+          ))}
+        </div>
+      )}
+      <button type="button" onClick={() => upd({ [key]: [...(cur[key] || []), blank((cur[key] || [])[(cur[key] || []).length - 1])] })} style={{ width: "100%", background: "transparent", color: T.gold, border: `1.5px dashed ${T.gold}`, borderRadius: 10, padding: "9px 12px", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>{header}</button>
+    </div>
+  );
+  const text = (ph, list) => (v, f) => <input list={list} value={v || ""} onChange={(e) => f(e.target.value)} placeholder={ph} style={inp} />;
+  const num = (ph) => (v, f) => <input type="number" inputMode="decimal" value={v || ""} onChange={(e) => f(e.target.value)} placeholder={ph} style={{ ...inp, textAlign: "center" }} />;
+  const side = (v, f) => sideSel(v || "L", f);
+  const sel = (opts) => (v, f) => <select value={v || opts[0]} onChange={(e) => f(e.target.value)} style={inp}>{opts.map((o) => <option key={o}>{o}</option>)}</select>;
+  const sec = (t) => <div style={{ fontSize: 14, fontWeight: 700, margin: "6px 0 8px" }}>{t}</div>;
+  // progress
+  const all = [...sheets, ...Object.values(legacy || {}).filter((x) => x && x.date && (x.rom || []).length).map((x) => ({ date: x.date, rom: x.rom, str: [], pain: x.painGeneral, legacy: true }))].sort((a, b) => String(a.date).localeCompare(String(b.date)) || (a.created || 0) - (b.created || 0));
+  const series3 = (items, keyOf, valOf) => {
+    const keys = [...new Set(all.flatMap((x) => (x[items] || []).map(keyOf).filter(Boolean)))];
+    return keys;
+  };
+  const romKeys = series3("rom", (m) => (clinNum(m.deg) && m.move) || null);
+  const strKeys = series3("str", (m) => (clinNum(m.val) && m.name ? `${m.name} (${m.unit || "kg"})` : null));
+  const rk = romKeys.includes(romSel) ? romSel : romKeys[0];
+  const sk = strKeys.includes(strSel) ? strSel : strKeys[0];
+  const build = (items, match, valKey) => {
+    const byDate = {};
+    all.forEach((x) => { (x[items] || []).forEach((m) => { if (match(m) && clinNum(m[valKey])) { const d = (byDate[x.date] = byDate[x.date] || {}); d[m.side || "-"] = clinNum(m[valKey]); } }); });
+    return Object.keys(byDate).sort().map((dt) => ({ date: dt, L: byDate[dt].L ?? null, R: byDate[dt].R ?? null, N: byDate[dt]["-"] ?? null }));
+  };
+  const romData = rk ? build("rom", (m) => m.move === rk, "deg") : [];
+  const strData = sk ? build("str", (m) => `${m.name} (${m.unit || "kg"})` === sk, "val") : [];
+  const painByDate = {}; all.forEach((x) => { if (x.pain !== undefined && x.pain !== null && x.pain !== "") painByDate[x.date] = Number(x.pain); });
+  const painData = Object.keys(painByDate).sort().map((dt) => ({ date: dt, pain: painByDate[dt] }));
+  const rs = (data) => [{ key: "L", color: "#2F6FDE", label: "Αριστερά" }, { key: "R", color: "#0E8A7D", label: "Δεξιά" }, { key: "N", color: "#D9560B", label: "Χωρίς πλευρά" }].filter((q) => data.some((d) => d[q.key] !== null));
+  const block = (title, keys, cur2, setCur, data, unit) => data.length > 0 && (
+    <div style={{ marginBottom: 18 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 6 }}>
+        <div style={{ fontWeight: 700, fontSize: 15 }}>{title}</div>
+        {keys.length > 1 ? <select value={cur2} onChange={(e) => setCur(e.target.value)} style={{ ...inputStyle, width: "auto", padding: "6px 12px", fontSize: 13 }}>{keys.map((k) => <option key={k}>{k}</option>)}</select> : <span style={{ fontSize: 13, color: T.paperDim }}>{cur2}</span>}
+      </div>
+      <TrendChart data={data} xKey="date" domain={autoDomain(data.flatMap((d) => [d.L, d.R, d.N]))} series={rs(data)} />
+      <div style={{ overflowX: "auto", marginTop: 6 }}><table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+        <thead><tr>{["Ημερομηνία", ...rs(data).map((q) => q.label)].map((h) => <th key={h} style={{ textAlign: "left", padding: "6px 8px", fontSize: 12.5, color: T.paperDim, borderBottom: `1px solid ${T.panelLine}` }}>{h}</th>)}</tr></thead>
+        <tbody>{data.map((d) => <tr key={d.date}><td style={{ padding: "7px 8px", fontWeight: 600, borderBottom: `1px solid ${T.panelLine}` }}>{fmtDay(d.date)}</td>{rs(data).map((q) => <td key={q.key} style={{ padding: "7px 8px", borderBottom: `1px solid ${T.panelLine}` }}>{d[q.key] !== null ? `${d[q.key]}${unit}` : "—"}</td>)}</tr>)}</tbody>
+      </table></div>
+    </div>
+  );
+  return (
+    <>
+      <Panel title={`Κλινική Εικόνα — ${fmtDay(sessionDate)}`} accent>
+        <datalist id="clin-moves">{CLIN_MOVES.map((n) => <option key={n} value={n} />)}</datalist>
+        <datalist id="clin-muscles">{CLIN_MUSCLES.map((n) => <option key={n} value={n} />)}</datalist>
+        <datalist id="clin-params">{CLIN_PARAMS.map((n) => <option key={n} value={n} />)}</datalist>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+          {day.map((x, i) => (
+            <button key={x.id} type="button" onClick={() => setActive(x.id)} style={{ padding: "8px 16px", borderRadius: 999, border: `1px solid ${cur && cur.id === x.id ? T.gold : T.panelLine}`, background: cur && cur.id === x.id ? "rgba(217,86,11,0.14)" : "transparent", color: cur && cur.id === x.id ? T.gold : T.paperDim, fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>{x.title || `Φύλλο ${i + 1}`}</button>
+          ))}
+          <button type="button" onClick={addSheet} style={{ padding: "8px 16px", borderRadius: 999, border: `1.5px dashed ${T.gold}`, background: "transparent", color: T.gold, fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>+ Νέο φύλλο</button>
+        </div>
+        {!cur && <div style={{ fontSize: 13.5, color: T.paperDim }}>Δεν υπάρχει φύλλο για αυτή την ημέρα. Πάτησε «+ Νέο φύλλο». Μπορείς να έχεις πολλά φύλλα την ίδια ημέρα (π.χ. «Πριν τη θεραπεία», «Μετά», «Προπόνηση»).</div>}
+        {cur && (
+          <div>
+            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+              <input value={cur.title || ""} onChange={(e) => upd({ title: e.target.value })} placeholder="Όνομα φύλλου (π.χ. Πριν τη θεραπεία, Μετά, Προπόνηση)" style={{ ...inputStyle, flex: 1 }} />
+              <button type="button" onClick={delSheet} style={{ background: "none", color: T.rust, border: `1px solid ${T.panelLine}`, borderRadius: 9, padding: "8px 14px", fontSize: 13, cursor: "pointer" }}>Διαγραφή φύλλου</button>
+            </div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+              {["Κλινική εικόνα", "Εκτίμηση", "Θεραπεία"].map((k) => (
+                <button key={k} type="button" onClick={() => upd({ kind: k })} style={{ padding: "6px 14px", borderRadius: 999, border: `1px solid ${(cur.kind || "Κλινική εικόνα") === k ? T.gold : T.panelLine}`, background: (cur.kind || "Κλινική εικόνα") === k ? "rgba(217,86,11,0.14)" : "transparent", color: (cur.kind || "Κλινική εικόνα") === k ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{k}</button>
+              ))}
+            </div>
+            {sec("Εύρος κίνησης (ROM)")}
+            {rowsEditor("rom", [{ k: "move", h: "Κίνηση", w: "1fr", render: text("π.χ. Κάμψη γόνατος", "clin-moves") }, { k: "side", h: "Πλευρά", w: "116px", render: side }, { k: "deg", h: "Μοίρες °", w: "84px", render: num("120") }, { k: "type", h: "Τύπος", w: "122px", render: sel(["Ενεργητικό", "Παθητικό"]) }], (p) => ({ move: p ? p.move : "", side: p ? (p.side === "L" ? "R" : "L") : "L", deg: "", type: p ? p.type : "Ενεργητικό" }), "+ Προσθήκη εύρους κίνησης")}
+            {sec("Δύναμη")}
+            {rowsEditor("str", [{ k: "name", h: "Μυϊκή ομάδα / τεστ", w: "1fr", render: text("π.χ. Τετρακέφαλος", "clin-muscles") }, { k: "side", h: "Πλευρά", w: "116px", render: side }, { k: "val", h: "Τιμή", w: "84px", render: num("30") }, { k: "unit", h: "Μονάδα", w: "88px", render: sel(["kg", "N", "MMT", "% LSI"]) }], (p) => ({ name: p ? p.name : "", side: p ? (p.side === "L" ? "R" : "L") : "L", val: "", unit: p ? p.unit : "kg" }), "+ Προσθήκη δύναμης")}
+            {sec("Πόνος")}
+            <ScaleInput label="Πόνος γενικά" value={cur.pain == null ? 0 : cur.pain} onChange={(v) => upd({ pain: v })} low="καθόλου" high="αφόρητος" danger plain />
+            {sec("Παράμετροι θεραπείας / προπόνησης")}
+            {rowsEditor("params", [{ k: "name", h: "Παράμετρος", w: "1fr", render: text("π.χ. Τεχνική, Ένταση, Διάρκεια", "clin-params") }, { k: "value", h: "Τιμή", w: "1.4fr", render: text("π.χ. mobilisation grade III, 10 λεπτά", "") }], () => ({ name: "", value: "" }), "+ Προσθήκη παραμέτρου")}
+            <TextAreaField label="Σημειώσεις" value={cur.notes || ""} onChange={(v) => upd({ notes: v })} rows={2} />
+          </div>
+        )}
+      </Panel>
+      {(romData.length > 0 || strData.length > 0 || painData.length > 1) && (
+        <Panel title="Πρόοδος κλινικής εικόνας">
+          {block("Εύρος κίνησης (°)", romKeys, rk, setRomSel, romData, "°")}
+          {block("Δύναμη", strKeys, sk, setStrSel, strData, "")}
+          {painData.length > 1 && (
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 6 }}>Πόνος γενικά (0–10)</div>
+              <TrendChart data={painData} xKey="date" domain={[0, 10]} series={[{ key: "pain", color: "#C0392B", label: "Πόνος γενικά" }]} />
+            </div>
+          )}
+        </Panel>
+      )}
+      {all.some((x) => x.date !== sessionDate && (x.params || []).length) && (
+        <Panel title="Ιστορικό παραμέτρων θεραπείας / προπόνησης">
+          {[...all].filter((x) => (x.params || []).some((p) => p.name || p.value)).reverse().map((x) => (
+            <div key={x.id} style={{ padding: "8px 0", borderBottom: `1px solid ${T.panelLine}`, fontSize: 14 }}>
+              <b>{fmtDay(x.date)}</b>{x.title ? <span style={{ color: T.gold }}> · {x.title}</span> : null}
+              <div style={{ color: T.paperDim, marginTop: 2 }}>{(x.params || []).filter((p) => p.name || p.value).map((p) => `${p.name}: ${p.value}`).join(" · ")}</div>
+            </div>
+          ))}
+        </Panel>
+      )}
+    </>
+  );
+}
+function DayModule({ patient, patientId, sessionDate, week, dayEntries, assessment, assessments, dayMeas, onGo }) {
+  const sheets = patientId ? store.get(`trl_clin_${patientId}`, []) : [];
+  const legacy = patientId ? store.get(`trl_sessions_${patientId}`, {}) : {};
+  const all = [...sheets, ...Object.values(legacy || {}).filter((x) => x && x.date && (x.rom || []).length).map((x) => ({ date: x.date, rom: x.rom, str: [], pain: x.painGeneral, created: 0 }))].sort((p, q) => String(p.date).localeCompare(String(q.date)) || (p.created || 0) - (q.created || 0));
+  const clin = all.filter((x) => x.date === sessionDate);
+  const rx = (patientId ? store.get(`trl_rx_${patientId}`, []) : []).filter((p) => p.date === sessionDate);
+  const sideT = { L: "Αριστ.", R: "Δεξ.", "-": "" };
+  const kindOf = (x) => x.kind || "Κλινική εικόνα";
+  const ofKind = (...ks) => clin.filter((x) => ks.includes(kindOf(x)));
+  // ---- flowsheet ----
+  const items = [];
+  const put = (key, label, unit, better, date, v) => { if (v === null || v === undefined || isNaN(v)) return; let it = items.find((x) => x.key === key); if (!it) { it = { key, label, unit, better, vals: {} }; items.push(it); } it.vals[date] = v; };
+  all.forEach((x) => {
+    (x.rom || []).forEach((m) => { const v = clinNum(m.deg); if (m.move && v) put(`r|${m.move}|${m.side}`, `${m.move} ${sideT[m.side] || ""}`.trim(), "°", 1, x.date, v); });
+    (x.str || []).forEach((m) => { const v = clinNum(m.val); if (m.name && v) put(`s|${m.name}|${m.side}|${m.unit}`, `${m.name} ${sideT[m.side] || ""} (${m.unit || "kg"})`.trim(), "", 1, x.date, v); });
+    if (x.pain !== undefined && x.pain !== null && x.pain !== "") put("p", "Πόνος γενικά (0–10)", "", -1, x.date, Number(x.pain));
+  });
+  Object.entries(assessments || {}).forEach(([d, a]) => { if (a && a.severityNow !== undefined && a.severityNow !== null && a.severityNow !== "") put("pa", "Πόνος τώρα — εκτίμηση", "", -1, d, Number(a.severityNow)); });
+  const allDates = [...new Set(items.flatMap((it) => Object.keys(it.vals)).concat(sessionDate))].sort();
+  const cols = allDates.filter((d) => d <= sessionDate).slice(-5);
+  const rows = items.filter((it) => cols.some((d) => it.vals[d] !== undefined));
+  const delta = (it) => {
+    const cur = it.vals[sessionDate]; if (cur === undefined) return null;
+    const prev = [...cols].filter((d) => d < sessionDate && it.vals[d] !== undefined).pop();
+    if (!prev) return null;
+    const d = Math.round((cur - it.vals[prev]) * 10) / 10;
+    return d;
+  };
+  const dBadge = (it) => {
+    const d = delta(it);
+    if (d === null) return <span style={{ color: T.paperDim }}>—</span>;
+    if (d === 0) return <span style={{ color: T.paperDim }}>=</span>;
+    return <b style={{ color: d * it.better > 0 ? "#0E8A7D" : "#C0392B", whiteSpace: "nowrap" }}>{d > 0 ? "▲ +" : "▼ "}{d}{it.unit}</b>;
+  };
+  const th = { textAlign: "center", padding: "8px 6px", fontSize: 12.5, color: T.paperDim, fontWeight: 600, borderBottom: `2px solid ${T.panelLine}` };
+  const td = { padding: "10px 6px", borderBottom: `1px solid ${T.panelLine}`, fontSize: 14, textAlign: "center" };
+  // ---- visit sections ----
+  const entryTxt = (e) => (e.setRows && e.setRows.length ? rxRowsText(e.setRows, e.setMode) : `${e.sets || "–"}×${e.reps || "–"}${parseFloat(e.resistance) > 0 ? " @" + e.resistance + (e.resistanceUnit || "") : ""}`);
+  const a = assessment;
+  const clinLines = (list) => list.flatMap((x) => [
+    ...(x.rom || []).filter((m) => m.move && m.deg).map((m) => `${m.move} ${sideT[m.side] || ""} ${m.deg}°`),
+    ...(x.str || []).filter((m) => m.name && m.val).map((m) => `${m.name} ${sideT[m.side] || ""} ${m.val} ${m.unit}`),
+    ...(x.pain != null ? [`Πόνος ${x.pain}/10`] : []),
+  ]);
+  const therLines = (list) => list.flatMap((x) => [...(x.params || []).filter((p) => p.name || p.value).map((p) => `${p.name}: ${p.value}`), ...(x.notes ? [x.notes] : [])]);
+  const sections = [
+    { t: "Εκτίμηση", view: "assessment", lines: a && (a.chiefComplaint || a.site) ? [a.chiefComplaint, a.site ? `${a.site}${a.siteSide && a.siteSide !== "—" ? " · " + a.siteSide : ""}` : "", a.severityNow != null ? `Πόνος τώρα ${a.severityNow}/10` : ""].filter(Boolean) : [] },
+    { t: "Κλινική εικόνα", view: "daily", lines: clinLines(ofKind("Κλινική εικόνα", "Εκτίμηση")) },
+    { t: "Θεραπεία", view: "daily", lines: therLines(ofKind("Θεραπεία", "Προπόνηση")) },
+    { t: "Προπόνηση", view: "load", lines: dayEntries.map((e) => `${e.activity} · ${entryTxt(e)}`), sub: "Καταγραφή φορτίου" },
+    { t: "Συνταγή", view: "rx", lines: rx.map((p) => `${p.dx}: ${p.items.map((x) => x.name).filter(Boolean).join(", ")}`) },
+    { t: "Μετρήσεις", view: "measurements", lines: dayMeas.length ? [`${dayMeas.length} ${dayMeas.length === 1 ? "μέτρηση" : "μετρήσεις"}`] : [] },
+  ];
+  const box = { background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 16, padding: "16px 18px" };
+  return (
+    <>
+      <div className="ll-dxrow" style={{ margin: "4px 2px 16px" }}>
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 22 }}>Επίσκεψη — {fmtDay(sessionDate)}</div>
+        <div style={{ fontSize: 14, color: T.paperDim, marginTop: 2 }}>{patient ? patient.name : ""}{week ? ` · Εβδομάδα ${week}` : ""}</div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: 14, alignItems: "start" }}>
+        <div style={box}>
+          <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 6 }}>Η ημέρα</div>
+          {sections.map((sc) => (
+            <div key={sc.t} onClick={() => onGo(sc.view)} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "11px 0", borderTop: `1px solid ${T.panelLine}`, cursor: "pointer" }}>
+              <div style={{ width: 118, flex: "none" }}>
+                <div style={{ fontWeight: 700, fontSize: 14.5 }}>{sc.t}</div>
+                {sc.sub && <div style={{ fontSize: 11.5, color: T.paperDim }}>{sc.sub}</div>}
+              </div>
+              <div style={{ flex: 1, fontSize: 13.5, lineHeight: 1.5, color: sc.lines.length ? T.paper : T.paperDim }}>
+                {sc.lines.length ? sc.lines.map((l, i) => <div key={i}>{l}</div>) : "—"}
+              </div>
+              <span style={{ color: T.gold, fontWeight: 700, fontSize: 18, lineHeight: 1 }}>{sc.lines.length ? "›" : "+"}</span>
+            </div>
+          ))}
+        </div>
+        <div style={box}>
+          <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 8 }}>Σύγκριση με τις προηγούμενες</div>
+          {rows.length === 0 ? <div style={{ fontSize: 14, color: T.paperDim }}>Συμπλήρωσε ROM, δύναμη ή πόνο στην «Κλινική Εικόνα» και εδώ θα φανεί η εξέλιξη από επίσκεψη σε επίσκεψη.</div> : (
+            <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead><tr>
+                <th style={{ ...th, textAlign: "left" }}>Μέτρηση</th>
+                {cols.map((d) => <th key={d} style={{ ...th, color: d === sessionDate ? T.gold : T.paperDim, background: d === sessionDate ? "rgba(217,86,11,0.08)" : "transparent" }}>{d.slice(8, 10)}/{d.slice(5, 7)}</th>)}
+                <th style={th}>Δ από προηγ.</th>
+              </tr></thead>
+              <tbody>{rows.map((it) => (
+                <tr key={it.key}>
+                  <td style={{ ...td, textAlign: "left", fontWeight: 600 }}>{it.label}</td>
+                  {cols.map((d) => <td key={d} style={{ ...td, fontWeight: d === sessionDate ? 700 : 400, background: d === sessionDate ? "rgba(217,86,11,0.08)" : "transparent" }}>{it.vals[d] !== undefined ? `${it.vals[d]}${it.unit}` : <span style={{ color: T.paperDim }}>·</span>}</td>)}
+                  <td style={td}>{dBadge(it)}</td>
+                </tr>
+              ))}</tbody>
+            </table></div>
+          )}
+          <div style={{ fontSize: 12, color: T.paperDim, marginTop: 10 }}>Πράσινο = βελτίωση (περισσότερο εύρος/δύναμη, λιγότερος πόνος). Κόκκινο = επιδείνωση.</div>
+        </div>
+      </div>
+      <div style={{ ...box, marginTop: 14, display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+        <b style={{ fontSize: 14, marginRight: 4 }}>Όλα του ασθενή</b>
+        {[["assessment", "Ιατρική Εκτίμηση"], ["load", "Καταγραφή Φορτίου"], ["daily", "Κλινική Εικόνα"], ["rtp", "Κριτήρια RTP"], ["measurements", "Μετρήσεις (VALD)"], ["loadmgmt", "Διαχείριση Φορτίου"], ["rx", "Συνταγή"], ["sources", "Πηγές"]].map(([k, l]) => (
+          <button key={k} onClick={() => onGo(k)} style={{ border: `1px solid ${T.panelLine}`, background: T.bgSoft, borderRadius: 999, padding: "8px 14px", fontSize: 13.5, fontWeight: 600, cursor: "pointer", color: T.paper }}>{l}</button>
+        ))}
+      </div>
+    </>
   );
 }
 function RxModule({ patientId, patient, exercises, sessionDate }) {
@@ -2876,9 +3151,10 @@ function TissueLoadLog() {
   const [measurements, setMeasurements] = useState([]);
   const [patientQuery, setPatientQuery] = useState("");
   const [histEx, setHistEx] = useState("");
-  const [view, setView] = useState("assessment"); // assessment | load | daily | measurements | loadmgmt
+  const [view, setView] = useState("day"); // assessment | load | daily | measurements | loadmgmt
   const [assessments, setAssessments] = useState({});
   const [sessions, setSessions] = useState({});
+  const [romSel, setRomSel] = useState("");
   const [assessDraft, setAssessDraft] = useState(emptyAssess());
   const [sessionDraft, setSessionDraft] = useState(emptySession());
   const [printMode, setPrintMode] = useState(null);
@@ -3025,6 +3301,7 @@ function TissueLoadLog() {
     store.remove(`trl_rtp_${id}`);
     store.remove(`trl_rx_${id}`);
     store.remove(`trl_bodysel_${id}`);
+    store.remove(`trl_clin_${id}`);
   };
 
   const addCustomType = () => {
@@ -3069,8 +3346,8 @@ function TissueLoadLog() {
   const syncRows = (rows, mode) => {
     const list = [];
     rows.forEach((rw) => {
-      if (mode === "U") { ["L", "R"].forEach((sd) => { const c = rw[sd]; if (c && parseFloat(c.reps) > 0) list.push({ reps: String(c.reps), dur: c.dur || "", load: c.load || "", side: sd }); }); }
-      else { const c = rw.B; if (c && parseFloat(c.reps) > 0) list.push({ reps: String(c.reps), dur: c.dur || "", load: c.load || "", side: "B" }); }
+      if (mode === "U") { ["L", "R"].forEach((sd) => { const c = rw[sd]; if (c && (parseFloat(c.reps) > 0 || parseFloat(c.dur) > 0)) list.push({ reps: String(c.reps || 1), dur: c.dur || "", rest: c.rest || "", load: c.load || "", side: sd }); }); }
+      else { const c = rw.B; if (c && (parseFloat(c.reps) > 0 || parseFloat(c.dur) > 0)) list.push({ reps: String(c.reps || 1), dur: c.dur || "", rest: c.rest || "", load: c.load || "", side: "B" }); }
     });
     return { setRows: rows, setMode: mode, setList: list, sets: rows.length ? String(rows.length) : "", reps: list.map((x) => x.reps).join("+") };
   };
@@ -3488,46 +3765,7 @@ function TissueLoadLog() {
   );
 
   const dayAvgRpe = dayEntries.length ? (dayEntries.reduce((a, e) => a + Number(rpeOf(e) || 0), 0) / dayEntries.length) : null;
-  const dailyView = (
-    <>
-      <Panel title={`Ημερήσια Συνεδρία — ${fmtDay(sessionDate)}`} accent>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
-          <NumberField label="Διάρκεια συνεδρίας" unit="λεπτά" value={sessionDraft.duration} onChange={(v) => sd("duration", v)} placeholder="60" />
-          <Field label="Φορτίο συνεδρίας (AU)">
-            <div style={{ ...inputStyle, color: T.gold, fontFamily: "'IBM Plex Mono', monospace" }}>{sessionDraft.duration ? Number(sessionDraft.duration) * sessionDraft.sessionRPE : "—"}</div>
-          </Field>
-        </div>
-        <ScaleInput label="Συνολικό RPE συνεδρίας (Borg CR10)" value={sessionDraft.sessionRPE} onChange={(v) => sd("sessionRPE", v)} low="χαλαρά" high="εξάντληση" />
-        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.paperDim, margin: "6px 0 10px" }}>Γενική ψυχική εικόνα ασθενή</div>
-        <ScaleInput label="Διάθεση" value={sessionDraft.mood} onChange={(v) => sd("mood", v)} low="πολύ χαμηλή" high="πολύ καλή" plain />
-        <ScaleInput label="Ενέργεια" value={sessionDraft.energy} onChange={(v) => sd("energy", v)} low="εξάντληση" high="γεμάτος ενέργεια" plain />
-        <ScaleInput label="Ποιότητα ύπνου" value={sessionDraft.sleep} onChange={(v) => sd("sleep", v)} low="πολύ κακή" high="εξαιρετική" plain />
-        <ScaleInput label="Στρες / άγχος" value={sessionDraft.stress} onChange={(v) => sd("stress", v)} low="καθόλου" high="πολύ υψηλό" danger plain />
-        <ScaleInput label="Κίνητρο / προθυμία" value={sessionDraft.motivation} onChange={(v) => sd("motivation", v)} low="χαμηλό" high="υψηλό" plain />
-        <div style={{ display: "grid", gap: 12, marginTop: 6 }}>
-          <TextAreaField label="Συμπεράσματα ημέρας (φόρτιση, ανταπόκριση, προσαρμογές)" value={sessionDraft.conclusions} onChange={(v) => sd("conclusions", v)} rows={3} />
-          <TextAreaField label="Σημειώσεις" value={sessionDraft.notes} onChange={(v) => sd("notes", v)} rows={2} />
-        </div>
-        <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-          <button onClick={saveSessionRec} style={{ flex: 1, background: T.terracotta, color: T.bg, border: "none", borderRadius: 9, padding: "12px", fontSize: 14.5, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>{sessions[sessionDate] ? "Ενημέρωση συνεδρίας" : "Αποθήκευση συνεδρίας"}</button>
-          {sessions[sessionDate] && <button onClick={deleteSessionRec} style={{ background: "none", color: T.rust, border: `1px solid ${T.panelLine}`, borderRadius: 9, padding: "12px 14px", fontSize: 13, cursor: "pointer" }}>Διαγραφή</button>}
-        </div>
-      </Panel>
-      <Panel title={`Ασκήσεις της ημέρας (${dayEntries.length})`}>
-        {dayEntries.length === 0 ? <div style={{ color: T.paperDim, fontSize: 13, opacity: 0.8 }}>Καμία καταγραφή φορτίου για αυτή την ημέρα.</div> : (
-          <>
-            {dayAvgRpe != null && <div style={{ fontSize: 12.5, color: T.gold, marginBottom: 8 }}>Μέσο RPE ασκήσεων: {dayAvgRpe.toFixed(1)}</div>}
-            {dayEntries.map((e) => (
-              <div key={e.id} style={{ fontSize: 13, padding: "6px 0", borderBottom: `1px solid ${T.panelLine}` }}>
-                <b>{e.activity}</b> <span style={{ color: T.paperDim }}>· {(e.tissues && e.tissues.length ? e.tissues : [e.tissue]).map((id) => (TISSUES.find((t) => t.id === id) || {}).label).filter(Boolean).join(" + ")} · RPE {rpeOf(e)}{(e.sets || e.reps) ? ` · ${e.sets || "–"}×${e.reps || "–"}` : ""}{e.tempo ? ` · ${e.tempo}` : ""}</span>
-                <button onClick={() => startEdit(e)} style={{ background: "none", border: `1px solid ${T.panelLine}`, color: T.gold, borderRadius: 8, padding: "1px 10px", fontSize: 11.5, fontWeight: 600, cursor: "pointer", marginLeft: 8 }}>Διόρθωση</button>
-              </div>
-            ))}
-          </>
-        )}
-      </Panel>
-    </>
-  );
+  const dailyView = <ClinicalModule patientId={activePatient} sessionDate={sessionDate} week={selWeek} />;
 
   const loadMgmtView = (
     <>
@@ -3537,7 +3775,7 @@ function TissueLoadLog() {
           <div><div style={{ fontSize: 11, color: T.paperDim }}>Χρόνιο (μ.ό. 4 εβδ.)</div><div style={{ fontSize: 22, fontWeight: 700, color: T.paper }}>{Math.round(chronic)}<span style={{ fontSize: 11, color: T.paperDim }}> AU</span></div></div>
           <div><div style={{ fontSize: 11, color: T.paperDim }}>ACWR</div><div style={{ fontSize: 22, fontWeight: 700, color: acwrZone ? acwrZone[1] : T.paperDim }}>{acwr != null ? acwr.toFixed(2) : "—"}</div></div>
         </div>
-        <div style={{ fontSize: 13, color: acwrZone ? acwrZone[1] : T.paperDim }}>{acwrZone ? acwrZone[0] : "Χρειάζονται καταχωρημένες συνεδρίες με διάρκεια και RPE (καρτέλα «Ημερήσια Συνεδρία»)."}</div>
+        <div style={{ fontSize: 13, color: acwrZone ? acwrZone[1] : T.paperDim }}>{acwrZone ? acwrZone[0] : "Δεν υπάρχουν αρκετά δεδομένα φόρτου συνεδριών."}</div>
         <div style={{ fontSize: 11, color: T.paperDim, marginTop: 8, lineHeight: 1.5 }}>Φορτίο συνεδρίας = διάρκεια (λεπτά) × RPE συνεδρίας. ACWR = οξύ φορτίο 7 ημερών ÷ μέσο εβδομαδιαίο φορτίο 4 εβδομάδων. Η ζώνη 0.8–1.3 θεωρείται συνήθως «βέλτιστη»· είναι ενδεικτικό εργαλείο, όχι προγνωστικό κριτήριο.</div>
       </Panel>
       {weekRows.some((w) => w.load > 0) && (
@@ -3678,15 +3916,17 @@ function TissueLoadLog() {
           <>
             <div className="mac-top" data-view={view}>
               <div className="mac-ptitle">
-                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 17 }}>{patient ? patient.name : ""}</div>
-                <div style={{ fontSize: 12, color: T.paperDim }}>{fmtDay(sessionDate)}{patient && patient.startDate ? ` · Εβδ.${weekNumber(patient.startDate, sessionDate)}` : ""}</div>
+                {!isPatientMode && view !== "day" && <button onClick={() => setView("day")} style={{ background: "none", border: "none", color: T.gold, fontWeight: 700, fontSize: 14, cursor: "pointer", padding: "0 0 4px", fontFamily: "inherit" }}>‹ Πίσω στην ημέρα</button>}
+                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 28, lineHeight: 1.15 }}>{patient ? patient.name : ""}</div>
+                <div style={{ fontSize: 13.5, color: T.paperDim, paddingBottom: 12 }}>{patient && patient.pathology ? patient.pathology + " · " : ""}{fmtDay(sessionDate)}{patient && patient.startDate ? ` · Εβδ.${weekNumber(patient.startDate, sessionDate)}` : ""}{!isPatientMode && view !== "day" ? " · " + ({ assessment: "Ιατρική Εκτίμηση", load: "Καταγραφή Φορτίου", rtp: "Κριτήρια RTP", daily: "Κλινική Εικόνα", measurements: "Μετρήσεις (VALD)", loadmgmt: "Διαχείριση Φορτίου", rx: "Συνταγή", sources: "Πηγές" }[view] || "") : ""}</div>
               </div>
-            <div className="mac-tabs" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, marginBottom: 20 }}>
+            {isPatientMode && <div className="mac-tabs" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, marginBottom: 20 }}>
               {[
+                { id: "day", label: "Ημέρα", icon: "calendar", clin: true },
                 { id: "assessment", label: "Ιατρική Εκτίμηση", icon: "stethoscope", main: true, clin: true },
                 { id: "load", label: "Καταγραφή Φορτίου", icon: "activity" },
                 { id: "rtp", label: "Κριτήρια RTP", icon: "flag", clin: true },
-                { id: "daily", label: "Ημερήσια Συνεδρία", icon: "folder", clin: true },
+                { id: "daily", label: "Κλινική Εικόνα", icon: "folder", clin: true },
                 { id: "measurements", label: "Μετρήσεις (VALD)", icon: "gauge" },
                 { id: "loadmgmt", label: "Διαχείριση Φορτίου", icon: "heart", clin: true },
                 { id: "rx", label: "Συνταγή", icon: "pencil", clin: true },
@@ -3702,12 +3942,13 @@ function TissueLoadLog() {
                   color: view === v.id ? T.gold : T.paperDim,
                 }}><Icon name={v.icon} size={v.main ? 17 : 15} /> {v.label}</button>
               ))}
-            </div>
+            </div>}
             </div>
 
             <div className="mac-main" data-view={view}>
             {view === "assessment" && !isPatientMode && assessmentView}
             {view === "rtp" && !isPatientMode && <RtpModule patientId={activePatient} patientName={patient && patient.name} assessments={assessments} sessionDate={sessionDate} />}
+            {view === "day" && !isPatientMode && <DayModule patient={patient} patientId={activePatient} sessionDate={sessionDate} week={selWeek} dayEntries={dayEntries} assessment={assessments[sessionDate]} dayMeas={dayMeas} assessments={assessments} onGo={setView} />}
             {view === "daily" && !isPatientMode && dailyView}
             {view === "sources" && !isPatientMode && <SourcesModule />}
             {view === "loadmgmt" && !isPatientMode && loadMgmtView}
@@ -3819,17 +4060,6 @@ function TissueLoadLog() {
 
                   {!isCardio && (
                     <>
-                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>{sscOf(tissueId, form.loadType) ? "Επιπλέον φορτίο — γιλέκο / βάρη (προαιρετικό)" : "Φορτίο αντίστασης (προαιρετικό)"}</label>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 10, marginBottom: 14 }}>
-                        <input type="number" inputMode="decimal" value={form.resistance} onChange={(e) => setForm({ ...form, resistance: e.target.value })} placeholder="π.χ. 20" style={inputStyle} />
-                        <div style={{ position: "relative" }}>
-                          <select value={form.resistanceUnit} onChange={(e) => setForm({ ...form, resistanceUnit: e.target.value })} style={{ ...inputStyle, padding: "10px 30px 10px 12px", appearance: "none" }}>
-                            {RESISTANCE_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
-                          </select>
-                          <Icon name="chevron" size={15} style={{ position: "absolute", right: 10, top: 12, color: T.paperDim, pointerEvents: "none" }} />
-                        </div>
-                      </div>
-
                       <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Τύπος φόρτισης</label>
                       <div style={{ position: "relative", marginBottom: 8 }}>
                         <select value={form.loadType} onChange={(e) => setForm({ ...form, loadType: e.target.value })} style={{ ...inputStyle, padding: "10px 36px 10px 12px", appearance: "none" }}>
@@ -3849,21 +4079,36 @@ function TissueLoadLog() {
                         </div>
                       )}
 
-                      <div style={{ display: "grid", gridTemplateColumns: (form.setList || []).length ? "1fr" : sscOf(tissueId, form.loadType) ? "1fr 1fr" : "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
-                        {!(form.setList || []).length && <NumberField label={sscOf(tissueId, form.loadType) ? "Σετ" : "Sets"} value={form.sets} onChange={(v) => setForm({ ...form, sets: v })} placeholder="3" />}
-                        {!(form.setList || []).length && <NumberField label={sscOf(tissueId, form.loadType) ? "Επαφές / σετ" : "Reps"} value={form.reps} onChange={(v) => setForm({ ...form, reps: v })} placeholder="10" />}
-                        {!sscOf(tissueId, form.loadType) && <SelectField label="Ρυθμός" value={form.tempo || "—"} onChange={(v) => setForm({ ...form, tempo: v === "—" ? "" : v })} options={["—", "Slow", "Slow Heavy", "Fast", "Quick", "Explosive"]} />}
-                      </div>
-
                       <div className="ll-sets" style={{ border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 14, marginBottom: 14, background: T.bgSoft }}>
                         <MiniSetTable rows={setRows} mode={setMode} unit={form.resistanceUnit || "kg"} iso={/Ισομετρ/.test(form.loadType || "")} onChange={(rows, mode) => setForm({ ...form, ...syncRows(rows, mode) })} />
                         {setRows.length === 0 && <div style={{ fontSize: 12, color: T.paperDim }}>Ή συμπλήρωσε γρήγορα παρακάτω «Sets / Reps» αν όλα τα σετ είναι ίδια.</div>}
                         {(form.setList || []).length > 0 && <div style={{ fontSize: 12.5, color: T.paperDim, marginTop: 4 }}>{setsSummary(form.setList)}{calcOf(tissueId, form).volume ? ` · όγκος ${calcOf(tissueId, form).volume} kg` : ""}</div>}
                       </div>
 
-                      <TissuePanel tissue={tissue} loadType={form.loadType} tp={form.tp || {}} form={form} onChange={(v) => setForm({ ...form, tp: v })} />
+                      <details style={{ marginBottom: 12 }}><summary style={{ cursor: "pointer", fontSize: 13.5, fontWeight: 600, color: T.gold, padding: "6px 0" }}>+ Επιπλέον φορτίο, γρήγορα Sets/Reps, Ρυθμός</summary>
+                      <label style={{ display: "block", fontSize: 12, color: T.paperDim, marginBottom: 6 }}>{sscOf(tissueId, form.loadType) ? "Επιπλέον φορτίο — γιλέκο / βάρη (προαιρετικό)" : "Φορτίο αντίστασης (προαιρετικό)"}</label>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 10, marginBottom: 14 }}>
+                        <input type="number" inputMode="decimal" value={form.resistance} onChange={(e) => setForm({ ...form, resistance: e.target.value })} placeholder="π.χ. 20" style={inputStyle} />
+                        <div style={{ position: "relative" }}>
+                          <select value={form.resistanceUnit} onChange={(e) => setForm({ ...form, resistanceUnit: e.target.value })} style={{ ...inputStyle, padding: "10px 30px 10px 12px", appearance: "none" }}>
+                            {RESISTANCE_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+                          </select>
+                          <Icon name="chevron" size={15} style={{ position: "absolute", right: 10, top: 12, color: T.paperDim, pointerEvents: "none" }} />
+                        </div>
+                      </div>
 
-                      {!isPatientMode && (
+                      <div style={{ display: "grid", gridTemplateColumns: (form.setList || []).length ? "1fr" : sscOf(tissueId, form.loadType) ? "1fr 1fr" : "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+                        {!(form.setList || []).length && <NumberField label={sscOf(tissueId, form.loadType) ? "Σετ" : "Sets"} value={form.sets} onChange={(v) => setForm({ ...form, sets: v })} placeholder="3" />}
+                        {!(form.setList || []).length && <NumberField label={sscOf(tissueId, form.loadType) ? "Επαφές / σετ" : "Reps"} value={form.reps} onChange={(v) => setForm({ ...form, reps: v })} placeholder="10" />}
+                        {!sscOf(tissueId, form.loadType) && <SelectField label="Ρυθμός" value={form.tempo || "—"} onChange={(v) => setForm({ ...form, tempo: v === "—" ? "" : v })} options={["—", "Slow", "Slow Heavy", "Fast", "Quick", "Explosive"]} />}
+                      </div>
+
+                      </details>
+                      <details style={{ marginBottom: 12 }}><summary style={{ cursor: "pointer", fontSize: 13.5, fontWeight: 600, color: T.gold, padding: "6px 0" }}>+ Παράμετροι ιστού (συχνότητα, ένταση, διάρκεια…)</summary>
+                      <TissuePanel tissue={tissue} loadType={form.loadType} tp={form.tp || {}} form={form} onChange={(v) => setForm({ ...form, tp: v })} />
+                      </details>
+
+                      {false && (
                         <div style={{ background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: 14, marginBottom: 14 }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 6, color: T.gold, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, marginBottom: 12 }}>
                             <Icon name="gauge" size={13} /> Κλινική Εικόνα
@@ -3929,7 +4174,6 @@ function TissueLoadLog() {
                   )}
 
                   <ScaleInput label="RPE άσκησης (Borg CR10)" value={form.intensity} onChange={(v) => setForm({ ...form, intensity: v })} low="πολύ ελαφριά" high="μέγιστη" />
-                  <div style={{ fontSize: 11, color: T.paperDim, marginTop: -8, marginBottom: 14 }}>Το συνολικό RPE της συνεδρίας καταχωρείται στην καρτέλα «Ημερήσια Συνεδρία».</div>
                   <ScaleInput label="Πόνος κατά τη δραστηριότητα" value={form.painDuring} onChange={(v) => setForm({ ...form, painDuring: v })} low="καθόλου" high="αφόρητος" danger />
                   <ScaleInput label="Πόνος 24 ώρες μετά" value={form.pain24h} onChange={(v) => setForm({ ...form, pain24h: v })} low="καθόλου" high="αφόρητος" danger />
 
