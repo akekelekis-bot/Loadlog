@@ -610,6 +610,12 @@ Object.keys(TISSUE_FIELDS).forEach((t) => {
     { k: "restSess", l: "Ξεκούραση ιστού έως την επόμενη φόρτιση", u: "ώρες", t: "number", ph: "48", g: "rest", hint: REST_HINTS[t] },
   ];
 });
+const SIDE_L = { L: "Αριστ.", R: "Δεξ.", B: "Αμφ." };
+const setsSummary = (list) => {
+  const g = {}; (list || []).forEach((x) => { const k = x.side || "B"; (g[k] = g[k] || { n: 0, r: 0 }); g[k].n++; g[k].r += parseFloat(x.reps) || 0; });
+  return ["L", "R", "B"].filter((k) => g[k]).map((k) => `${SIDE_L[k]}: ${g[k].n} σετ · ${g[k].r} επαν.`).join("  |  ");
+};
+const setLine = (list) => (list || []).map((x) => `${x.side && x.side !== "B" ? SIDE_L[x.side] + " " : ""}${cellTxt(x)}`).join(" · ");
 const sscOf = (tissueId, lt) => tissueId === "tendon" && plyoLT(lt);
 const calcOf = (tissueId, form) => {
   const sets = parseFloat(form.sets), reps = parseFloat(form.reps), kg = form.resistanceUnit === "kg" ? parseFloat(form.resistance) : NaN;
@@ -1585,7 +1591,7 @@ function EntryCard({ e, onDelete, onEdit, onSaveParams, suggestions }) {
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 6 }}>
         {e.resistance && <Chip tone="main">{e.resistance} {e.resistanceUnit}</Chip>}
-        {(e.sets || e.reps) && <Chip tone="main">{e.sets || "–"} × {e.reps || "–"}</Chip>}
+        {(e.sets || e.reps) && <Chip tone="main">{e.setList && e.setList.some((x) => x.side && x.side !== "B") ? `${e.setList.length} σετ` : `${e.sets || "–"} × ${e.reps || "–"}`}</Chip>}
         {e.loadType && <Chip>{e.loadType}</Chip>}
         <Chip>RPE {rpeOf(e)}</Chip>
         <Chip tone={hurt ? "warn" : undefined}>πόνος {e.painDuring}/{e.pain24h}</Chip>
@@ -1595,6 +1601,7 @@ function EntryCard({ e, onDelete, onEdit, onSaveParams, suggestions }) {
           {bits.join(" · ")}{bits.length > 0 && extraText(e) ? " · " : ""}{extraText(e) ? <strong style={{ color: T.gold }}>{extraText(e)}</strong> : null}
         </div>
       )}
+      {e.setList && e.setList.length > 0 && <div style={{ marginTop: 5, fontSize: 12.5, color: T.paper }}><span style={{ color: T.gold, fontWeight: 600 }}>Σετ:</span> {setLine(e.setList)}</div>}
       {calcText(e) && <div style={{ marginTop: 5, fontSize: 12, color: T.gold, fontWeight: 600 }}>{calcText(e)}</div>}
       {tpText(e) && <div style={{ marginTop: 5, fontSize: 12, color: T.paper, opacity: 0.9 }}><span style={{ color: T.gold, fontWeight: 600 }}>{tl}:</span> {tpText(e)}</div>}
       {e.notes && <div style={{ marginTop: 6, color: T.paper, opacity: 0.85 }}>{e.notes}</div>}
@@ -1604,7 +1611,7 @@ function EntryCard({ e, onDelete, onEdit, onSaveParams, suggestions }) {
 }
 function ProgressTable({ entries, selected, onSelect, cardio, tissueLabel }) {
   const num = (x) => { const v = parseFloat(x); return isFinite(v) ? v : null; };
-  const loadOf = (e) => (cardio ? num(e.duration) : num(e.resistance));
+  const loadOf = (e) => { if (cardio) return num(e.duration); const ls = (e.setList || []).map((x) => num(x.load)).filter((v) => v !== null && v > 0); return ls.length ? Math.max(...ls) : num(e.resistance); };
   const volOf = (e) => {
     if (e.calc && e.calc.volume) return e.calc.volume;
     const sn = num(e.sets), rn = num(e.reps), k = e.resistanceUnit === "kg" ? num(e.resistance) : null;
@@ -2712,7 +2719,53 @@ const RX_STAGES = ["1 · Ισομετρική φόρτιση (έλεγχος π�
 const RX_TYPES = ["Ισομετρική", "Ομόκεντρη", "Έκκεντρη", "Πλειομετρική", "Ισορροπία / ιδιοδεκτικότητα", "Αερόβια", "Άλλο"];
 const RX_SWELL = ["Όχι", "Ήπιο", "Σημαντικό"];
 const RX_DEC = ["Πρόοδος", "Διατήρηση", "Υποχώρηση"];
-const rxEmptyItem = () => ({ id: `${Date.now()}${Math.floor(Math.random() * 1000)}`, name: "", type: RX_TYPES[0], sets: "", reps: "", intensity: "", tempo: "", rest: "", freq: "", note: "" });
+const rxEmptyItem = () => ({ id: `${Date.now()}${Math.floor(Math.random() * 1000)}`, name: "", type: RX_TYPES[0], sets: "", reps: "", mode: "B", rows: [], intensity: "", tempo: "", rest: "", freq: "", note: "" });
+const cellTxt = (c) => { c = c || {}; return `${c.reps || "–"}${c.dur ? "×" + c.dur + "″" : ""}${c.load ? " @" + c.load : ""}`; };
+const rxRowsText = (rows, mode) => (rows || []).map((rw, i) => mode === "U" ? `#${i + 1} Αριστ. ${cellTxt(rw.L)} / Δεξ. ${cellTxt(rw.R)}` : `#${i + 1} ${cellTxt(rw.B)}`).join("  ·  ");
+const rxSetsText = (x) => (x.rows && x.rows.length ? rxRowsText(x.rows, x.mode) : `${x.sets || "–"}×${x.reps || "–"}`);
+function MiniSetTable({ rows, mode, unit, iso, onChange }) {
+  const m = mode || "B", rs = rows || [];
+  const blank = (prev) => { const cp = (c) => ({ reps: c ? c.reps : "", dur: c ? c.dur : "", load: c ? c.load : "" }); return m === "U" ? { L: cp(prev && prev.L), R: cp(prev && prev.R) } : { B: cp(prev && prev.B) }; };
+  const nc = iso ? 3 : 2;
+  const upd = (i, sd, k, v) => onChange(rs.map((rw, j) => (j === i ? { ...rw, [sd]: { ...(rw[sd] || {}), [k]: v } } : rw)), m);
+  const inp = { ...inputStyle, padding: "9px 6px", textAlign: "center", fontSize: 15, minWidth: 0, width: "100%" };
+  const cell = (i, rw, sd, k, ph) => <input key={sd + k} type="number" inputMode="decimal" value={(rw[sd] || {})[k] || ""} placeholder={ph} onChange={(e) => upd(i, sd, k, e.target.value)} style={inp} />;
+  const setM = (nm) => { if (nm === m) return; onChange(rs.map((rw) => (nm === "U" ? { L: { ...(rw.B || {}) }, R: { ...(rw.B || {}) } } : { B: { ...(rw.L || rw.R || {}) } })), nm); };
+  return (
+    <div style={{ marginBottom: 8 }}>
+      <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap", alignItems: "center" }}>
+        <span style={{ fontSize: 13, fontWeight: 700, marginRight: 4 }}>Σετ</span>
+        {[["B", "Και τα δύο άκρα"], ["U", "Ένα άκρο (Αριστ. / Δεξ.)"]].map(([k, l]) => (
+          <button key={k} type="button" onClick={() => setM(k)} style={{ padding: "6px 12px", borderRadius: 999, border: `1px solid ${m === k ? T.gold : T.panelLine}`, background: m === k ? "rgba(217,86,11,0.14)" : "transparent", color: m === k ? T.gold : T.paperDim, fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>{l}</button>
+        ))}
+      </div>
+      {rs.length > 0 && (
+        <div style={{ display: "grid", gridTemplateColumns: `40px repeat(${(m === "U" ? 2 : 1) * nc}, 1fr) 30px`, gap: 6, alignItems: "center" }}>
+          <span />
+          {m === "U" ? (<>
+            <div style={{ gridColumn: `span ${nc}`, textAlign: "center", fontSize: 12, fontWeight: 700, color: "#2F6FDE", borderBottom: "2px solid #2F6FDE", paddingBottom: 2 }}>ΑΡΙΣΤΕΡΑ</div>
+            <div style={{ gridColumn: `span ${nc}`, textAlign: "center", fontSize: 12, fontWeight: 700, color: "#0E8A7D", borderBottom: "2px solid #0E8A7D", paddingBottom: 2 }}>ΔΕΞΙΑ</div>
+          </>) : (<div style={{ gridColumn: `span ${nc}` }} />)}
+          <span />
+          <span />
+          {(m === "U" ? [...(iso ? ["Επαν.", "Δευτ/πτα", "Φορτίο"] : ["Επαν.", "Φορτίο"]), ...(iso ? ["Επαν.", "Δευτ/πτα", "Φορτίο"] : ["Επαν.", "Φορτίο"])] : (iso ? ["Επαναλήψεις", "Δευτερόλεπτα", "Φορτίο"] : ["Επαναλήψεις", "Φορτίο"])).map((h, k) => <span key={k} style={{ fontSize: 11.5, color: T.paperDim, textAlign: "center" }}>{h}</span>)}
+          <span />
+          {rs.map((rw, i) => (
+            <React.Fragment key={i}>
+              <b style={{ fontSize: 13 }}>#{i + 1}</b>
+              {m === "U" ? (<>{cell(i, rw, "L", "reps", "5")}{iso && cell(i, rw, "L", "dur", "30")}{cell(i, rw, "L", "load", unit)}{cell(i, rw, "R", "reps", "5")}{iso && cell(i, rw, "R", "dur", "30")}{cell(i, rw, "R", "load", unit)}</>) : (<>{cell(i, rw, "B", "reps", "5")}{iso && cell(i, rw, "B", "dur", "30")}{cell(i, rw, "B", "load", unit)}</>)}
+              <span style={{ display: "flex", gap: 2 }}>
+                {m === "U" && <button type="button" title="Αντιγραφή Αριστερά → Δεξιά" onClick={() => onChange(rs.map((x, j) => (j === i ? { ...x, R: { ...x.L } } : x)), m)} style={{ background: "none", border: "none", color: T.gold, cursor: "pointer", fontSize: 14, padding: 0 }}>⇢</button>}
+                <button type="button" aria-label="Αφαίρεση σετ" onClick={() => onChange(rs.filter((_, j) => j !== i), m)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 18, padding: 0 }}>×</button>
+              </span>
+            </React.Fragment>
+          ))}
+        </div>
+      )}
+      <button type="button" onClick={() => onChange([...rs, blank(rs[rs.length - 1])], m)} style={{ marginTop: 8, width: "100%", background: "transparent", color: T.gold, border: `1.5px dashed ${T.gold}`, borderRadius: 10, padding: "9px 12px", fontSize: 13.5, fontWeight: 700, cursor: "pointer" }}>+ Προσθήκη σετ{rs.length ? " (αντιγράφει το προηγούμενο)" : ""}</button>
+    </div>
+  );
+}
 function RxModule({ patientId, patient, exercises, sessionDate }) {
   const dxList = [patient && patient.pathology ? patient.pathology : "Κύρια διάγνωση", ...((patient && patient.issues) || []).map((i) => i.name)];
   const [plans, setPlans] = useState([]);
@@ -2736,7 +2789,7 @@ function RxModule({ patientId, patient, exercises, sessionDate }) {
   const esc = (t) => String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
   const printPlan = (p) => {
     const w = window.open("", "_blank"); if (!w) return;
-    const rows = p.items.map((x) => `<tr><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td>${esc(x.sets)} × ${esc(x.reps)}</td><td>${esc(x.intensity)}</td><td>${esc(x.tempo)}</td><td>${esc(x.rest)}</td><td>${esc(x.freq)}</td><td>${esc(x.note)}</td></tr>`).join("");
+    const rows = p.items.map((x) => `<tr><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td>${esc(x.rows && x.rows.length ? rxRowsText(x.rows, x.mode) : (x.sets + " × " + x.reps))}</td><td>${esc(x.intensity)}</td><td>${esc(x.tempo)}</td><td>${esc(x.rest)}</td><td>${esc(x.freq)}</td><td>${esc(x.note)}</td></tr>`).join("");
     w.document.write(`<html><head><meta charset="utf-8"><title>Συνταγή Άσκησης</title><style>body{font-family:Arial,sans-serif;color:#111;padding:28px;font-size:13px}h1{font-size:20px;margin:0 0 4px}table{border-collapse:collapse;width:100%;margin-top:14px}th,td{border:1px solid #bbb;padding:6px 8px;text-align:left;vertical-align:top}th{background:#f1f1ef}.f{margin-top:24px;font-size:11px;color:#555}</style></head><body><h1>Συνταγή Άσκησης</h1><div><b>${esc(patient && patient.name)}</b> · ${esc(p.dx)} · ${esc(p.date)}</div><div>Επίπεδο: ${esc(p.stage)}</div><table><tr><th>Άσκηση</th><th>Τύπος</th><th>Σετ × Επαν.</th><th>Ένταση</th><th>Tempo</th><th>Διάλειμμα</th><th>Συχνότητα</th><th>Σημειώσεις</th></tr>${rows}</table>${p.progression ? `<p><b>Κριτήρια προόδου:</b> ${esc(p.progression)}</p>` : ""}${p.note ? `<p><b>Οδηγίες:</b> ${esc(p.note)}</p>` : ""}<div class="f">Afxentios Kekelekis PhD · Sports ReHub · sportsrehub.com</div><script>window.onload=function(){window.print()}<\/script></body></html>`);
     w.document.close();
   };
@@ -2757,9 +2810,10 @@ function RxModule({ patientId, patient, exercises, sessionDate }) {
               <Field label={`Άσκηση ${idx + 1}`}><input list="rx-lib" value={it.name} onChange={(e) => setItem(it.id, { name: e.target.value })} placeholder="π.χ. Spanish squat" style={inputStyle} /></Field>
               <SelectField label="Τύπος" value={it.type} onChange={(v) => setItem(it.id, { type: v })} options={RX_TYPES} />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 }}>
-              <TextField label="Σετ" value={it.sets} onChange={(v) => setItem(it.id, { sets: v })} placeholder="4" />
-              <TextField label="Επαν./Διάρκεια" value={it.reps} onChange={(v) => setItem(it.id, { reps: v })} placeholder="5 / 30″" />
+            <MiniSetTable rows={it.rows} mode={it.mode} unit="kg" iso={/Ισομετρ/.test(it.type)} onChange={(rows, mode) => setItem(it.id, { rows, mode, sets: rows.length ? String(rows.length) : it.sets, reps: rows.length ? rows.map((rw) => (mode === "U" ? `${(rw.L || {}).reps || "–"}/${(rw.R || {}).reps || "–"}` : (rw.B || {}).reps || "–")).join("+") : it.reps })} />
+            <div style={{ display: "grid", gridTemplateColumns: it.rows && it.rows.length ? "repeat(4, 1fr)" : "repeat(6, 1fr)", gap: 8 }}>
+              {!(it.rows && it.rows.length) && <TextField label="Σετ (όλα ίδια)" value={it.sets} onChange={(v) => setItem(it.id, { sets: v })} placeholder="4" />}
+              {!(it.rows && it.rows.length) && <TextField label="Επαν./Διάρκεια" value={it.reps} onChange={(v) => setItem(it.id, { reps: v })} placeholder="5 / 30″" />}
               <TextField label="Ένταση" value={it.intensity} onChange={(v) => setItem(it.id, { intensity: v })} placeholder="70% ή RPE 7" />
               <TextField label="Tempo" value={it.tempo} onChange={(v) => setItem(it.id, { tempo: v })} placeholder="3-0-3" />
               <TextField label="Διάλειμμα" value={it.rest} onChange={(v) => setItem(it.id, { rest: v })} placeholder="2′" />
@@ -2793,7 +2847,7 @@ function RxModule({ patientId, patient, exercises, sessionDate }) {
                 <button onClick={() => persist(plans.filter((x) => x.id !== p.id))} aria-label="Διαγραφή" style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 16 }}>×</button>
               </div>
             </div>
-            <div style={{ fontSize: 12.5, margin: "6px 0", color: T.paperDim }}>{p.items.map((x) => `${x.name} (${x.type}) ${x.sets}×${x.reps}${x.intensity ? " @ " + x.intensity : ""}`).join(" · ")}</div>
+            <div style={{ fontSize: 12.5, margin: "6px 0", color: T.paperDim }}>{p.items.map((x) => `${x.name} (${x.type}) ${rxSetsText(x)}${x.intensity ? " @ " + x.intensity : ""}`).join(" · ")}</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1.4fr", gap: 8, alignItems: "end" }}>
               <SelectField label="Πόνος 24 ωρών (0–10)" value={p.pain24} onChange={(v) => upd(p.id, { pain24: v })} options={["", ...Array.from({ length: 11 }, (_, i) => String(i))]} />
               <SelectField label="Πρήξιμο" value={p.swelling} onChange={(v) => upd(p.id, { swelling: v })} options={["", ...RX_SWELL]} />
@@ -2871,7 +2925,7 @@ function TissueLoadLog() {
   const emptyForm = {
     activity: "", loadType: allLoadTypes[0], intensity: 5,
     resistance: "", resistanceUnit: "kg",
-    sets: "", reps: "", tempo: "", setList: [],
+    sets: "", reps: "", tempo: "", setList: [], setRows: [], setMode: "B",
     duration: "", heartRateAvg: "", heartRatePercent: "",
     speed: "", pace: "", incline: "", resistanceLevel: "",
     rom: "", romType: "Ενεργητικό", strengthGrade: "", strengthForce: "", power: "", oneRM: "",
@@ -3009,15 +3063,30 @@ function TissueLoadLog() {
     });
   };
 
-  const [setDraft, setSetDraft] = useState({ reps: "", load: "" });
   const [editingId, setEditingId] = useState(null);
-  const syncSets = (list) => ({ setList: list, sets: list.length ? String(list.length) : "", reps: list.map((x) => x.reps).join("+") });
-  const addSetItem = () => {
-    if (!(parseFloat(setDraft.reps) > 0)) { flashToast("Γράψε επαναλήψεις για το σετ"); return; }
-    const list = [...(form.setList || []), { reps: String(setDraft.reps), load: setDraft.load }];
-    setForm({ ...form, ...syncSets(list) }); setSetDraft({ reps: "", load: setDraft.load });
+  const setMode = form.setMode || "B";
+  const setRows = form.setRows || [];
+  const syncRows = (rows, mode) => {
+    const list = [];
+    rows.forEach((rw) => {
+      if (mode === "U") { ["L", "R"].forEach((sd) => { const c = rw[sd]; if (c && parseFloat(c.reps) > 0) list.push({ reps: String(c.reps), dur: c.dur || "", load: c.load || "", side: sd }); }); }
+      else { const c = rw.B; if (c && parseFloat(c.reps) > 0) list.push({ reps: String(c.reps), dur: c.dur || "", load: c.load || "", side: "B" }); }
+    });
+    return { setRows: rows, setMode: mode, setList: list, sets: rows.length ? String(rows.length) : "", reps: list.map((x) => x.reps).join("+") };
   };
-  const removeSetItem = (i) => { const list = (form.setList || []).filter((_, j) => j !== i); setForm({ ...form, ...syncSets(list) }); };
+  const blankRow = (mode, prev) => {
+    const cp = (c) => ({ reps: c ? c.reps : "", load: c ? c.load : "" });
+    return mode === "U" ? { L: cp(prev && prev.L), R: cp(prev && prev.R) } : { B: cp(prev && prev.B) };
+  };
+  const addSetRow = () => setForm({ ...form, ...syncRows([...setRows, blankRow(setMode, setRows[setRows.length - 1])], setMode) });
+  const updSetCell = (i, sd, k, v) => setForm({ ...form, ...syncRows(setRows.map((rw, j2) => (j2 === i ? { ...rw, [sd]: { ...(rw[sd] || {}), [k]: v } } : rw)), setMode) });
+  const copyLtoR = (i) => setForm({ ...form, ...syncRows(setRows.map((rw, j2) => (j2 === i ? { ...rw, R: { ...rw.L } } : rw)), setMode) });
+  const removeSetRow = (i) => setForm({ ...form, ...syncRows(setRows.filter((_, j2) => j2 !== i), setMode) });
+  const changeSetMode = (m) => {
+    if (m === setMode) return;
+    const rows = setRows.map((rw) => (m === "U" ? { L: { ...(rw.B || {}) }, R: { ...(rw.B || {}) } } : { B: { ...(rw.L || rw.R || {}) } }));
+    setForm({ ...form, ...syncRows(rows, m) });
+  };
   const quickAddExercise = () => {
     const name = form.activity.trim(); if (!name) return;
     if (exercises.some((x) => x.name.toLowerCase() === name.toLowerCase() && (!x.tissue || x.tissue === tissueId))) { flashToast("Υπάρχει ήδη στη βάση ασκήσεων"); return; }
@@ -3031,7 +3100,7 @@ function TissueLoadLog() {
     if (t && t !== tissueId) setTissueId(t);
     if (cm) setCardioMode(cm);
     setTimeout(() => {
-      setForm({ ...emptyForm, ...rest, setList: rest.setList || [], extra: rest.extra || [], tp: rest.tp || {} });
+      setForm({ ...emptyForm, ...rest, setList: rest.setList || [], setRows: rest.setRows || [], setMode: rest.setMode || "B", extra: rest.extra || [], tp: rest.tp || {} });
       try { const m = document.querySelector(".mac-main"); if (m) m.scrollTo({ top: 0, behavior: "smooth" }); } catch (_) {}
     }, t && t !== tissueId ? 80 : 0);
   };
@@ -3780,30 +3849,16 @@ function TissueLoadLog() {
                         </div>
                       )}
 
-                      <div style={{ display: "grid", gridTemplateColumns: sscOf(tissueId, form.loadType) ? "1fr 1fr" : "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
-                        <NumberField label={sscOf(tissueId, form.loadType) ? "Σετ" : "Sets"} value={form.sets} onChange={(v) => setForm({ ...form, sets: v })} placeholder="3" />
-                        <NumberField label={sscOf(tissueId, form.loadType) ? "Επαφές / σετ" : "Reps"} value={form.reps} onChange={(v) => setForm({ ...form, reps: v })} placeholder="10" />
+                      <div style={{ display: "grid", gridTemplateColumns: (form.setList || []).length ? "1fr" : sscOf(tissueId, form.loadType) ? "1fr 1fr" : "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+                        {!(form.setList || []).length && <NumberField label={sscOf(tissueId, form.loadType) ? "Σετ" : "Sets"} value={form.sets} onChange={(v) => setForm({ ...form, sets: v })} placeholder="3" />}
+                        {!(form.setList || []).length && <NumberField label={sscOf(tissueId, form.loadType) ? "Επαφές / σετ" : "Reps"} value={form.reps} onChange={(v) => setForm({ ...form, reps: v })} placeholder="10" />}
                         {!sscOf(tissueId, form.loadType) && <SelectField label="Ρυθμός" value={form.tempo || "—"} onChange={(v) => setForm({ ...form, tempo: v === "—" ? "" : v })} options={["—", "Slow", "Slow Heavy", "Fast", "Quick", "Explosive"]} />}
                       </div>
 
-                      <div style={{ border: `1px dashed ${T.panelLine}`, borderRadius: 10, padding: 10, marginBottom: 14 }}>
-                        <div style={{ fontSize: 12, color: T.paperDim, marginBottom: 6 }}>Σετ ένα-ένα <span style={{ opacity: 0.7 }}>(π.χ. 8, μετά 10, μετά 15 επαναλήψεις)</span></div>
-                        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                          <input type="number" inputMode="numeric" value={setDraft.reps} onChange={(e) => setSetDraft({ ...setDraft, reps: e.target.value })} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addSetItem(); } }} placeholder="Επαν." style={{ ...inputStyle, width: 90 }} />
-                          <input type="number" inputMode="decimal" value={setDraft.load} onChange={(e) => setSetDraft({ ...setDraft, load: e.target.value })} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addSetItem(); } }} placeholder={form.resistance ? `φορτίο (${form.resistance})` : "φορτίο"} style={{ ...inputStyle, width: 130 }} />
-                          <button type="button" onClick={addSetItem} style={{ background: T.terracotta, color: T.bg, border: "none", borderRadius: 8, padding: "9px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>+ Σετ</button>
-                        </div>
-                        {(form.setList || []).length > 0 && (
-                          <div style={{ marginTop: 8 }}>
-                            {form.setList.map((x, i) => (
-                              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: T.bgSoft, border: `1px solid ${T.panelLine}`, borderRadius: 999, padding: "4px 6px 4px 12px", fontSize: 12.5, margin: "0 6px 6px 0" }}>
-                                <b>Σετ {i + 1}</b> {x.reps} επ.{x.load ? ` · ${x.load}` : ""}
-                                <button type="button" aria-label="Αφαίρεση σετ" onClick={() => removeSetItem(i)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", fontSize: 14, padding: "0 4px" }}>×</button>
-                              </span>
-                            ))}
-                            <div style={{ fontSize: 12, color: T.paperDim }}>{form.setList.length} σετ · {form.setList.reduce((a, x) => a + (parseFloat(x.reps) || 0), 0)} επαναλήψεις{calcOf(tissueId, form).volume ? ` · όγκος ${calcOf(tissueId, form).volume} kg` : ""}</div>
-                          </div>
-                        )}
+                      <div className="ll-sets" style={{ border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 14, marginBottom: 14, background: T.bgSoft }}>
+                        <MiniSetTable rows={setRows} mode={setMode} unit={form.resistanceUnit || "kg"} iso={/Ισομετρ/.test(form.loadType || "")} onChange={(rows, mode) => setForm({ ...form, ...syncRows(rows, mode) })} />
+                        {setRows.length === 0 && <div style={{ fontSize: 12, color: T.paperDim }}>Ή συμπλήρωσε γρήγορα παρακάτω «Sets / Reps» αν όλα τα σετ είναι ίδια.</div>}
+                        {(form.setList || []).length > 0 && <div style={{ fontSize: 12.5, color: T.paperDim, marginTop: 4 }}>{setsSummary(form.setList)}{calcOf(tissueId, form).volume ? ` · όγκος ${calcOf(tissueId, form).volume} kg` : ""}</div>}
                       </div>
 
                       <TissuePanel tissue={tissue} loadType={form.loadType} tp={form.tp || {}} form={form} onChange={(v) => setForm({ ...form, tp: v })} />
