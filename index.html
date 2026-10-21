@@ -702,29 +702,50 @@ const symOf = (L, R, aff) => {
 const srKey = (x) => [x.joint, x.move, x.method || x.type].join("|");
 const baselineOf = (as) => { const ds = Object.keys(as || {}).sort(); return ds.find((d) => as[d] && as[d].baseline) || ds[0] || null; };
 function AssessProgress({ assessments, draft, sessionDate }) {
+  const [kind, setKind] = useState("strength");
+  const [pick, setPick] = useState("");
+  const [show, setShow] = useState({ L: true, R: true, S: false });
   const all = { ...(assessments || {}) }; all[sessionDate] = { ...(all[sessionDate] || {}), strength: draft.strength || [], rom: draft.rom || [] };
-  const dates = Object.keys(all).filter((d) => (all[d].strength || []).length || (all[d].rom || []).length).sort();
-  const base = baselineOf(assessments);
-  if (dates.length < 1) return null;
-  const th = { padding: "4px 8px", fontWeight: 600, fontSize: 11.5, color: T.paperDim, textAlign: "left", borderBottom: `1px solid ${T.panelLine}`, whiteSpace: "nowrap" };
-  const td = { padding: "4px 8px", borderBottom: `1px solid ${T.panelLine}`, fontSize: 12.5, whiteSpace: "nowrap" };
-  const block = (kind, title) => {
-    const keys = []; const meta = {};
-    dates.forEach((d) => (all[d][kind] || []).forEach((r) => { const k = srKey(r); if (!meta[k]) { meta[k] = r; keys.push(k); } }));
-    if (!keys.length) return null;
-    return (
-      <div style={{ overflowX: "auto", marginBottom: 8 }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead><tr><th style={th}>{title}</th>{dates.map((d) => <th key={d} style={{ ...th, color: d === sessionDate ? T.gold : T.paperDim }}>{fmtDay(d)}{d === base ? " · αρχική" : ""}</th>)}</tr></thead>
-          <tbody>{keys.map((k) => { const m = meta[k]; const u = kind === "strength" ? m.unit : "°"; return (
-            <tr key={k}><td style={{ ...td, fontWeight: 600 }}>{m.joint} · {m.move}</td>
-              {dates.map((d) => { const h = (all[d][kind] || []).find((x) => srKey(x) === k); return <td key={d} style={td}>{h && (h.L !== "" || h.R !== "") ? <span>Α <b>{h.L || "—"}</b> / Δ <b>{h.R || "—"}</b> <span style={{ color: T.paperDim }}>{u}</span></span> : <span style={{ color: T.paperDim }}>—</span>}</td>; })}
-            </tr>); })}</tbody>
-        </table>
+  const dates = Object.keys(all).filter((d) => (all[d][kind] || []).length).sort();
+  const keys = []; const meta = {};
+  dates.forEach((d) => (all[d][kind] || []).forEach((r) => { const k = srKey(r); if (!meta[k]) { meta[k] = r; keys.push(k); } }));
+  const cur = keys.includes(pick) ? pick : keys[0];
+  const num = (v) => { const n = parseFloat(String(v).replace(",", ".")); return isFinite(n) ? n : null; };
+  const rows = cur ? dates.map((d) => { const h = (all[d][kind] || []).find((x) => srKey(x) === cur); const L = h ? num(h.L) : null, R = h ? num(h.R) : null; return { date: d, L, R, S: L !== null && R !== null && Math.max(L, R) > 0 ? Math.round((Math.min(L, R) / Math.max(L, R)) * 100) : null }; }).filter((r) => r.L !== null || r.R !== null) : [];
+  const unit = cur ? (kind === "strength" ? meta[cur].unit : "°") : "";
+  const series = [show.L && { key: "L", color: "#2F6FB5", label: "Αριστερά" }, show.R && { key: "R", color: "#C0392B", label: "Δεξιά" }, show.S && { key: "S", color: "#6B8E4E", label: "Συμμετρία %" }].filter(Boolean);
+  const vals = rows.flatMap((r) => series.map((s2) => r[s2.key])).filter((v) => v !== null && v !== undefined);
+  const chip = (on) => ({ padding: "4px 12px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 12.5, fontWeight: 600, cursor: "pointer" });
+  const th2 = { padding: "3px 6px", fontWeight: 600 };
+  return (
+    <Panel title="Πρόοδος μετρήσεων">
+      <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+        <button type="button" onClick={() => setKind("strength")} style={chip(kind === "strength")}>Δύναμη</button>
+        <button type="button" onClick={() => setKind("rom")} style={chip(kind === "rom")}>ROM</button>
       </div>
-    );
-  };
-  return <Panel title="Πρόοδος αντικειμενικών μετρήσεων — ανά ημερομηνία">{block("strength", "Δύναμη")}{block("rom", "ROM")}</Panel>;
+      {keys.length === 0 ? <div style={{ fontSize: 12.5, color: T.paperDim }}>Πρόσθεσε μετρήσεις {kind === "strength" ? "δύναμης" : "ROM"} για να δεις το διάγραμμα.</div> : (
+        <>
+          <select value={cur} onChange={(e) => setPick(e.target.value)} style={{ ...inputStyle, padding: "6px 10px", fontSize: 13, marginBottom: 8 }}>
+            {keys.map((k) => <option key={k} value={k}>{meta[k].joint} · {meta[k].move}{kind === "strength" && meta[k].method ? ` (${meta[k].method.split(" ")[0]})` : ""}</option>)}
+          </select>
+          <div style={{ display: "flex", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
+            {[["L", "Αριστερά"], ["R", "Δεξιά"], ["S", "Συμμετρία %"]].map(([k, lb]) => <button key={k} type="button" onClick={() => setShow((o) => ({ ...o, [k]: !o[k] }))} style={chip(show[k])}>{lb}</button>)}
+          </div>
+          {rows.length > 1 && series.length > 0 ? (
+            <TrendChart data={rows} xKey="date" domain={(() => { const mn = Math.min(...vals), mx = Math.max(...vals); const pad = Math.max((mx - mn) * 0.25, mx * 0.05, 1); return [Math.max(0, Math.floor(mn - pad)), Math.ceil(mx + pad)]; })()} series={series} />
+          ) : (
+            <div style={{ fontSize: 12.5, color: T.paperDim, margin: "6px 0" }}>Χρειάζονται τουλάχιστον 2 αξιολογήσεις με αυτή τη μέτρηση για διάγραμμα.</div>
+          )}
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5, marginTop: 4 }}>
+              <thead><tr style={{ color: T.paperDim, textAlign: "left" }}><th style={th2}>Ημ/νία</th><th style={th2}>Α</th><th style={th2}>Δ</th><th style={th2}>Συμμ.</th></tr></thead>
+              <tbody>{rows.map((r) => <tr key={r.date} style={{ borderTop: `1px solid ${T.panelLine}` }}><td style={{ padding: "3px 6px" }}>{fmtDay(r.date)}</td><td style={{ padding: "3px 6px" }}>{r.L ?? "—"} {unit}</td><td style={{ padding: "3px 6px" }}>{r.R ?? "—"} {unit}</td><td style={{ padding: "3px 6px" }}>{r.S !== null ? r.S + "%" : "—"}</td></tr>)}</tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </Panel>
+  );
 }
 
 function StrengthRomPanel({ draft, ad, assessments, sessionDate, affected }) {
@@ -1111,7 +1132,7 @@ function SpecialTestsPanel({ draft, ad }) {
   const mini = { ...inputStyle, padding: "6px 4px", fontSize: 12, appearance: "none", textAlign: "center", minWidth: 0, width: 62 };
   const nq = (x) => String(x).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   const posAll = Object.entries(sp).filter(([k, v]) => v && (v.L === "(+)" || v.R === "(+)"));
-  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const chip = (on) => ({ padding: "8px 18px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 14.5, fontWeight: 600, cursor: "pointer" });
   const count = (r) => Object.keys(sp).filter((k) => k.startsWith(r + "|") && (sp[k].L || sp[k].R)).length;
   return (
     <Panel title="Ειδικές ορθοπεδικές δοκιμασίες">
@@ -1125,25 +1146,25 @@ function SpecialTestsPanel({ draft, ad }) {
           {posAll.map(([k, v]) => <span key={k} style={{ background: "rgba(192,57,43,0.12)", border: "1px solid #C0392B", color: "#C0392B", borderRadius: 999, padding: "3px 10px", fontSize: 11.5 }}>{k.replace("|", " · ")} ({[v.L === "(+)" ? "Α" : "", v.R === "(+)" ? "Δ" : ""].filter(Boolean).join("/")})</span>)}
         </div>
       )}
-      <div style={{ columnWidth: 400, columnGap: 22 }}>
+      <div style={{ columnWidth: 460, columnGap: 28 }}>
       {Object.entries(SPECIAL_TESTS[reg]).map(([grp, tests]) => {
         const shown = tests.filter(([n, h]) => !q.trim() || nq(n + " " + h + " " + grp).includes(nq(q.trim())));
         if (!shown.length) return null;
         return (
           <div key={grp} className="ll-sp-grp" style={{ breakInside: "avoid", marginBottom: 10 }}>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: T.gold, textTransform: "uppercase", letterSpacing: "0.04em", padding: "2px 0 3px", borderBottom: `2px solid ${T.gold}` }}>{grp}{(() => { const np = shown.filter(([n]) => { const v = sp[key(n)]; return v && (v.L === "(+)" || v.R === "(+)"); }).length; return np ? <b style={{ color: "#C0392B", textTransform: "none" }}> · {np} θετικά</b> : null; })()}</div>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: T.gold, textTransform: "uppercase", letterSpacing: "0.04em", padding: "3px 0 4px", borderBottom: `2px solid ${T.gold}` }}>{grp}{(() => { const np = shown.filter(([n]) => { const v = sp[key(n)]; return v && (v.L === "(+)" || v.R === "(+)"); }).length; return np ? <b style={{ color: "#C0392B", textTransform: "none" }}> · {np} θετικά</b> : null; })()}</div>
             <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 0 }}>
               {shown.map(([n, h]) => (
-                <div key={n} className="ll-sp-row" style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 0", borderTop: `1px solid ${T.panelLine}` }}>
+                <div key={n} className="ll-sp-row" style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0", borderTop: `1px solid ${T.panelLine}` }}>
                   <div style={{ flex: 1, minWidth: 0 }} title={h}>
-                    <div style={{ fontSize: 12.5, lineHeight: 1.25 }}>{n}</div>
-                    <div style={{ fontSize: 10, color: T.paperDim, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{h}</div>
+                    <div style={{ fontSize: 15, lineHeight: 1.3, fontWeight: 500 }}>{n}</div>
+                    <div style={{ fontSize: 12, color: T.paperDim, lineHeight: 1.3 }}>{h}</div>
                   </div>
                   {["L", "R"].map((sd) => (
                     <span key={sd} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
-                      <span style={{ fontSize: 10.5, color: T.paperDim }}>{sd === "L" ? "Α" : "Δ"}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: T.paperDim }}>{sd === "L" ? "Α" : "Δ"}</span>
                       {[["(+)", "Θετ."], ["(−)", "Αρν."]].map(([o, l]) => { const on = val(n, sd) === o; const col = o === "(+)" ? "#C0392B" : T.sage; return (
-                        <button key={o} type="button" aria-label={`${n} ${sd === "L" ? "Α" : "Δ"} ${l}`} onClick={() => put(n, sd, on ? "—" : o)} style={{ border: `1px solid ${on ? col : T.panelLine}`, background: on ? col : "transparent", color: on ? "#fff" : T.paperDim, borderRadius: 8, padding: "3px 6px", fontSize: 11, fontWeight: 600, cursor: "pointer" }}>{l}</button>
+                        <button key={o} type="button" aria-label={`${n} ${sd === "L" ? "Α" : "Δ"} ${l}`} onClick={() => put(n, sd, on ? "—" : o)} style={{ border: `1px solid ${on ? col : T.panelLine}`, background: on ? col : "transparent", color: on ? "#fff" : T.paperDim, borderRadius: 9, padding: "6px 10px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{l}</button>
                       ); })}
                     </span>
                   ))}
@@ -1236,10 +1257,10 @@ function SpinePanel({ draft, ad }) {
   const ak = (r, m) => r + "|" + m;
   const putA = (r, m, f, v) => upd("arom", { ...arom, [ak(r, m)]: { ...(arom[ak(r, m)] || {}), [f]: v === "—" ? "" : v } });
   const gA = (r, m, f) => (arom[ak(r, m)] && arom[ak(r, m)][f]) || "—";
-  const mini = { ...inputStyle, padding: "6px 6px", fontSize: 12, appearance: "none", minWidth: 0 };
+  const mini = { ...inputStyle, padding: "3px 6px", fontSize: 12.5, appearance: "none", minWidth: 0, width: 150, borderRadius: 8 };
   const th = { textAlign: "left", fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.06em", color: T.paperDim, fontWeight: 600, padding: "4px 6px", whiteSpace: "nowrap" };
-  const td = { padding: "5px 4px", borderTop: `1px solid ${T.panelLine}`, fontSize: 12.5 };
-  const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  const td = { padding: "2px 6px 2px 0", borderTop: `1px solid ${T.panelLine}`, fontSize: 13 };
+  const chip = (on) => ({ padding: "5px 14px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
   const sub = (t) => <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: T.gold, fontWeight: 600, margin: "16px 0 8px" }}>{t}</div>;
   const filled = (r) => Object.keys(arom).filter((k) => k.startsWith(r + "|") && Object.values(arom[k]).some(Boolean)).length;
   const sel = (aria, f, opts, onCh, v) => <select aria-label={aria} value={v} onChange={(e) => onCh(e.target.value)} style={mini}>{opts.map((o) => <option key={o} value={o}>{o}</option>)}</select>;
@@ -1254,7 +1275,7 @@ function SpinePanel({ draft, ad }) {
         {Object.keys(SPINE_AROM).map((r) => <button key={r} type="button" onClick={() => setReg(r)} style={chip(reg === r)}>{r}{filled(r) ? ` · ${filled(r)}` : ""}</button>)}
       </div>
       <div style={{ overflowX: "auto" }}>
-        <table className="ll-spine" style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table className="ll-spine" style={{ width: "auto", borderCollapse: "collapse" }}>
           <thead><tr><th style={th}>Κίνηση</th><th style={th}>Εύρος</th><th style={th}>Ποιότητα</th><th style={th}>Συμπτώματα</th><th style={th}>Τιμή (°/cm)</th></tr></thead>
           <tbody>
             {SPINE_AROM[reg].map((m) => (
@@ -1263,7 +1284,7 @@ function SpinePanel({ draft, ad }) {
                 <td style={td}>{sel(`arom ${reg} ${m} εύρος`, "q", SPINE_RANGE, (v) => putA(reg, m, "q", v), gA(reg, m, "q"))}</td>
                 <td style={td}>{sel(`arom ${reg} ${m} ποιότητα`, "ql", SPINE_QUAL, (v) => putA(reg, m, "ql", v), gA(reg, m, "ql"))}</td>
                 <td style={td}>{sel(`arom ${reg} ${m} συμπτώματα`, "s", SPINE_SYMP, (v) => putA(reg, m, "s", v), gA(reg, m, "s"))}</td>
-                <td style={td}><input aria-label={`arom ${reg} ${m} τιμή`} value={(arom[ak(reg, m)] && arom[ak(reg, m)].v) || ""} onChange={(e) => putA(reg, m, "v", e.target.value)} style={{ ...mini, width: 78 }} placeholder="π.χ. 45°" /></td>
+                <td style={td}><input aria-label={`arom ${reg} ${m} τιμή`} value={(arom[ak(reg, m)] && arom[ak(reg, m)].v) || ""} onChange={(e) => putA(reg, m, "v", e.target.value)} style={{ ...mini, width: 90 }} placeholder="π.χ. 45°" /></td>
               </tr>
             ))}
           </tbody>
@@ -4011,11 +4032,10 @@ function TissueLoadLog() {
 <NeuroPanel draft={assessDraft} ad={ad} />
       </div>
 
-      <div style={{ display: vis("strength") }}>
-<StrengthRomPanel draft={assessDraft} ad={ad} assessments={assessments} sessionDate={sessionDate} affected={patient && patient.affectedSide} />
+      <div style={{ display: vis("strength") === "block" ? "grid" : "none", gridTemplateColumns: "minmax(0, 1.55fr) minmax(0, 1fr)", gap: 10, alignItems: "start" }}>
+        <StrengthRomPanel draft={assessDraft} ad={ad} assessments={assessments} sessionDate={sessionDate} affected={patient && patient.affectedSide} />
+        <AssessProgress assessments={assessments} draft={assessDraft} sessionDate={sessionDate} />
       </div>
-
-      <div style={{ display: vis("progress") }}><AssessProgress assessments={assessments} draft={assessDraft} sessionDate={sessionDate} /></div>
 
       <div style={{ display: vis("plan") }}>
 <Panel title="Κλινική εκτίμηση & πλάνο">
