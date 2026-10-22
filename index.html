@@ -397,9 +397,20 @@ body .mac-tabs.mac-tabs button:nth-child(n).on { color: #111 !important; font-we
     body .mac-top > *, body .mac-main > * { zoom: 0.74; max-width: none !important; margin-left: 0 !important; margin-right: 0 !important; }
     body .mac-main { padding-top: 14px !important; }
   }
+  @media screen and (min-width: 1400px) {
+    .ll-msk { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+    .ll-msk > div { min-width: 0; }
+    .ll-msk { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); }
+    .ll-msk-a { grid-column: 1; grid-row: 1 / span 2; } .ll-msk-b { grid-column: 2 / 4; grid-row: 1; } .ll-msk-c { grid-column: 2 / 4; grid-row: 2; display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; gap: 10px !important; }
+    .ll-msk > div > section, .ll-msk > div > div { margin-bottom: 0 !important; }
+    .ll-msk-c > * { margin-bottom: 10px; }
+    .ll-msk .ll-spine select { width: 100% !important; min-width: 0 !important; }
+    .ll-msk .ll-spine input { width: 100% !important; }
+    .ll-msk .ll-spine { width: 100% !important; table-layout: fixed; }
+  }
   @media screen and (min-width: 1400px) { body .mac-top > *, body .mac-main > * { zoom: 1.0; } }
-  @media screen and (min-width: 1800px) { body .mac-top > *, body .mac-main > * { zoom: 1.25; } }
-  @media screen and (min-width: 2200px) { body .mac-top > *, body .mac-main > * { zoom: 1.5; } }
+  @media screen and (min-width: 1800px) { body .mac-top > *, body .mac-main > * { zoom: 1.05; } }
+  @media screen and (min-width: 2200px) { body .mac-top > *, body .mac-main > * { zoom: 1.2; } }
   .ll-qs input[type=number]::-webkit-inner-spin-button, .ll-qs input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   .ll-qs input[type=number] { -moz-appearance: textfield; text-align: center; }
 </style>
@@ -1132,7 +1143,7 @@ function SpecialTestsPanel({ draft, ad }) {
   const key = (t) => reg + "|" + t;
   const put = (t, side, v) => ad("special", { ...sp, [key(t)]: { ...(sp[key(t)] || {}), [side]: v === "—" ? "" : v } });
   const val = (t, side) => (sp[key(t)] && sp[key(t)][side]) || "—";
-  const mini = { ...inputStyle, padding: "6px 4px", fontSize: 12, appearance: "none", textAlign: "center", minWidth: 0, width: 62 };
+  const mini = { ...inputStyle, padding: "4px 4px", fontSize: 12, appearance: "none", textAlign: "center", minWidth: 0, width: 62 };
   const nq = (x) => String(x).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   const posAll = Object.entries(sp).filter(([k, v]) => v && (v.L === "(+)" || v.R === "(+)"));
   const chip = (on) => ({ padding: "8px 18px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 14.5, fontWeight: 600, cursor: "pointer" });
@@ -1149,7 +1160,7 @@ function SpecialTestsPanel({ draft, ad }) {
           {posAll.map(([k, v]) => <span key={k} style={{ background: "rgba(192,57,43,0.12)", border: "1px solid #C0392B", color: "#C0392B", borderRadius: 999, padding: "3px 10px", fontSize: 11.5 }}>{k.replace("|", " · ")} ({[v.L === "(+)" ? "Α" : "", v.R === "(+)" ? "Δ" : ""].filter(Boolean).join("/")})</span>)}
         </div>
       )}
-      <div style={{ columnWidth: 460, columnGap: 28 }}>
+      <div style={{ columnWidth: 400, columnGap: 24 }}>
       {Object.entries(SPECIAL_TESTS[reg]).map(([grp, tests]) => {
         const shown = tests.filter(([n, h]) => !q.trim() || nq(n + " " + h + " " + grp).includes(nq(q.trim())));
         if (!shown.length) return null;
@@ -1158,7 +1169,7 @@ function SpecialTestsPanel({ draft, ad }) {
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: T.gold, textTransform: "uppercase", letterSpacing: "0.04em", padding: "3px 0 4px", borderBottom: `2px solid ${T.gold}` }}>{grp}{(() => { const np = shown.filter(([n]) => { const v = sp[key(n)]; return v && (v.L === "(+)" || v.R === "(+)"); }).length; return np ? <b style={{ color: "#C0392B", textTransform: "none" }}> · {np} θετικά</b> : null; })()}</div>
             <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 0 }}>
               {shown.map(([n, h]) => (
-                <div key={n} className="ll-sp-row" style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0", borderTop: `1px solid ${T.panelLine}` }}>
+                <div key={n} className="ll-sp-row" style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 0", borderTop: `1px solid ${T.panelLine}` }}>
                   <div style={{ flex: 1, minWidth: 0 }} title={h}>
                     <div style={{ fontSize: 15, lineHeight: 1.3, fontWeight: 500 }}>{n}</div>
                     <div style={{ fontSize: 12, color: T.paperDim, lineHeight: 1.3 }}>{h}</div>
@@ -3832,7 +3843,7 @@ function TissueLoadLog() {
               </div>
               <div>
                 <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: T.gold, marginBottom: 6, paddingBottom: 3, borderBottom: `1px solid ${T.panelLine}` }}>Ιατρικά</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: 18, rowGap: 4 }}>
                   {patient.pathology ? <div><strong style={{ color: T.paper }}>Παθολογία:</strong> {patient.pathology}</div> : <div style={{ opacity: 0.5 }}>Καμία παθολογία</div>}
                   {patient.complaintSite && <div><strong style={{ color: T.paper }}>Πού πονάει:</strong> {patient.complaintSite}</div>}
                   {patient.affectedSide && <div><strong style={{ color: T.paper }}>Πάσχον:</strong> {patient.affectedSide}</div>}
@@ -4023,11 +4034,12 @@ function TissueLoadLog() {
       </Panel>
       </div>
 
-      <div style={{ display: vis("spine") }}>
+      <div className={assessSub === "msk" ? "ll-msk" : ""} style={{ display: assessSub === "msk" || assessSub === "neuro" ? (assessSub === "msk" ? "grid" : "block") : "none" }}>
+      <div className="ll-msk-a" style={{ display: vis("spine") }}>
 <SpinePanel draft={assessDraft} ad={ad} />
       </div>
 
-      <div style={{ display: vis("special") }}>
+      <div className="ll-msk-b" style={{ display: vis("special") }}>
 <SpecialTestsPanel draft={assessDraft} ad={ad} />
       </div>
 
@@ -4035,9 +4047,10 @@ function TissueLoadLog() {
 <NeuroPanel draft={assessDraft} ad={ad} />
       </div>
 
-      <div style={{ display: vis("strength") === "block" ? "grid" : "none", gridTemplateColumns: "minmax(0, 1.55fr) minmax(0, 1fr)", gap: 10, alignItems: "start" }}>
+      <div className="ll-msk-c" style={{ display: vis("strength") === "block" ? (assessSub === "msk" ? "block" : "grid") : "none", gridTemplateColumns: "minmax(0, 1.55fr) minmax(0, 1fr)", gap: 10, alignItems: "start" }}>
         <StrengthRomPanel draft={assessDraft} ad={ad} assessments={assessments} sessionDate={sessionDate} affected={patient && patient.affectedSide} />
         <AssessProgress assessments={assessments} draft={assessDraft} sessionDate={sessionDate} />
+      </div>
       </div>
 
       <div style={{ display: vis("plan") }}>
