@@ -330,7 +330,7 @@
     .mac-main button:focus-visible, .mac-side button:focus-visible, .mac-tabs button:focus-visible { outline: 2px solid #D9560B; outline-offset: 2px; }
     .mac-pchip, .mac-pnew { border-radius: 10px !important; }
     .mac-side { background: #FBFBF9; }
-    .mac-main button[style*="background: var(--vac"][style*="border: none"], .mac-sheet button[style*="background: var(--vac"][style*="border: none"] { min-height: 34px; padding: 7px 18px !important; font-size: 13px !important; font-weight: 600 !important; border-radius: 10px !important; line-height: 1.2; box-shadow: 0 1px 4px rgba(17,17,17,.12); width: 190px !important; min-height: 38px; flex: 0 0 auto !important; align-self: flex-end; margin-left: auto !important; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+    .mac-main button[style*="background: var(--vac"][style*="border: none"], .mac-sheet button[style*="background: var(--vac"][style*="border: none"] { min-height: 34px; padding: 8px 22px !important; font-size: 15.5px !important; font-weight: 600 !important; border-radius: 10px !important; line-height: 1.2; box-shadow: 0 1px 4px rgba(17,17,17,.12); width: auto !important; min-width: 150px; white-space: nowrap; min-height: 38px; flex: 0 0 auto !important; align-self: flex-end; margin-left: auto !important; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
     /* ---- soft tabs, page accent follows view ---- */
     .mac-tabs { gap: 4px !important; margin: 10px 0 14px !important; }
     .mac-tabs button { border-radius: 10px !important; padding: 9px 8px !important; font-size: 12px !important; font-weight: 500; background: #FFFFFF !important; color: #5E5E5E !important; border: 1.5px solid #E4E4E0 !important; margin-bottom: 0 !important; box-shadow: none; }
@@ -397,6 +397,9 @@ body .mac-tabs.mac-tabs button:nth-child(n).on { color: #111 !important; font-we
     body .mac-top > *, body .mac-main > * { zoom: 0.74; max-width: none !important; margin-left: 0 !important; margin-right: 0 !important; }
     body .mac-main { padding-top: 14px !important; }
   }
+  @media screen and (min-width: 1400px) { body .mac-top > *, body .mac-main > * { zoom: 1.0; } }
+  @media screen and (min-width: 1800px) { body .mac-top > *, body .mac-main > * { zoom: 1.25; } }
+  @media screen and (min-width: 2200px) { body .mac-top > *, body .mac-main > * { zoom: 1.5; } }
   .ll-qs input[type=number]::-webkit-inner-spin-button, .ll-qs input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   .ll-qs input[type=number] { -moz-appearance: textfield; text-align: center; }
 </style>
@@ -3809,7 +3812,7 @@ function TissueLoadLog() {
           <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderLeft: `4px solid ${T.terracotta}`, borderRadius: 12, padding: "8px 14px 10px", marginBottom: 8, fontSize: 14, color: T.paperDim, lineHeight: 1.4 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4, gap: 10 }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
-                <span style={{ color: T.gold, fontWeight: 700, fontSize: 14 }}>Φάκελος ασθενή{todayWeek ? ` · Εβδ. ${todayWeek}` : ""}</span>
+                <span style={{ color: T.gold, fontWeight: 700, fontSize: 20 }}>Φάκελος ασθενή{todayWeek ? ` · Εβδ. ${todayWeek}` : ""}</span>
               </div>
               {!isPatientMode && <button onClick={openEditPatient} style={{ background: "none", border: "none", color: T.gold, cursor: "pointer", padding: 4 }} aria-label="Επεξεργασία φακέλου"><Icon name="pencil" size={14} /></button>}
             </div>
@@ -3931,7 +3934,7 @@ function TissueLoadLog() {
       {patientFileView}
       <div className="ll-assess-nav" style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "0 0 8px" }}>
         {[["hist", "Ιστορικό & χάρτης"], ["soc", "SOCRATES"], ["msk", "Μυοσκελετική αξιολόγηση"], ["neuro", "Νευρολογική αξιολόγηση"], ["plan", "Εκτίμηση & πλάνο"]].map(([id, lb]) => { const on = assessSub === id; return (
-          <button key={id} type="button" onClick={() => setAssessSub(id)} style={{ flex: "1 1 130px", border: `1.5px solid ${on ? T.terracotta : T.panelLine}`, background: on ? T.terracotta : T.panel, color: on ? T.bg : T.paper, borderRadius: 10, padding: "7px 10px", fontSize: 13.5, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>{lb}</button>
+          <button key={id} type="button" onClick={() => setAssessSub(id)} style={{ flex: "0 1 auto", minWidth: 130, border: `1.5px solid ${on ? T.terracotta : T.panelLine}`, background: on ? T.terracotta : T.panel, color: on ? T.bg : T.paper, borderRadius: 10, padding: "8px 18px", fontSize: 15.5, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>{lb}</button>
         ); })}
       </div>
       <details className="ll-assess-map" open={firstVisit} style={{ display: assessSub === "hist" ? "block" : "none", border: `1px solid ${T.panelLine}`, borderRadius: 12, background: T.panel, padding: "8px 12px", marginBottom: 8 }}>
@@ -4049,12 +4052,12 @@ function TissueLoadLog() {
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 22 }}>
-        <button onClick={saveAssessment} style={{ flex: "2 1 340px", minWidth: 340, whiteSpace: "nowrap", background: T.terracotta, color: T.bg, border: "none", borderRadius: 9, padding: "12px", fontSize: 14.5, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>
+        <button onClick={saveAssessment} style={{ flex: "0 0 auto", whiteSpace: "nowrap", background: T.terracotta, color: T.bg, border: "none", borderRadius: 10, padding: "11px 26px", fontSize: 17, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>
           {assessments[sessionDate] ? "Ενημέρωση εκτίμησης" : "Αποθήκευση εκτίμησης"} · {fmtDay(sessionDate)}
         </button>
-        <button onClick={() => setPrintMode("filled")} style={{ flex: "1 1 120px", background: T.panel, color: T.gold, border: `1px solid ${T.gold}`, borderRadius: 9, padding: "12px", fontSize: 13.5, fontWeight: 600, cursor: "pointer" }}>Εκτύπωση</button>
-        <button onClick={() => setPrintMode("blank")} style={{ flex: "1 1 120px", background: T.panel, color: T.paper, border: `1px solid ${T.panelLine}`, borderRadius: 9, padding: "12px", fontSize: 13.5, cursor: "pointer" }}>Κενή φόρμα</button>
-        {assessments[sessionDate] && <button onClick={deleteAssessment} style={{ background: "none", color: T.rust, border: `1px solid ${T.panelLine}`, borderRadius: 9, padding: "12px 14px", fontSize: 13, cursor: "pointer" }}>Διαγραφή</button>}
+        <button onClick={() => setPrintMode("filled")} style={{ flex: "0 0 auto", background: T.panel, color: T.gold, border: `1px solid ${T.gold}`, borderRadius: 10, padding: "11px 22px", fontSize: 16, fontWeight: 600, cursor: "pointer" }}>Εκτύπωση</button>
+        <button onClick={() => setPrintMode("blank")} style={{ flex: "0 0 auto", background: T.panel, color: T.paper, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "11px 22px", fontSize: 16, cursor: "pointer" }}>Κενή φόρμα</button>
+        {assessments[sessionDate] && <button onClick={deleteAssessment} style={{ background: "none", color: T.rust, border: `1px solid ${T.panelLine}`, borderRadius: 10, padding: "11px 18px", fontSize: 15, cursor: "pointer" }}>Διαγραφή</button>}
       </div>
       <div style={{ fontSize: 12, color: T.paperDim, marginTop: -10, marginBottom: 22 }}>{assessments[sessionDate] ? "Υπάρχει αποθηκευμένη εκτίμηση για αυτή την ημέρα." : "Νέα εκτίμηση — δεν έχει αποθηκευτεί ακόμα για αυτή την ημέρα."}</div>
 
@@ -4073,7 +4076,7 @@ function TissueLoadLog() {
   const clinSwitch = (
     <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
       {[["daily", "Κλινική εικόνα"], ["measurements", "Μετρήσεις (άλματα, ισομετρικά)"]].map(([id, lb]) => { const on = view === id; return (
-        <button key={id} type="button" onClick={() => setView(id)} style={{ border: `1.5px solid ${on ? T.terracotta : T.panelLine}`, background: on ? T.terracotta : "transparent", color: on ? T.bg : T.paper, borderRadius: 999, padding: "4px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>{lb}</button>
+        <button key={id} type="button" onClick={() => setView(id)} style={{ border: `1.5px solid ${on ? T.terracotta : T.panelLine}`, background: on ? T.terracotta : "transparent", color: on ? T.bg : T.paper, borderRadius: 999, padding: "5px 16px", fontSize: 14.5, fontWeight: 700, cursor: "pointer" }}>{lb}</button>
       ); })}
     </div>
   );
@@ -4225,7 +4228,7 @@ function TissueLoadLog() {
               </div>
             {!isPatientMode && <div className="ll-domains" style={{ display: "flex", gap: 8, flexWrap: "nowrap", alignItems: "center", margin: "0 0 8px", width: "100%", flexBasis: "100%", gridColumn: "1 / -1", order: 5 }}>
               {[["assessment", "Ιατρικός φάκελος", ["assessment"], "#D9560B"], ["daily", "Κλινικά δεδομένα", ["daily", "measurements"], "#8466C9"], ["load", "Καταγραφή φορτίου", ["load"], "#3F8F86"], ["rtp", "Κριτήρια RTP", ["rtp"], "#4F77C4"]].map(([id, lb, ons, col]) => { const on = ons.includes(view); return (
-                <button key={id} type="button" onClick={() => setView(id)} style={{ flex: "1 1 0", border: `1.5px solid ${col}`, background: on ? col : `color-mix(in srgb, ${col} 8%, white)`, color: on ? "#fff" : col, borderRadius: 10, padding: "7px 12px", fontSize: 13.5, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>{lb}</button>
+                <button key={id} type="button" onClick={() => setView(id)} style={{ flex: "0 1 auto", minWidth: 150, border: `1.5px solid ${col}`, background: on ? col : `color-mix(in srgb, ${col} 8%, white)`, color: on ? "#fff" : col, borderRadius: 10, padding: "8px 22px", fontSize: 16, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>{lb}</button>
               ); })}
             </div>}
             {isPatientMode && <div className="mac-tabs" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, marginBottom: 20 }}>
