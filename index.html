@@ -436,9 +436,24 @@ body .mac-tabs.mac-tabs button:nth-child(n).on { color: #111 !important; font-we
     .mac-top::after { display: none !important; }
     .mac-top { padding-bottom: 0 !important; border-bottom: 1px solid #E4E4E0; }
   }
-  @media screen and (min-width: 1400px) { body .mac-top > *, body .mac-main > * { zoom: 1.0; } }
-  @media screen and (min-width: 1800px) { body .mac-top > *, body .mac-main > * { zoom: 1.05; } }
-  @media screen and (min-width: 2200px) { body .mac-top > *, body .mac-main > * { zoom: 1.2; } }
+  /* ---- domain colours: tab icons + page backgrounds ---- */
+  @media screen and (min-width: 600px) {
+    .ll-dtab svg { box-sizing: content-box; padding: 8px; border-radius: 12px; background: color-mix(in srgb, var(--tc) 14%, white); color: var(--tc); }
+    .ll-dtab.on svg { background: var(--tc); color: #fff; }
+    .ll-dtab { color: color-mix(in srgb, var(--tc) 55%, #333) !important; }
+    .ll-dtab .ll-dnum { color: color-mix(in srgb, var(--tc) 60%, white); font-weight: 700; }
+    .mac-main[data-view="assessment"] { background: #FFF3EA !important; }
+    .mac-main[data-view="daily"], .mac-main[data-view="measurements"] { background: #F3EEFB !important; }
+    .mac-main[data-view="load"] { background: #E9F5F2 !important; }
+    .mac-main[data-view="rtp"] { background: #EBF0FA !important; }
+    .mac-top[data-view="assessment"] { background: linear-gradient(180deg, #fff, #FFF3EA) !important; }
+    .mac-top[data-view="daily"], .mac-top[data-view="measurements"] { background: linear-gradient(180deg, #fff, #F3EEFB) !important; }
+    .mac-top[data-view="load"] { background: linear-gradient(180deg, #fff, #E9F5F2) !important; }
+    .mac-top[data-view="rtp"] { background: linear-gradient(180deg, #fff, #EBF0FA) !important; }
+  }
+  @media screen and (min-width: 1400px) { body .mac-top > *, body .mac-main > * { zoom: 0.9; } }
+  @media screen and (min-width: 1800px) { body .mac-top > *, body .mac-main > * { zoom: 1.0; } }
+  @media screen and (min-width: 2200px) { body .mac-top > *, body .mac-main > * { zoom: 1.1; } }
   .ll-qs input[type=number]::-webkit-inner-spin-button, .ll-qs input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   .ll-qs input[type=number] { -moz-appearance: textfield; text-align: center; }
 </style>
