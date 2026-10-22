@@ -408,6 +408,34 @@ body .mac-tabs.mac-tabs button:nth-child(n).on { color: #111 !important; font-we
     .ll-msk .ll-spine input { width: 100% !important; }
     .ll-msk .ll-spine { width: 100% !important; table-layout: fixed; }
   }
+  /* ---- shell restyle ---- */
+  @media screen and (min-width: 600px) {
+    .mac-plist { gap: 4px !important; }
+    .mac-pchip { display: flex !important; align-items: center; gap: 12px; padding: 8px 36px 8px 10px !important; border-radius: 12px !important; border-left: 4px solid transparent !important; }
+    .mac-pchip.on { background: #FFEDE3 !important; color: #111 !important; border-left-color: #D9560B !important; font-weight: 600; }
+    .mac-pav { flex: none; width: 40px; height: 40px; border-radius: 50%; background: #E9E9E6; color: #333; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; font-family: 'Space Grotesk', sans-serif; }
+    .mac-pchip.on .mac-pav { background: #FBD5C1; color: #D9560B; }
+    .mac-ptxt { display: flex; flex-direction: column; min-width: 0; text-align: left; }
+    .mac-pname { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mac-pnew { justify-content: center !important; border: 1.5px solid #D9560B !important; color: #D9560B !important; font-weight: 600; margin-top: 10px !important; border-radius: 12px !important; padding: 10px 12px !important; }
+    .mac-ptitle { width: 100%; flex: 1 0 100%; }
+    .mac-crumb { font-size: 13.5px; color: #777; margin-bottom: 8px; }
+    .mac-crumb span { margin: 0 6px; opacity: .6; } .mac-crumb b { color: #111; font-weight: 600; }
+    .mac-pcardtop { display: flex; align-items: center; gap: 16px; background: #fff; border: 1px solid #E4E4E0; border-radius: 16px; padding: 12px 18px; margin-bottom: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+    .mac-pav-lg { width: 56px; height: 56px; font-size: 20px; background: #FBD5C1; color: #D9560B; }
+    .mac-pname-lg { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2; }
+    .mac-psub-lg { font-size: 14px; color: #6b6b6b; margin-top: 2px; }
+    .mac-datechip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid #DADAD6; border-radius: 12px; padding: 10px 16px; font-size: 14.5px; color: #333; background: #fff; white-space: nowrap; }
+    .mac-btn-solid { display: inline-flex; align-items: center; gap: 8px; background: #D9560B; color: #fff; border: none; padding: 11px 22px; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; border-radius: 12px !important; }
+    .mac-btn-line { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #D9560B; border: 1.5px solid #D9560B; padding: 10px 20px; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; border-radius: 12px !important; }
+    .ll-dtab { flex: 1 1 0; display: flex !important; align-items: center; justify-content: center; gap: 12px; padding: 14px 18px !important; background: transparent !important; border: none !important; border-bottom: 3px solid transparent !important; border-radius: 0 !important; color: #444 !important; font-size: 17px; font-weight: 600; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
+    .ll-dtab .ll-dnum { font-size: 14px; color: #9a9a9a; font-weight: 500; }
+    .ll-dtab:hover { background: rgba(0,0,0,.03) !important; }
+    .ll-dtab.on { color: var(--tc) !important; border-bottom-color: var(--tc) !important; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--tc) 10%, white)) !important; }
+    .ll-dtab.on .ll-dnum { color: var(--tc); }
+    .mac-top::after { display: none !important; }
+    .mac-top { padding-bottom: 0 !important; border-bottom: 1px solid #E4E4E0; }
+  }
   @media screen and (min-width: 1400px) { body .mac-top > *, body .mac-main > * { zoom: 1.0; } }
   @media screen and (min-width: 1800px) { body .mac-top > *, body .mac-main > * { zoom: 1.05; } }
   @media screen and (min-width: 2200px) { body .mac-top > *, body .mac-main > * { zoom: 1.2; } }
@@ -1396,6 +1424,7 @@ function Icon(props) {
     book: <React.Fragment><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></React.Fragment>,
     flag: <path d="M4 22V4M4 4h13l-2 4 2 4H4"/>,
     folder: <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>,
+    calendar: <React.Fragment><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></React.Fragment>,
     gauge: <React.Fragment><path d="M12 20a8 8 0 1 0-8-8"/><path d="M12 12l4-4M4 12H2M12 2v2M22 12h-2"/></React.Fragment>,
   };
   const strokeW = name === "plus" || name === "x" ? 2.5 : 2;
@@ -2606,7 +2635,7 @@ const COND_INFO = {
 "Δυσλειτουργία οπίσθιου κνημιαίου": "Έσω πόνος, πλατυποδία, αδύναμο single-leg heel raise. Στάδιο I: ορθωτικό + ενδυνάμωση· προχωρημένο → ορθοπαιδική εκτίμηση.",
 "Μη ειδικός οσφυαλγία": "Πόνος χωρίς σαφή δομική αιτία, ο συχνότερος. Παραμονή σε κίνηση, εκπαίδευση, σταδιακή φόρτιση· αξιολόγηση ψυχοκοινωνικών παραγόντων (π.χ. FABQ) και red flags."
 };
-function BodyMapModule({ patient, onGo, onPick }) {
+function BodyMapModule({ patient, onGo, onPick, compact }) {
   const [sel, setSel] = useState("knee");
   const [selCond, setSelCond] = useState(null);
   useEffect(() => { setSelCond(null); }, [sel]);
@@ -2694,6 +2723,7 @@ function BodyMapModule({ patient, onGo, onPick }) {
   );
   const btn = (primary) => ({ background: primary ? T.terracotta : "transparent", color: primary ? T.bg : T.gold, border: `1px solid ${primary ? T.terracotta : T.gold}`, borderRadius: 999, padding: "9px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" });
   const chip = (on) => ({ padding: "7px 16px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 13, fontWeight: 600, cursor: "pointer" });
+  if (compact) return <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "flex-start" }}><div style={{ flex: "1 1 0", maxWidth: 150 }}>{front}</div><div style={{ flex: "1 1 0", maxWidth: 150 }}>{rear}</div></div>;
   return (
     <div className="ll-body" style={{ display: "grid", gridTemplateColumns: "minmax(280px, 380px) minmax(0, 1fr)", gap: 18, alignItems: "start" }}>
       <Panel title="Χάρτης σώματος">
@@ -2959,6 +2989,255 @@ const CLIN_MOVES = ["Κάμψη γόνατος", "Έκταση γόνατος", 
 const CLIN_MUSCLES = ["Τετρακέφαλος", "Οπίσθιοι μηριαίοι", "Απαγωγείς ισχίου", "Προσαγωγοί ισχίου", "Γλουτιαίοι", "Γαστροκνήμιος / υπο-κνημιαίος", "Περιστροφείς ώμου", "Δικέφαλος βραχίονα", "Τρικέφαλος βραχίονα", "Λαβή (grip)"];
 const CLIN_PARAMS = ["Τεχνική / θεραπεία", "Ένταση", "Διάρκεια (λεπτά)", "Συχνότητα", "Συσκευή / ρυθμίσεις", "Θέση ασθενή", "Άσκηση", "Σετ × επαναλήψεις", "Φορτίο", "Ξεκούραση"];
 const clinNum = (x) => { const v = parseFloat(x); return isFinite(v) && v > 0 ? v : null; };
+const initialsOf = (n) => { const w = String(n || "").trim().split(/\s+/).filter(Boolean); return ((w[0] ? w[0][0] : "") + (w[1] ? w[1][0] : "")).toUpperCase() || "?"; };
+function AreaChart({ data, series, domain, xKey, height = 270, unit = "" }) {
+  const w = 920, h = height, padL = 46, padR = 16, padT = 14, padB = 30;
+  const iw = w - padL - padR, ih = h - padT - padB, n = data.length;
+  const [dMin, dMax] = domain;
+  const x = (i) => padL + (n === 1 ? iw / 2 : (iw * i) / (n - 1));
+  const y = (v) => padT + ih - (ih * (v - dMin)) / (dMax - dMin || 1);
+  const ok = (v) => typeof v === "number" && isFinite(v);
+  const ticks = Array.from({ length: 6 }, (_, i) => dMin + ((dMax - dMin) * i) / 5);
+  const seg = (key) => { const out = []; let cur = []; data.forEach((d, i) => { if (ok(d[key])) cur.push([x(i), y(d[key])]); else if (cur.length) { out.push(cur); cur = []; } }); if (cur.length) out.push(cur); return out; };
+  const gid = "ag" + Math.random().toString(36).slice(2, 7);
+  const lbl = (d) => { const t = String(d[xKey] || ""); return t.length >= 10 ? t.slice(8, 10) + "/" + t.slice(5, 7) : t; };
+  return (
+    <div>
+      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", display: "block" }}>
+        <defs>{series.map((s, k) => <linearGradient key={k} id={gid + k} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={s.color} stopOpacity="0.22" /><stop offset="100%" stopColor={s.color} stopOpacity="0.02" /></linearGradient>)}</defs>
+        {ticks.map((v, i) => <g key={i}><line x1={padL} x2={w - padR} y1={y(v)} y2={y(v)} stroke="#E6E6E2" /><text x={padL - 8} y={y(v) + 4} fontSize="12" fill="#6b6b6b" textAnchor="end">{Math.round(v)}</text></g>)}
+        {data.map((d, i) => <text key={i} x={x(i)} y={h - 8} fontSize="12" fill="#6b6b6b" textAnchor="middle">{lbl(d)}</text>)}
+        {series.map((s, k) => seg(s.key).map((pts, j) => {
+          const d = pts.map((q, i) => `${i ? "L" : "M"}${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(" ");
+          return <g key={k + "-" + j}>{pts.length > 1 && <path d={`${d} L${pts[pts.length - 1][0]} ${padT + ih} L${pts[0][0]} ${padT + ih} Z`} fill={`url(#${gid + k})`} />}<path d={d} fill="none" stroke={s.color} strokeWidth="2.6" strokeLinejoin="round" />{pts.map((q, i) => <circle key={i} cx={q[0]} cy={q[1]} r="4.5" fill="#fff" stroke={s.color} strokeWidth="2.4" />)}</g>;
+        }))}
+      </svg>
+      <div style={{ display: "flex", gap: 22, justifyContent: "center", marginTop: 2 }}>
+        {series.map((s) => <span key={s.key} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "#444" }}><span style={{ width: 11, height: 11, borderRadius: "50%", background: s.color, display: "inline-block" }} />{s.label}</span>)}
+      </div>
+    </div>
+  );
+}
+const dmy = (d) => (d && String(d).length >= 10 ? `${String(d).slice(8, 10)}/${String(d).slice(5, 7)}/${String(d).slice(0, 4)}` : d);
+function LoadBars({ rows }) {
+  const w = 560, h = 250, padL = 44, padR = 12, padT = 12, padB = 34;
+  const iw = w - padL - padR, ih = h - padT - padB, n = rows.length;
+  const loads = rows.map((r) => r.load || 0);
+  const avg = loads.map((_, i) => { const prev = loads.slice(Math.max(0, i - 4), i).filter((x) => x > 0); return prev.length ? prev.reduce((a, b) => a + b, 0) / prev.length : null; });
+  const mx = Math.max(10, ...loads, ...avg.filter((v) => v !== null));
+  const top = Math.ceil((mx * 1.1) / 100) * 100 || 100;
+  const y = (v) => padT + ih - (ih * v) / top;
+  const bw = Math.min(38, (iw / n) * 0.6);
+  const cx = (i) => padL + (iw / n) * (i + 0.5);
+  const ticks = Array.from({ length: 5 }, (_, i) => (top * i) / 4);
+  const pts = avg.map((v, i) => v === null ? null : [cx(i), y(v)]);
+  const path = (() => { let st = true; return pts.map((q) => { if (!q) { st = true; return ""; } const c = `${st ? "M" : "L"}${q[0].toFixed(1)} ${q[1].toFixed(1)}`; st = false; return c; }).join(" "); })();
+  return (
+    <div>
+      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", display: "block" }}>
+        {ticks.map((v, i) => <g key={i}><line x1={padL} x2={w - padR} y1={y(v)} y2={y(v)} stroke="#E6E6E2" /><text x={padL - 8} y={y(v) + 4} fontSize="12" fill="#6b6b6b" textAnchor="end">{Math.round(v)}</text></g>)}
+        {rows.map((r, i) => { const ld = r.load || 0; return <g key={i}><rect x={cx(i) - bw / 2} y={y(ld)} width={bw} height={Math.max(0, padT + ih - y(ld))} rx="4" fill="#D9560B" opacity={ld ? 0.92 : 0.2} /><text x={cx(i)} y={h - 12} fontSize="12" fill="#6b6b6b" textAnchor="middle">{String(r.ws).slice(8, 10)}/{String(r.ws).slice(5, 7)}</text></g>; })}
+        {path && <path d={path} fill="none" stroke="#0E8A7D" strokeWidth="2.6" />}
+        {pts.map((q, i) => q ? <circle key={i} cx={q[0]} cy={q[1]} r="4.5" fill="#fff" stroke="#0E8A7D" strokeWidth="2.4" /> : null)}
+      </svg>
+      <div style={{ display: "flex", gap: 22, justifyContent: "center", marginTop: 2 }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "#444" }}><span style={{ width: 11, height: 11, borderRadius: "50%", background: "#D9560B" }} />Συνολικό φορτίο</span>
+        <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "#444" }}><span style={{ width: 18, height: 3, background: "#0E8A7D", borderRadius: 2 }} />Μέσος όρος προηγ. εβδομάδων</span>
+      </div>
+    </div>
+  );
+}
+function Spark({ vals, color, w = 190, h = 44, area = true }) {
+  const v = vals.filter((x) => typeof x === "number" && isFinite(x));
+  if (v.length < 2) return <div style={{ width: w, height: h, display: "flex", alignItems: "center", color: T.paperDim, fontSize: 11 }}>—</div>;
+  const mn = Math.min(...v), mx = Math.max(...v), rg = mx - mn || 1;
+  const pts = v.map((x, i) => [4 + (i * (w - 8)) / (v.length - 1), h - 4 - ((x - mn) * (h - 10)) / rg]);
+  const d = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(" ");
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ display: "block" }}>
+      {area && <path d={`${d} L${pts[pts.length - 1][0]} ${h} L${pts[0][0]} ${h} Z`} fill={color} opacity="0.12" />}
+      <path d={d} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" />
+      <circle cx={pts[pts.length - 1][0]} cy={pts[pts.length - 1][1]} r="3" fill={color} />
+    </svg>
+  );
+}
+const dashFmtPct = (a, b) => (typeof a === "number" && typeof b === "number" && b !== 0 ? Math.round(((a - b) / Math.abs(b)) * 100) : null);
+function ClinicalDashboard({ patient, patientId, assessments, measurements, entries, weekRows, sessionDate, onGo }) {
+  const [, force] = useState(0);
+  useEffect(() => { const f = () => force((n) => n + 1); window.addEventListener("ll-clin", f); return () => window.removeEventListener("ll-clin", f); }, []);
+  const [pickM, setPickM] = useState("");
+  const [cat, setCat] = useState("all");
+  const [q, setQ] = useState("");
+  const sheets = (patientId && store.get(`trl_clin_${patientId}`, [])) || [];
+  const sessions = (patientId && store.get(`trl_sessions_${patientId}`, {})) || {};
+  const aff = patient && patient.affectedSide;
+  const num = (v) => { const n = parseFloat(String(v).replace(",", ".")); return isFinite(n) ? n : null; };
+  // ---- metrics
+  const M = {}; // id -> { id,label,unit,kind,by:{date:{L,R,N}} }
+  const add = (kind, label, unit, date, side, val) => {
+    const v = num(val); if (v === null || !date) return;
+    const id = kind + "|" + label + "|" + unit;
+    const m = (M[id] = M[id] || { id, kind, label, unit, by: {} });
+    const o = (m.by[date] = m.by[date] || {});
+    o[side === "L" || side === "R" ? side : "N"] = v;
+  };
+  Object.entries(assessments || {}).forEach(([d, a]) => {
+    (a.strength || []).forEach((r) => { const lb = `${r.joint} · ${r.move}`; add("str", lb, r.unit || "N", d, "L", r.L); add("str", lb, r.unit || "N", d, "R", r.R); });
+    (a.rom || []).forEach((r) => { const lb = `${r.joint} · ${r.move}`; add("rom", lb, "°", d, "L", r.L); add("rom", lb, "°", d, "R", r.R); });
+  });
+  sheets.forEach((x) => {
+    (x.str || []).forEach((m) => { if (m.name) add("str", m.name, m.unit || "kg", x.date, m.side, m.val); });
+    (x.rom || []).forEach((m) => { if (m.move) add("rom", m.move, "°", x.date, m.side, m.deg); });
+  });
+  (measurements || []).forEach((m) => {
+    if (m.category === "isometric") { add("str", m.testType, "N", m.date, "L", m.leftForce); add("str", m.testType, "N", m.date, "R", m.rightForce); }
+    else if (m.category === "jump") add("jump", m.testType, "cm", m.date, "N", m.jumpHeight);
+  });
+  const mets = Object.values(M).map((m) => ({ ...m, dates: Object.keys(m.by).sort() }));
+  const affKey = aff === "Αριστερό" ? "L" : aff === "Δεξί" ? "R" : null;
+  const valAt = (m, d) => { const o = m.by[d] || {}; if (affKey && o[affKey] !== undefined) return o[affKey]; const vs = [o.L, o.R, o.N].filter((x) => x !== undefined); return vs.length ? Math.max(...vs) : null; };
+  const series = (m) => m.dates.map((d) => valAt(m, d)).filter((x) => x !== null);
+  const best = (kind) => mets.filter((m) => m.kind === kind).sort((a, b) => b.dates.length - a.dates.length || String(b.dates[b.dates.length - 1]).localeCompare(String(a.dates[a.dates.length - 1])))[0] || null;
+  const mStr = best("str"), mRom = best("rom");
+  // ---- pain
+  const painBy = {};
+  Object.entries(assessments || {}).forEach(([d, a]) => { if (a && a.severityNow !== undefined && a.severityNow !== "") painBy[d] = Number(a.severityNow); });
+  sheets.forEach((x) => { if (x.pain !== undefined && x.pain !== null && x.pain !== "") painBy[x.date] = Number(x.pain); });
+  const painPts = Object.keys(painBy).sort().map((d) => ({ date: d, pain: painBy[d] }));
+  const pLast = painPts.length ? painPts[painPts.length - 1].pain : null;
+  const pDelta = painPts.length > 1 ? dashFmtPct(pLast, painPts[0].pain) : null;
+  // ---- visits
+  const visitDates = new Set([...(entries || []).map((e) => e.date), ...(measurements || []).map((m) => m.date), ...Object.keys(assessments || {}), ...Object.keys(sessions || {}), ...sheets.map((x) => x.date)]);
+  const thisWeekVisits = (weekRows && weekRows.length ? weekRows[weekRows.length - 1].visits : 0) || 0;
+  const wr = weekRows || [];
+  // ---- cards
+  const card = { background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: "14px 16px", minWidth: 0 };
+  const cTitle = { fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16, marginBottom: 8 };
+  const badge = (txt, good) => <span style={{ fontSize: 12, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: good === false ? "rgba(192,57,43,0.10)" : "rgba(14,138,125,0.12)", color: good === false ? "#C0392B" : "#0E8A7D", whiteSpace: "nowrap" }}>{txt}</span>;
+  const pct = (v) => v === null ? null : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v) + "%";
+  const kpi = (icon, title, big, unit, bdg, graph, key) => (
+    <div key={key} style={card}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 15.5, fontWeight: 600 }}><span style={{ color: "#D9560B", display: "inline-flex" }}><Icon name={icon} size={22} /></span> {title}</div>
+        {bdg}
+      </div>
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 10, marginTop: 8 }}>
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 34, lineHeight: 1 }}>{big}<span style={{ fontSize: 18, fontWeight: 500, color: T.paperDim }}>{unit}</span></div>
+        <div style={{ flex: "0 1 190px", minWidth: 0 }}>{graph}</div>
+      </div>
+    </div>
+  );
+  const strS = mStr ? series(mStr) : [], romS = mRom ? series(mRom) : [];
+  const symBar = (m) => { const d = m.dates[m.dates.length - 1]; const o = m.by[d] || {}; if (o.L === undefined || o.R === undefined) return null; return Math.round((Math.min(o.L, o.R) / Math.max(o.L, o.R)) * 100); };
+  const romSym = mRom ? symBar(mRom) : null;
+  // ---- evolution chart
+  const isPain = pickM === "pain";
+  const curM = isPain ? null : (mets.find((m) => m.id === pickM) || mStr || mRom || mets[0] || null);
+  const evoData = curM ? curM.dates.map((d) => ({ date: d, L: curM.by[d].L ?? null, R: curM.by[d].R ?? null, N: curM.by[d].N ?? null })) : [];
+  const evoSer = [{ key: "R", color: "#D9560B", label: "Δεξιά" }, { key: "L", color: "#0E8A7D", label: "Αριστερά" }, { key: "N", color: "#8466C9", label: "Χωρίς πλευρά" }].filter((s) => evoData.some((d) => d[s.key] !== null));
+  const evoVals = evoData.flatMap((d) => evoSer.map((s) => d[s.key])).filter((v) => v !== null);
+  const evoDom = (() => { if (!evoVals.length) return [0, 10]; const mn = Math.min(...evoVals), mx = Math.max(...evoVals); const pad = Math.max((mx - mn) * 0.25, mx * 0.05, 1); return [Math.max(0, Math.floor(mn - pad)), Math.ceil(mx + pad)]; })();
+  const kindLbl = { str: "Δύναμη", rom: "Κινητικότητα", jump: "Άλματα" };
+  // ---- side comparison
+  const cmp = ["str", "rom"].flatMap((k) => mets.filter((m) => m.kind === k && (m.by[m.dates[m.dates.length - 1]].L !== undefined) && (m.by[m.dates[m.dates.length - 1]].R !== undefined)).slice(0, k === "str" ? 2 : 1));
+  // ---- recent
+  const recent = [
+    ...Object.keys(assessments || {}).map((d) => ({ d, t: "Αξιολόγηση", s: "Ιατρική εκτίμηση & δοκιμασίες", c: "#D9560B", go: "assessment" })),
+    ...sheets.map((x) => ({ d: x.date, t: "Κλινική εικόνα", s: x.title || "Φύλλο κλινικής εικόνας", c: "#8466C9", go: "daily" })),
+    ...(measurements || []).map((m) => ({ d: m.date, t: "Μέτρηση", s: m.testType, c: "#4F77C4", go: "measurements" })),
+    ...(entries || []).map((e) => ({ d: e.date, t: "Φορτίο", s: e.activity || "Καταγραφή φορτίου", c: "#3F8F86", go: "load" })),
+  ].sort((a, b) => String(b.d).localeCompare(String(a.d))).slice(0, 6);
+  // ---- table
+  const rows = mets.filter((m) => (cat === "all" || (cat === "str" && m.kind === "str") || (cat === "rom" && m.kind === "rom") || (cat === "jump" && m.kind === "jump")) && (!q.trim() || (m.label || "").toLowerCase().includes(q.trim().toLowerCase())));
+  const chip = (on) => ({ padding: "3px 12px", borderRadius: 999, border: `1px solid ${on ? T.gold : T.panelLine}`, background: on ? "color-mix(in srgb, var(--vac, #D9560B) 12%, transparent)" : "transparent", color: on ? T.gold : T.paperDim, fontSize: 12.5, fontWeight: 600, cursor: "pointer" });
+  const th = { textAlign: "left", fontSize: 12, color: T.paperDim, fontWeight: 600, padding: "6px 8px", borderBottom: `1px solid ${T.panelLine}`, whiteSpace: "nowrap" };
+  const td = { padding: "7px 8px", borderTop: `1px solid ${T.panelLine}`, fontSize: 13.5 };
+  const none = (t) => <div style={{ fontSize: 13, color: T.paperDim, padding: "10px 0" }}>{t}</div>;
+  const maxLoad = Math.max(1, ...wr.map((w) => w.load || 0));
+  return (
+    <div className="ll-dash" style={{ display: "grid", gap: 12, marginBottom: 16 }}>
+      <div><div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 30, lineHeight: 1.1 }}>Κλινική επισκόπηση</div><div style={{ fontSize: 15, color: T.paperDim, marginTop: 4 }}>{patient && patient.pathology ? patient.pathology + " · " : ""}Συνοπτική εικόνα της πορείας του ασθενή</div></div>
+      <div className="ll-dash-kpi" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: 12 }}>
+        {kpi("activity", "Πόνος", pLast !== null ? pLast : "—", pLast !== null ? "/10" : "", pDelta !== null ? badge(pct(pDelta), pDelta <= 0) : null, <Spark vals={painPts.map((p) => p.pain)} color="#D9560B" />, "k1")}
+        {kpi("gauge", "Εύρος κίνησης", romS.length ? romS[romS.length - 1] : "—", romS.length ? "°" : "", romS.length > 1 ? badge(pct(dashFmtPct(romS[romS.length - 1], romS[0])), dashFmtPct(romS[romS.length - 1], romS[0]) >= 0) : null,
+          romSym !== null ? <div><div style={{ height: 8, borderRadius: 99, background: "#E4E4E0", overflow: "hidden" }}><div style={{ width: romSym + "%", height: "100%", background: "#D9560B" }} /></div><div style={{ fontSize: 11, color: T.paperDim, marginTop: 4, textAlign: "right" }}>συμμετρία {romSym}%</div></div> : <Spark vals={romS} color="#D9560B" />, "k2")}
+        {kpi("heart", "Δύναμη", strS.length ? strS[strS.length - 1] : "—", strS.length ? " " + (mStr.unit || "") : "", strS.length > 1 ? badge(pct(dashFmtPct(strS[strS.length - 1], strS[0])), dashFmtPct(strS[strS.length - 1], strS[0]) >= 0) : null, <Spark vals={strS} color="#0E8A7D" />, "k3")}
+        {kpi("calendar", "Συνεδρίες", visitDates.size, "", thisWeekVisits ? badge("+" + thisWeekVisits + " αυτή την εβδ.") : null,
+          <svg width="190" height="44" viewBox="0 0 190 44" style={{ display: "block" }}>{wr.map((w, i) => { const hh = Math.max(3, Math.round(((w.visits || 0) / Math.max(1, ...wr.map((x) => x.visits || 0))) * 38)); return <rect key={i} x={6 + i * 23} y={44 - hh} width="14" height={hh} rx="3" fill="#D9560B" opacity={w.visits ? 0.9 : 0.25} />; })}</svg>, "k4")}
+      </div>
+      {mets.length > 0 || painPts.length > 0 ? (
+        <>
+          <div className="ll-dash-row2" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.7fr) minmax(0, 1fr)", gap: 12 }}>
+            <div style={card}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 6 }}>
+                <div style={{ ...cTitle, marginBottom: 0 }}>Εξέλιξη μετρήσεων</div>
+                {(mets.length > 0 || painPts.length > 1) && <select value={isPain ? "pain" : (curM ? curM.id : "")} onChange={(e) => setPickM(e.target.value)} style={{ ...inputStyle, width: "auto", padding: "5px 12px", fontSize: 13 }}>
+                  {painPts.length > 1 && <option value="pain">Πόνος (0–10)</option>}{mets.map((m) => <option key={m.id} value={m.id}>{kindLbl[m.kind]} · {m.label} ({m.unit})</option>)}
+                </select>}
+              </div>
+              {isPain ? <AreaChart data={painPts} xKey="date" domain={[0, 10]} series={[{ key: "pain", color: "#D9560B", label: "Πόνος (0–10)" }]} /> : evoData.length > 1 ? <AreaChart data={evoData} xKey="date" domain={evoDom} series={evoSer} /> : none("Χρειάζονται τουλάχιστον 2 μετρήσεις για διάγραμμα εξέλιξης.")}
+            </div>
+            <div style={{ ...card, "--vac": "#D9560B" }}>
+              <div style={cTitle}>Χάρτης σώματος</div>
+              <BodyMapModule patient={patient} compact onGo={onGo} />
+              <div style={{ display: "flex", gap: 16, justifyContent: "center", fontSize: 13, color: "#444", marginTop: 6 }}><span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 11, height: 11, borderRadius: "50%", background: "#D9560B" }} />Περιοχή ενδιαφέροντος</span>{patient && patient.complaintSite ? <span style={{ color: T.paperDim }}>{patient.complaintSite}</span> : null}</div>
+            </div>
+          </div>
+          <div className="ll-dash-row3" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 12 }}>
+            <div style={card}>
+              <div style={cTitle}>Φορτίο ανά εβδομάδα (AU)</div>
+              {wr.some((w) => w.load > 0) ? <LoadBars rows={wr} /> : none("Δεν υπάρχουν καταγεγραμμένα φορτία συνεδριών.")}
+            </div>
+            <div style={card}>
+              <div style={cTitle}>Σύγκριση πλευρών</div>
+              {cmp.length ? cmp.map((m) => { const o = m.by[m.dates[m.dates.length - 1]]; const mx = Math.max(o.L, o.R) || 1; return (
+                <div key={m.id} style={{ marginBottom: 10 }}>
+                  <div style={{ fontSize: 12.5, color: T.paperDim, marginBottom: 3 }}>{m.label} ({m.unit})</div>
+                  {[["Δ", o.R, "#D9560B"], ["Α", o.L, "#0E8A7D"]].map(([lb, v, col]) => <div key={lb} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}><span style={{ width: 14, fontSize: 12, fontWeight: 700, color: col }}>{lb}</span><div style={{ flex: 1, height: 11, borderRadius: 99, background: "#EEEEEA" }}><div style={{ width: Math.round((v / mx) * 100) + "%", height: "100%", borderRadius: 99, background: col }} /></div><span style={{ width: 42, fontSize: 12.5, textAlign: "right" }}>{v}</span></div>)}
+                </div>
+              ); }) : none("Χρειάζονται μετρήσεις και για τις δύο πλευρές.")}
+            </div>
+            <div style={card}>
+              <div style={cTitle}>Πρόσφατες καταγραφές</div>
+              {recent.length ? recent.map((r, i) => (
+                <button key={i} type="button" onClick={() => onGo && onGo(r.go)} style={{ display: "flex", gap: 10, alignItems: "center", width: "100%", textAlign: "left", background: "none", border: "none", borderTop: i ? `1px solid ${T.panelLine}` : "none", padding: "7px 0", cursor: "pointer", color: T.paper, borderRadius: 0 }}>
+                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: r.c, flex: "none" }} />
+                  <span style={{ fontSize: 13, color: T.paperDim, width: 84, flex: "none" }}>{dmy(r.d)}</span>
+                  <span style={{ minWidth: 0 }}><span style={{ fontWeight: 700, fontSize: 13.5 }}>{r.t}</span><br /><span style={{ fontSize: 12, color: T.paperDim, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block" }}>{r.s}</span></span>
+                </button>
+              )) : none("Καμία καταγραφή ακόμη.")}
+            </div>
+          </div>
+          <div style={card}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 8 }}>
+              <div style={{ ...cTitle, marginBottom: 0 }}>Πίνακας μετρήσεων</div>
+              {[["all", "Όλες"], ["str", "Δύναμη"], ["rom", "Κινητικότητα"], ["jump", "Άλματα"]].map(([k, lb]) => <button key={k} type="button" onClick={() => setCat(k)} style={chip(cat === k)}>{lb}</button>)}
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Αναζήτηση δοκιμασίας…" style={{ ...inputStyle, width: 240, marginLeft: "auto", padding: "5px 14px", fontSize: 13 }} />
+            </div>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead><tr>{["Ημερομηνία", "Δοκιμασία", "Αριστερά", "Δεξιά", "Μονάδα", "Εξέλιξη", "Μεταβολή"].map((h) => <th key={h} style={th}>{h}</th>)}</tr></thead>
+                <tbody>
+                  {rows.map((m) => { const d = m.dates[m.dates.length - 1], o = m.by[d]; const s = series(m); const ch = s.length > 1 ? dashFmtPct(s[s.length - 1], s[s.length - 2]) : null; return (
+                    <tr key={m.id}>
+                      <td style={td}>{dmy(d)}</td><td style={{ ...td, fontWeight: 600 }}>{m.label}</td>
+                      <td style={td}>{o.L ?? (o.N ?? "—")}</td><td style={td}>{o.R ?? "—"}</td><td style={td}>{m.unit}</td>
+                      <td style={td}><Spark vals={s} color="#D9560B" w={110} h={26} area={false} /></td>
+                      <td style={td}>{ch !== null ? badge((ch >= 0 ? "↑ " : "↓ ") + pct(ch), ch >= 0) : "—"}</td>
+                    </tr>
+                  ); })}
+                  {!rows.length && <tr><td style={td} colSpan={7}>{none("Καμία μέτρηση σε αυτή την κατηγορία.")}</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div style={{ ...card, color: T.paperDim, fontSize: 14 }}>Δεν υπάρχουν ακόμη μετρήσεις. Πρόσθεσε αξιολόγηση (Ιατρικός φάκελος), κλινική εικόνα παρακάτω ή μετρήσεις (άλματα, ισομετρικά).</div>
+      )}
+    </div>
+  );
+}
 function ClinicalModule({ patientId, sessionDate, week }) {
   const [sheets, setSheets] = useState([]);
   const [active, setActive] = useState(null);
@@ -2966,7 +3245,7 @@ function ClinicalModule({ patientId, sessionDate, week }) {
   const [strSel, setStrSel] = useState("");
   const [legacy, setLegacy] = useState({});
   useEffect(() => { setSheets(patientId ? store.get(`trl_clin_${patientId}`, []) : []); setLegacy(patientId ? store.get(`trl_sessions_${patientId}`, {}) : {}); setActive(null); }, [patientId]);
-  const persist = (next) => { setSheets(next); if (patientId) store.set(`trl_clin_${patientId}`, next); };
+  const persist = (next) => { setSheets(next); if (patientId) store.set(`trl_clin_${patientId}`, next); try { window.dispatchEvent(new Event("ll-clin")); } catch (e) {} };
   const day = sheets.filter((x) => x.date === sessionDate).sort((a, b) => (a.created || 0) - (b.created || 0));
   const cur = day.find((x) => x.id === active) || day[0] || null;
   const addSheet = () => {
@@ -4093,7 +4372,7 @@ function TissueLoadLog() {
       ); })}
     </div>
   );
-  const dailyView = <>{clinSwitch}<ClinicalModule patientId={activePatient} sessionDate={sessionDate} week={selWeek} /></>;
+  const dailyView = <>{clinSwitch}<ClinicalDashboard patient={patient} patientId={activePatient} assessments={assessments} measurements={measurements} entries={entries} weekRows={weekRows} sessionDate={sessionDate} onGo={setView} /><div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 17, margin: "6px 0 8px" }}>Νέα καταγραφή κλινικής εικόνας</div><ClinicalModule patientId={activePatient} sessionDate={sessionDate} week={selWeek} /></>;
 
   const loadMgmtView = (
     <>
@@ -4159,7 +4438,7 @@ function TissueLoadLog() {
                   border: `1px solid ${activePatient === p.id ? T.gold : T.panelLine}`,
                   background: activePatient === p.id ? "color-mix(in srgb, var(--vac, #D9560B) 14%, transparent)" : T.panel,
                   color: activePatient === p.id ? T.gold : T.paper, fontSize: 13.5, fontWeight: 500,
-                }}>{p.name}{p.pathology ? <span className="mac-psub">{p.pathology}</span> : null}</button>
+                }}><span className="mac-pav">{initialsOf(p.name)}</span><span className="mac-ptxt"><span className="mac-pname">{p.name}</span>{p.pathology ? <span className="mac-psub">{p.pathology}</span> : null}</span></button>
                 {!isPatientMode && (
                   <button className="mac-pdel" onClick={() => removePatient(p.id)} aria-label={`Διαγραφή ${p.name}`} style={{
                     position: "absolute", top: -6, right: -6, width: 16, height: 16, borderRadius: "50%",
@@ -4236,12 +4515,21 @@ function TissueLoadLog() {
           <>
             <div className="mac-top" data-view={view}>
               <div className="mac-ptitle">
-                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 28, lineHeight: 1.15 }}>{patient ? patient.name : ""}</div>
-                <div style={{ fontSize: 13.5, color: T.paperDim, paddingBottom: 12 }}>{patient && patient.pathology ? patient.pathology + " · " : ""}{fmtDay(sessionDate)}{patient && patient.startDate ? ` · Εβδ.${weekNumber(patient.startDate, sessionDate)}` : ""}{!isPatientMode && view !== "day" ? " · " + ({ assessment: "Ιατρική Εκτίμηση", load: "Καταγραφή Φορτίου", rtp: "Κριτήρια RTP", daily: "Κλινική Εικόνα", measurements: "Μετρήσεις (VALD)", loadmgmt: "Διαχείριση Φορτίου", rx: "Συνταγή", sources: "Πηγές" }[view] || "") : ""}</div>
+                <div className="mac-crumb">Ασθενείς <span>/</span> <b>{patient ? patient.name : ""}</b></div>
+                <div className="mac-pcardtop">
+                  <span className="mac-pav mac-pav-lg">{initialsOf(patient && patient.name)}</span>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div className="mac-pname-lg">{patient ? patient.name : ""}</div>
+                    <div className="mac-psub-lg">{[patient && patient.pathology, patient && patient.age ? patient.age + " ετών" : "", patient && patient.sport, !isPatientMode && view !== "day" ? ({ assessment: "Ιατρική Εκτίμηση", load: "Καταγραφή Φορτίου", rtp: "Κριτήρια RTP", daily: "Κλινικά δεδομένα", measurements: "Μετρήσεις" }[view] || "") : ""].filter(Boolean).join(" · ")}</div>
+                  </div>
+                  <span className="mac-datechip"><Icon name="calendar" size={16} /> {fmtDay(sessionDate)}{patient && patient.startDate ? ` · Εβδ.${weekNumber(patient.startDate, sessionDate)}` : ""}</span>
+                  {!isPatientMode && <button type="button" className="mac-btn-solid" onClick={() => setView("load")}><Icon name="plus" size={16} /> Νέα καταγραφή</button>}
+                  {!isPatientMode && <button type="button" className="mac-btn-line" onClick={openEditPatient}><Icon name="pencil" size={15} /> Στοιχεία ασθενή</button>}
+                </div>
               </div>
-            {!isPatientMode && <div className="ll-domains" style={{ display: "flex", gap: 8, flexWrap: "nowrap", alignItems: "center", margin: "0 0 8px", width: "100%", flexBasis: "100%", gridColumn: "1 / -1", order: 5 }}>
-              {[["assessment", "Ιατρικός φάκελος", ["assessment"], "#D9560B"], ["daily", "Κλινικά δεδομένα", ["daily", "measurements"], "#8466C9"], ["load", "Καταγραφή φορτίου", ["load"], "#3F8F86"], ["rtp", "Κριτήρια RTP", ["rtp"], "#4F77C4"]].map(([id, lb, ons, col]) => { const on = ons.includes(view); return (
-                <button key={id} type="button" onClick={() => setView(id)} style={{ flex: "0 1 auto", minWidth: 150, border: `1.5px solid ${col}`, background: on ? col : `color-mix(in srgb, ${col} 8%, white)`, color: on ? "#fff" : col, borderRadius: 10, padding: "8px 22px", fontSize: 16, fontWeight: 700, cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif" }}>{lb}</button>
+            {!isPatientMode && <div className="ll-domains" style={{ display: "flex", gap: 0, flexWrap: "nowrap", alignItems: "stretch", margin: "0", width: "100%", flexBasis: "100%", gridColumn: "1 / -1", order: 5 }}>
+              {[["assessment", "Ιατρικός φάκελος", ["assessment"], "#D9560B", "folder"], ["daily", "Κλινικά δεδομένα", ["daily", "measurements"], "#8466C9", "gauge"], ["load", "Καταγραφή φορτίου", ["load"], "#3F8F86", "activity"], ["rtp", "Κριτήρια RTP", ["rtp"], "#4F77C4", "flag"]].map(([id, lb, ons, col, ic], n) => { const on = ons.includes(view); return (
+                <button key={id} type="button" className={"ll-dtab" + (on ? " on" : "")} onClick={() => setView(id)} style={{ "--tc": col }}><span className="ll-dnum">0{n + 1}</span><Icon name={ic} size={20} /><span>{lb}</span></button>
               ); })}
             </div>}
             {isPatientMode && <div className="mac-tabs" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, marginBottom: 20 }}>
