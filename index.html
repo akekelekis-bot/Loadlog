@@ -1544,8 +1544,8 @@ const QS_COLS = [
   { k: "p24", l: "Πόνος 24ω", w: 70, tip: "0–10", pain: true, scale: true },
   { k: "note", l: "Σημείωση", w: 150 },
 ];
-function QuickSheet({ onSave }) {
-  const blank = () => ({ name: "", uni: false, reps2: "", load2: "", sets: "", reps: "", load: "", tempo: "", dur: "", rpe: "", pd: "", p24: "", note: "" });
+function QuickSheet({ onSave, loadTypes }) {
+  const blank = () => ({ name: "", lt: "", uni: false, reps2: "", load2: "", sets: "", reps: "", load: "", tempo: "", dur: "", rpe: "", pd: "", p24: "", note: "" });
   const [rows, setRows] = useState(() => Array.from({ length: 6 }, blank));
   const [cols, setCols] = useState(() => { const c = store.get("trl_qcols", null); return Array.isArray(c) ? c : ["rpe", "pd", "p24"]; });
   const toggle = (k) => setCols((c) => { const n = c.includes(k) ? c.filter((x) => x !== k) : [...c, k]; store.set("trl_qcols", n); return n; });
@@ -1569,6 +1569,7 @@ function QuickSheet({ onSave }) {
             <th style={{ ...cell, width: 22 }}>#</th>
             <th style={{ ...cell, width: "26%" }}>Άσκηση</th>
             <th style={{ ...cell, width: 50 }} title="Αμφοτερόπλευρη ή μονοποδική (αριστερά / δεξιά)">Πλευρά</th>
+            <th style={{ ...cell, width: "13%" }} title="Τύπος συστολής / φόρτισης: ισομετρική, ομόκεντρη, έκκεντρη…">Συστολή</th>
             <th style={cell}>Σετ</th>
             <th style={cell}>Επαν.</th>
             <th style={cell}>Φορτίο kg</th>
@@ -1580,6 +1581,7 @@ function QuickSheet({ onSave }) {
                 <td style={{ ...cell, color: T.paperDim }}>{i + 1}</td>
                 <td style={cell}><input list="exercise-options" value={r.name} onChange={(e) => upd(i, "name", e.target.value)} style={inp} /></td>
                 <td style={cell}><button type="button" onClick={() => upd(i, "uni", !r.uni)} style={{ width: "100%", border: `1px solid ${r.uni ? T.terracotta : T.panelLine}`, background: r.uni ? T.terracotta : "transparent", color: r.uni ? T.bg : T.paperDim, borderRadius: 8, padding: "5px 0", fontSize: 11.5, fontWeight: 600, cursor: "pointer" }}>{r.uni ? "Μον." : "Αμφ."}</button></td>
+                <td style={cell}><select aria-label={`Συστολή ${i + 1}`} value={r.lt} onChange={(e) => upd(i, "lt", e.target.value)} style={inp}><option value="">—</option>{(loadTypes || []).map((o) => <option key={o} value={o}>{String(o).split(" (")[0]}</option>)}</select></td>
                 <td style={cell}><input type="number" inputMode="numeric" value={r.sets} onChange={(e) => upd(i, "sets", e.target.value)} style={inp} /></td>
                 <td style={cell}>{r.uni ? <div style={{ display: "flex", gap: 2 }}><input type="number" placeholder="Αρ" value={r.reps} onChange={(e) => upd(i, "reps", e.target.value)} style={inp} /><input type="number" placeholder="Δε" value={r.reps2} onChange={(e) => upd(i, "reps2", e.target.value)} style={inp} /></div> : <input type="number" inputMode="numeric" value={r.reps} onChange={(e) => upd(i, "reps", e.target.value)} style={inp} />}</td>
                 <td style={cell}>{r.uni ? <div style={{ display: "flex", gap: 2 }}><input type="number" placeholder="Αρ" value={r.load} onChange={(e) => upd(i, "load", e.target.value)} style={inp} /><input type="number" placeholder="Δε" value={r.load2} onChange={(e) => upd(i, "load2", e.target.value)} style={inp} /></div> : <input type="number" inputMode="decimal" value={r.load} onChange={(e) => upd(i, "load", e.target.value)} style={inp} />}</td>
@@ -3940,7 +3942,7 @@ function TissueLoadLog() {
       const rowsB = sets > 0 && hasRep ? Array.from({ length: sets }, () => (r.uni
         ? { L: { reps: String(r.reps || ""), dur: r.dur || "", load: r.load || "" }, R: { reps: String(r.reps2 || r.reps || ""), dur: r.dur || "", load: r.load2 || r.load || "" } }
         : { B: { reps: String(r.reps || ""), dur: r.dur || "", load: r.load || "" } })) : [];
-      let f = { ...emptyForm, activity: name, loadType: ex && ex.defaultLoadType ? ex.defaultLoadType : allLoadTypes[0], tempo: r.tempo || "", notes: r.note || "", painDuring: Number(r.pd) || 0, pain24h: Number(r.p24) || 0, ...syncRows(rowsB, r.uni ? "U" : "B") };
+      let f = { ...emptyForm, activity: name, loadType: r.lt || (ex && ex.defaultLoadType ? ex.defaultLoadType : allLoadTypes[0]), tempo: r.tempo || "", notes: r.note || "", painDuring: Number(r.pd) || 0, pain24h: Number(r.p24) || 0, ...syncRows(rowsB, r.uni ? "U" : "B") };
       if (!rowsB.length) { f.sets = r.sets; f.reps = r.reps; f.resistance = r.load; }
       if (r.rpe === "") delete f.intensity; else f.intensity = Number(r.rpe);
       return { id: `${now}${i}`, date: sessionDate, tissue: tissueId, tissues: tissuesSel.length ? tissuesSel : [tissueId], dx: dxSel || undefined, recordedBy: mode === "clinician" ? "Θεραπευτής" : "Ασθενής", v2: true, week: patient ? weekNumber(patient.startDate, sessionDate) : null, ...f, extra: [], calc: calcOf(tissueId, f), tp: {} };
@@ -4612,7 +4614,7 @@ function TissueLoadLog() {
 
                 <div className="ll-load-grid">
                 <div className="ll-load-form">
-                {!isCardio && <QuickSheet onSave={saveQuick} />}
+                {!isCardio && <QuickSheet onSave={saveQuick} loadTypes={allLoadTypes} />}
                 <datalist id="exercise-options">{exercisesHere.map((ex) => <option key={ex.id} value={ex.name} />)}</datalist>
                 <details open={!!editingId || isCardio} style={{ marginBottom: 8 }}><summary style={{ cursor: "pointer", fontSize: 13.5, fontWeight: 600, color: T.gold, padding: "2px 2px" }}>Αναλυτική καταχώρηση μίας άσκησης (σετ ανά σετ, ιστός, επιπλέον)</summary>
                 <div style={{ background: T.panel, border: `1px solid ${T.panelLine}`, borderRadius: 14, padding: 18, marginBottom: 22 }}>
@@ -4830,7 +4832,7 @@ function TissueLoadLog() {
                     const rp = rpeOf(e);
                     return (
                       <div key={e.id} style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline", padding: "4px 0", borderTop: `1px solid ${T.panelLine}`, fontSize: 12.5 }}>
-                        <span><b>{e.activity}</b> <span style={{ color: T.paperDim }}>{sl}{e.tempo ? " · " + e.tempo : ""}</span></span>
+                        <span><b>{e.activity}</b> {e.loadType ? <span style={{ fontSize: 11.5, fontWeight: 600, color: T.gold, border: `1px solid ${T.gold}`, borderRadius: 999, padding: "1px 8px", marginRight: 4 }}>{String(e.loadType).split(" (")[0]}</span> : null}<span style={{ color: T.paperDim }}>{sl}{e.tempo ? " · " + e.tempo : ""}</span></span>
                         <span style={{ whiteSpace: "nowrap", color: T.paperDim }}>Δυσκολία <b style={{ color: T.paper }}>{rp ?? "–"}</b> · Πόνος <b style={{ color: Number(e.painDuring) > 0 ? T.rust : T.paper }}>{e.painDuring ?? 0}</b>/<b style={{ color: Number(e.pain24h) > 0 ? T.rust : T.paper }}>{e.pain24h ?? 0}</b>
                           <button type="button" onClick={() => startEdit(e)} style={{ background: "none", border: "none", color: T.gold, fontSize: 11.5, cursor: "pointer", marginLeft: 6 }}>αλλαγή</button>
                           <button type="button" onClick={() => deleteEntry(e.id)} style={{ background: "none", border: "none", color: T.paperDim, cursor: "pointer", padding: 2 }}><Icon name="trash" size={12} /></button>
