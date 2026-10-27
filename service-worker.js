@@ -1,5 +1,5 @@
 // Network-first: the app always loads the newest version when online, and falls back to the cache offline.
-const CACHE_NAME = "sports-rehub-loadlog-v6";
+const CACHE_NAME = "sports-rehub-loadlog-v4";
 
 self.addEventListener("install", () => { self.skipWaiting(); });
 
